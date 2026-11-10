@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://cenas/heroi/Heroi.tscn" id="1_heroi"]
+[ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="2_arvore"]
 
 [node name="Arena" type="Node2D"]
 
@@ -9,6 +10,9 @@ offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.18, 0.4, 0.2, 1)
+
+[node name="Arvore" parent="." instance=ExtResource("2_arvore")]
+position = Vector2(576, 324)
 
 [node name="Heroi" parent="." instance=ExtResource("1_heroi")]
 position = Vector2(576, 400)
