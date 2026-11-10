@@ -1,7 +1,8 @@
 extends Node
 ## Autoload de áudio: toca efeitos e músicas com troca suave (fade).
-## Liga-se sozinho aos signals das cenas quando os nós entram na árvore, sem mexer na lógica do jogo.
-## A música só começa depois do primeiro clique em um botão (exigência do navegador).
+## Liga-se sozinho aos signals das cenas (os nós que já estão na árvore e os que entram depois),
+## sem mexer na lógica do jogo. No navegador, o Godot só libera o som na primeira interação do jogador;
+## até lá a música do menu fica em silêncio e começa sozinha no primeiro clique ou tecla.
 
 const EFEITOS: Dictionary = {
 	"golpe": preload("res://assets/audio/efeitos/golpe.ogg"),
@@ -48,7 +49,6 @@ var _ultimo_toque: Dictionary = {}
 var _musica_ativa: AudioStreamPlayer
 var _musica_reserva: AudioStreamPlayer
 var _musica_atual: String = ""
-var _audio_liberado: bool = false
 
 
 func _ready() -> void:
@@ -62,6 +62,7 @@ func _ready() -> void:
 	for musica: AudioStreamOggVorbis in MUSICAS.values():
 		musica.loop = true
 	get_tree().node_added.connect(_ao_adicionar_no)
+	_ligar_nos_existentes(get_tree().root)
 
 
 # ---------------------------------------------------------------- API pública
@@ -82,7 +83,7 @@ func tocar(nome: String, pitch: float = 1.0) -> void:
 
 ## Troca de música com fade cruzado. Repetir a música atual não reinicia nada.
 func tocar_musica(nome: String) -> void:
-	if not _audio_liberado or nome == _musica_atual:
+	if nome == _musica_atual:
 		return
 	_musica_atual = nome
 	var saindo: AudioStreamPlayer = _musica_ativa
@@ -118,9 +119,17 @@ func efeitos_ligados() -> bool:
 
 # ---------------------------------------------------------------- ligação com as cenas
 
+## Na primeira abertura do jogo, a cena principal entra na árvore antes deste Autoload ficar pronto.
+func _ligar_nos_existentes(no: Node) -> void:
+	for filho in no.get_children():
+		if filho != self:
+			_ao_adicionar_no(filho)
+			_ligar_nos_existentes(filho)
+
+
 func _ao_adicionar_no(no: Node) -> void:
 	if no is Button:
-		no.pressed.connect(_ao_clicar_botao)
+		no.pressed.connect(tocar.bind("clique"))
 	elif no is Heroi:
 		no.atacou.connect(tocar.bind("golpe"))
 		no.dash_iniciado.connect(tocar.bind("dash"))
@@ -152,15 +161,6 @@ func _ligar_inimigo(inimigo: Node) -> void:
 		tocar("motosserra")
 
 
-func _ao_clicar_botao() -> void:
-	tocar("clique")
-	if _audio_liberado:
-		return
-	_audio_liberado = true
-	if get_tree().current_scene and get_tree().current_scene.scene_file_path == CENA_MENU:
-		tocar_musica("menu")
-
-
 func _ao_coletar_item(tipo: Item.Tipo) -> void:
 	match tipo:
 		Item.Tipo.FRUTA:
@@ -172,7 +172,6 @@ func _ao_coletar_item(tipo: Item.Tipo) -> void:
 
 
 func _ao_iniciar_onda(numero: int, gerente: GerenteDeOndas) -> void:
-	_audio_liberado = true
 	tocar("onda_iniciada")
 	tocar_musica("chefe" if numero == gerente.total_de_ondas() else "combate")
 
