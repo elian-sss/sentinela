@@ -7,10 +7,11 @@ extends Area2D
 
 
 func _ready() -> void:
-	body_entered.connect(_ao_tocar_corpo)
+	body_entered.connect(_ao_tocar)
+	area_entered.connect(_ao_tocar) # o fogo é uma área, não um corpo
 	get_tree().create_timer(duracao).timeout.connect(queue_free)
 
 
-func _ao_tocar_corpo(corpo: Node2D) -> void:
-	if corpo.is_in_group("inimigos"):
-		corpo.receber_dano(dano)
+func _ao_tocar(alvo: Node2D) -> void:
+	if alvo.is_in_group("inimigos"):
+		alvo.receber_dano(dano)

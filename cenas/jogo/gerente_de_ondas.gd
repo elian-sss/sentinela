@@ -8,16 +8,18 @@ signal vitoria
 
 ## Uma entrada por onda: quantos inimigos de cada tipo e o intervalo (s) entre um nascimento e outro.
 ## Numa onda com tipos misturados, a ordem de nascimento é sorteada.
+## O fogo ignora a posição fora da tela e escolhe sozinho um ponto perto da árvore.
 const ONDAS: Array[Dictionary] = [
 	{"inimigos": {"lenhador": 5}, "intervalo": 1.5},
-	{"inimigos": {"lenhador": 8}, "intervalo": 1.2},
+	{"inimigos": {"lenhador": 8, "fogo": 2}, "intervalo": 1.2},
 	{"inimigos": {"motosserrista": 10}, "intervalo": 1.0},
-	{"inimigos": {"lenhador": 8, "motosserrista": 8}, "intervalo": 0.8},
+	{"inimigos": {"lenhador": 8, "motosserrista": 8, "fogo": 3}, "intervalo": 0.8},
 	{"inimigos": {"lenhador": 1}, "intervalo": 1.0}, # vira o chefe quando ele existir
 ]
 const CENAS_INIMIGO: Dictionary = {
 	"lenhador": preload("res://cenas/inimigo/Inimigo.tscn"),
 	"motosserrista": preload("res://cenas/inimigo/Motosserrista.tscn"),
+	"fogo": preload("res://cenas/fogo/Fogo.tscn"),
 }
 
 @export var pausa_entre_ondas: float = 3.0
