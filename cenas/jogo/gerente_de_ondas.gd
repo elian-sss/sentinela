@@ -5,6 +5,7 @@ extends Node
 signal onda_iniciada(numero: int)
 signal onda_concluida(numero: int)
 signal vitoria
+signal inimigo_nasceu(inimigo: Node2D)
 
 ## Uma entrada por onda: quantos inimigos de cada tipo e o intervalo (s) entre um nascimento e outro.
 ## Numa onda com tipos misturados, a ordem de nascimento é sorteada.
@@ -14,12 +15,13 @@ const ONDAS: Array[Dictionary] = [
 	{"inimigos": {"lenhador": 8, "fogo": 2}, "intervalo": 1.2},
 	{"inimigos": {"motosserrista": 10}, "intervalo": 1.0},
 	{"inimigos": {"lenhador": 8, "motosserrista": 8, "fogo": 3}, "intervalo": 0.8},
-	{"inimigos": {"lenhador": 1}, "intervalo": 1.0}, # vira o chefe quando ele existir
+	{"inimigos": {"chefe": 1}, "intervalo": 1.0},
 ]
 const CENAS_INIMIGO: Dictionary = {
 	"lenhador": preload("res://cenas/inimigo/Inimigo.tscn"),
 	"motosserrista": preload("res://cenas/inimigo/Motosserrista.tscn"),
 	"fogo": preload("res://cenas/fogo/Fogo.tscn"),
+	"chefe": preload("res://cenas/chefe/Chefe.tscn"),
 }
 
 @export var pausa_entre_ondas: float = 3.0
@@ -72,6 +74,7 @@ func _fazer_nascer_inimigo() -> void:
 	inimigo.morreu.connect(_ao_inimigo_morrer)
 	get_parent().add_child(inimigo)
 	_vivos += 1
+	inimigo_nasceu.emit(inimigo)
 	if _fila_nascimento.is_empty():
 		_timer_nascimento.stop()
 

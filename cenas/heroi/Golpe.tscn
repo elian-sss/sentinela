@@ -6,6 +6,7 @@
 size = Vector2(36, 48)
 
 [node name="Golpe" type="Area2D"]
+collision_mask = 3
 monitorable = false
 script = ExtResource("1_golpe")
 

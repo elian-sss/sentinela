@@ -1,44 +1,44 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://olal6q2tc1cg"]
 
 [ext_resource type="PackedScene" path="res://cenas/heroi/Heroi.tscn" id="1_heroi"]
 [ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="2_arvore"]
-[ext_resource type="Script" path="res://cenas/jogo/gerente_de_ondas.gd" id="3_ondas"]
-[ext_resource type="Script" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
+[ext_resource type="Script" uid="uid://dktwf4lsovu47" path="res://cenas/jogo/gerente_de_ondas.gd" id="3_ondas"]
+[ext_resource type="Script" uid="uid://du82jsmy3j8s1" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
 [ext_resource type="PackedScene" path="res://cenas/hud/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaFimDePartida.tscn" id="6_tela_fim"]
 
-[node name="Arena" type="Node2D"]
+[node name="Arena" type="Node2D" unique_id=560938052]
 
-[node name="Fundo" type="ColorRect" parent="."]
+[node name="Fundo" type="ColorRect" parent="." unique_id=336529864]
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.18, 0.4, 0.2, 1)
 
-[node name="Arvore" parent="." instance=ExtResource("2_arvore")]
+[node name="Arvore" parent="." unique_id=970273876 instance=ExtResource("2_arvore")]
 position = Vector2(576, 324)
 
-[node name="Heroi" parent="." instance=ExtResource("1_heroi")]
+[node name="Heroi" parent="." unique_id=1851019146 instance=ExtResource("1_heroi")]
 position = Vector2(576, 400)
 
-[node name="GerenteDeOndas" type="Node" parent="."]
+[node name="GerenteDeOndas" type="Node" parent="." unique_id=1568633003]
 script = ExtResource("3_ondas")
 
-[node name="TimerNascimento" type="Timer" parent="GerenteDeOndas"]
+[node name="TimerNascimento" type="Timer" parent="GerenteDeOndas" unique_id=1176356091]
 
-[node name="TimerPausa" type="Timer" parent="GerenteDeOndas"]
+[node name="TimerPausa" type="Timer" parent="GerenteDeOndas" unique_id=1810544995]
 one_shot = true
 
-[node name="GerenteDoJogo" type="Node" parent="." node_paths=PackedStringArray("arvore", "heroi", "gerente_de_ondas")]
+[node name="GerenteDoJogo" type="Node" parent="." unique_id=680163438 node_paths=PackedStringArray("arvore", "heroi", "gerente_de_ondas")]
 script = ExtResource("4_gerente")
 arvore = NodePath("../Arvore")
 heroi = NodePath("../Heroi")
 gerente_de_ondas = NodePath("../GerenteDeOndas")
 
-[node name="HUD" parent="." node_paths=PackedStringArray("heroi", "arvore", "gerente_de_ondas") instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=874915791 node_paths=PackedStringArray("heroi", "arvore", "gerente_de_ondas") instance=ExtResource("5_hud")]
 heroi = NodePath("../Heroi")
 arvore = NodePath("../Arvore")
 gerente_de_ondas = NodePath("../GerenteDeOndas")
 
-[node name="TelaFimDePartida" parent="." node_paths=PackedStringArray("gerente_do_jogo") instance=ExtResource("6_tela_fim")]
+[node name="TelaFimDePartida" parent="." unique_id=1592875656 node_paths=PackedStringArray("gerente_do_jogo") instance=ExtResource("6_tela_fim")]
 gerente_do_jogo = NodePath("../GerenteDoJogo")

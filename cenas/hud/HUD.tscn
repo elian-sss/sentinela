@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://cenas/hud/hud.gd" id="1_hud"]
 
@@ -18,6 +18,13 @@ corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_arvore"]
 bg_color = Color(0.35, 0.9, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_chefe"]
+bg_color = Color(0.9, 0.3, 0.2, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -116,3 +123,35 @@ vertical_alignment = 1
 
 [node name="TimerAviso" type="Timer" parent="."]
 one_shot = true
+
+[node name="PainelChefe" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -64.0
+offset_right = 250.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Rotulo" type="Label" parent="PainelChefe"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Escavadeira"
+horizontal_alignment = 1
+
+[node name="BarraVida" type="ProgressBar" parent="PainelChefe"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vida_chefe")
+step = 1.0
+value = 100.0
+show_percentage = false

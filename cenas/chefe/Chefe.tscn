@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://cenas/chefe/chefe.gd" id="1_chefe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chefe"]
+size = Vector2(96, 72)
+
+[node name="Chefe" type="CharacterBody2D" groups=["inimigos"]]
+collision_layer = 2
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_chefe")
+
+[node name="LinhaAviso" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 0, 100, 0)
+width = 72.0
+default_color = Color(1, 0.2, 0.15, 0.3)
+
+[node name="Colisao" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_chefe")
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_left = -48.0
+offset_top = -36.0
+offset_right = 48.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.45, 0.4, 0.5, 1)
