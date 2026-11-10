@@ -1,18 +1,21 @@
 class_name Item
 extends Area2D
-## Item que cai dos inimigos. A fruta cura o herói; a erva cura a árvore de longe.
+## Item que cai dos inimigos. A fruta cura o herói, a erva cura a árvore de longe
+## e o escudo deixa o herói imune a dano por alguns segundos.
 ## Some depois de um tempo no chão, piscando no fim.
 
-enum Tipo { FRUTA, ERVA }
+enum Tipo { FRUTA, ERVA, ESCUDO }
 
 const CORES: Dictionary = {
 	Tipo.FRUTA: Color(0.95, 0.25, 0.35),
 	Tipo.ERVA: Color(0.6, 1.0, 0.45),
+	Tipo.ESCUDO: Color(0.55, 0.85, 1.0),
 }
 
 @export var tipo: Tipo = Tipo.FRUTA
 @export var cura_fruta: int = 25
 @export var cura_erva: int = 40
+@export var duracao_escudo: float = 4.0
 @export var tempo_no_chao: float = 8.0
 @export var tempo_piscando: float = 3.0
 @export var intervalo_piscar: float = 0.15
@@ -49,3 +52,5 @@ func _aplicar_efeito(heroi: Heroi) -> void:
 		Tipo.ERVA:
 			var arvore: Arvore = get_tree().get_first_node_in_group("arvore")
 			arvore.curar(cura_erva)
+		Tipo.ESCUDO:
+			heroi.ativar_escudo(duracao_escudo)

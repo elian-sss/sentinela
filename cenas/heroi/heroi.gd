@@ -26,14 +26,17 @@ var _tempo_dash_restante: float = 0.0
 var _tempo_cooldown_restante: float = 0.0
 var _tempo_cooldown_ataque: float = 0.0
 var _tempo_invencivel: float = 0.0
+var _tempo_escudo: float = 0.0
 
 @onready var _visual: ColorRect = $Visual
+@onready var _indicador_escudo: Line2D = $Escudo
 
 
 func _physics_process(delta: float) -> void:
 	_tempo_cooldown_restante = maxf(_tempo_cooldown_restante - delta, 0.0)
 	_tempo_cooldown_ataque = maxf(_tempo_cooldown_ataque - delta, 0.0)
 	_atualizar_invencibilidade(delta)
+	_atualizar_escudo(delta)
 
 	var direcao: Vector2 = Input.get_vector("mover_esquerda", "mover_direita", "mover_cima", "mover_baixo")
 	if direcao != Vector2.ZERO:
@@ -86,7 +89,7 @@ func _direcao_do_ataque() -> Vector2:
 
 
 func receber_dano(valor: int) -> void:
-	if esta_invencivel() or esta_morto():
+	if esta_invencivel() or tem_escudo() or esta_morto():
 		return
 	vida_atual -= valor
 	_tempo_invencivel = duracao_invencibilidade
@@ -100,6 +103,16 @@ func curar(valor: int) -> void:
 
 func esta_invencivel() -> bool:
 	return _tempo_invencivel > 0.0
+
+
+## Fica imune a dano pela duração dada. Pegar outro escudo não encurta o atual.
+func ativar_escudo(duracao: float) -> void:
+	_tempo_escudo = maxf(_tempo_escudo, duracao)
+	_indicador_escudo.show()
+
+
+func tem_escudo() -> bool:
+	return _tempo_escudo > 0.0
 
 
 func esta_morto() -> bool:
@@ -124,3 +137,11 @@ func _atualizar_invencibilidade(delta: float) -> void:
 		_visual.visible = fase % 2 == 0
 	else:
 		_visual.visible = true
+
+
+func _atualizar_escudo(delta: float) -> void:
+	if not tem_escudo():
+		return
+	_tempo_escudo = maxf(_tempo_escudo - delta, 0.0)
+	if not tem_escudo():
+		_indicador_escudo.hide()

@@ -19,7 +19,8 @@ const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 @export var chance_item: float = 0.15
 @export var bonus_chance_por_dano_arvore: float = 0.005
 @export var chance_item_maxima: float = 0.4
-@export var chance_erva: float = 0.5
+@export var chance_escudo: float = 0.2 ## entre os itens que caem, fração que é escudo
+@export var chance_erva: float = 0.5 ## entre os que não são escudo, fração que é erva
 
 var _arvore: Arvore
 var _dano_causado_arvore: int = 0
@@ -95,7 +96,13 @@ func _talvez_soltar_item() -> void:
 	if randf() >= _chance_de_item():
 		return
 	var item: Item = CENA_ITEM.instantiate()
-	item.tipo = Item.Tipo.ERVA if randf() < chance_erva else Item.Tipo.FRUTA
+	item.tipo = _sortear_tipo_item()
 	item.position = global_position
 	# Adiado: o inimigo costuma morrer dentro de um callback de física, onde não dá para criar áreas.
 	get_parent().add_child.call_deferred(item)
+
+
+func _sortear_tipo_item() -> Item.Tipo:
+	if randf() < chance_escudo:
+		return Item.Tipo.ESCUDO
+	return Item.Tipo.ERVA if randf() < chance_erva else Item.Tipo.FRUTA
