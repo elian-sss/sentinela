@@ -1,6 +1,10 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://cenas/heroi/golpe.gd" id="1_golpe"]
+[ext_resource type="SpriteFrames" path="res://cenas/heroi/golpe_quadros.tres" id="2_quadros"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aditivo"]
+blend_mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_golpe"]
 size = Vector2(36, 48)
@@ -13,10 +17,8 @@ script = ExtResource("1_golpe")
 [node name="Colisao" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_golpe")
 
-[node name="Visual" type="ColorRect" parent="."]
-offset_left = -18.0
-offset_top = -24.0
-offset_right = 18.0
-offset_bottom = 24.0
-mouse_filter = 2
-color = Color(1, 1, 0.75, 0.6)
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_aditivo")
+texture_filter = 1
+sprite_frames = ExtResource("2_quadros")
+animation = &"golpe"

@@ -1,0 +1,27 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/personagens/golpe.png" id="1_folha"]
+
+[sub_resource type="AtlasTexture" id="quadro_0"]
+atlas = ExtResource("1_folha")
+region = Rect2(0, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="quadro_1"]
+atlas = ExtResource("1_folha")
+region = Rect2(64, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="quadro_2"]
+atlas = ExtResource("1_folha")
+region = Rect2(128, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="quadro_3"]
+atlas = ExtResource("1_folha")
+region = Rect2(192, 0, 64, 84)
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("quadro_0")}, {"duration": 1.0, "texture": SubResource("quadro_1")}, {"duration": 1.0, "texture": SubResource("quadro_2")}, {"duration": 1.0, "texture": SubResource("quadro_3")}],
+"loop": false,
+"name": &"golpe",
+"speed": 20.0
+}]

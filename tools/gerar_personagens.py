@@ -382,6 +382,32 @@ def item_forca():
     return img
 
 
+# ------------------------------------------------------------------ golpe do herói
+
+def golpe(inicio, fim, forca):
+    """Arco de energia verde-dourada do cajado, virado para a direita (+x).
+    O centro do arco fica no herói, 34 px atrás do centro do quadro (como em heroi.gd).
+    inicio e fim são os ângulos do arco em graus; forca (0 a 1) afina e apaga o rastro."""
+    img = tela(64, 84)
+    cx, cy = 32 - 34, 42
+    cores = [(90, 200, 90, 150), (190, 255, 140, 210), (255, 255, 225, 255)]
+    for y in range(84):
+        for x in range(64):
+            d = math.hypot(x - cx, y - cy)
+            a = math.degrees(math.atan2(y - cy, x - cx))
+            if not inicio <= a <= fim:
+                continue
+            t = (a - inicio) / max(fim - inicio, 1)  # 0 no rastro, 1 na ponta do golpe
+            espessura = (3 + 9 * t) * forca
+            meio = 36
+            distancia = abs(d - meio)
+            if distancia > espessura:
+                continue
+            nivel = 2 if distancia < espessura * 0.35 else 1 if distancia < espessura * 0.7 else 0
+            px(img, x, y, cores[nivel])
+    return img
+
+
 # ------------------------------------------------------------------ saída
 
 def salvar_folha(nome, quadros):
@@ -436,6 +462,10 @@ def main():
                    [("andando", [0, 1], 6, True)])
 
     salvar_folha("arvore_sagrada", [arvore_sagrada(21)])
+
+    quadros = [golpe(-75, -25, 1.0), golpe(-75, 25, 1.0), golpe(-60, 70, 1.0), golpe(-20, 75, 0.6)]
+    tamanho = salvar_folha("golpe", quadros)
+    salvar_quadros("cenas/heroi/golpe_quadros.tres", "golpe", tamanho, [("golpe", [0, 1, 2, 3], 20, False)])
 
     for nome, funcao in (("fruta", item_fruta), ("erva", item_erva), ("escudo", item_escudo),
                          ("velocidade", item_velocidade), ("forca", item_forca)):
