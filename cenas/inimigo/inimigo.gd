@@ -19,6 +19,7 @@ const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 @export var chance_item: float = 0.15
 @export var bonus_chance_por_dano_arvore: float = 0.005
 @export var chance_item_maxima: float = 0.4
+@export var atrito_empurrao: float = 1500.0 ## quão rápido o empurrão perde força (px/s²)
 @export var chance_escudo: float = 0.2 ## entre os itens que caem, fração que é escudo
 @export var chance_erva: float = 0.5 ## entre os que não são escudo, fração que é erva
 
@@ -27,16 +28,25 @@ var _dano_causado_arvore: int = 0
 var _heroi: Heroi
 var _tempo_ate_ataque: float = 0.0
 var _tempo_ate_dano_heroi: float = 0.0
+var _empurrao: Vector2 = Vector2.ZERO
+var _cor_original: Color
+
+@onready var _visual: ColorRect = $Visual
 
 
 func _ready() -> void:
 	_arvore = get_tree().get_first_node_in_group("arvore")
 	_heroi = get_tree().get_first_node_in_group("heroi")
+	_cor_original = _visual.color
 	_tempo_ate_ataque = intervalo_ataque
 
 
 func _physics_process(delta: float) -> void:
 	_atacar_heroi_se_perto(delta)
+
+	if _empurrao != Vector2.ZERO:
+		_ser_empurrado(delta)
+		return
 
 	if _arvore == null or _arvore.esta_destruida():
 		velocity = Vector2.ZERO
@@ -52,6 +62,18 @@ func _physics_process(delta: float) -> void:
 
 func receber_dano(valor: int) -> void:
 	vida -= valor
+	Feedback.piscar_branco(self, _visual, _cor_original)
+
+
+func empurrar(impulso: Vector2) -> void:
+	_empurrao = impulso
+
+
+## Enquanto o empurrão dura, o inimigo só desliza e não anda nem ataca a árvore.
+func _ser_empurrado(delta: float) -> void:
+	velocity = _empurrao
+	move_and_slide()
+	_empurrao = _empurrao.move_toward(Vector2.ZERO, atrito_empurrao * delta)
 
 
 func _atacar_arvore(delta: float) -> void:

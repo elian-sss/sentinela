@@ -3,10 +3,14 @@ extends CanvasLayer
 ## Interface da partida: vida do herói, vida da árvore, onda atual e vida do chefe quando ele aparece.
 ## Atualiza só quando recebe os signals, sem consultar nada a cada frame.
 
+const COR_PISCAR_BARRA: Color = Color(1, 0.25, 0.25)
+
 @export var heroi: Heroi
 @export var arvore: Arvore
 @export var gerente_de_ondas: GerenteDeOndas
 @export var duracao_aviso_onda: float = 2.0
+
+var _tween_barra_arvore: Tween
 
 @onready var _barra_heroi: ProgressBar = $PainelHeroi/BarraVida
 @onready var _barra_arvore: ProgressBar = $PainelArvore/BarraVida
@@ -20,6 +24,8 @@ extends CanvasLayer
 func _ready() -> void:
 	heroi.vida_alterada.connect(_atualizar_barra.bind(_barra_heroi))
 	arvore.vida_alterada.connect(_atualizar_barra.bind(_barra_arvore))
+	if Feedback.PISCAR_BARRA_ARVORE:
+		arvore.dano_recebido.connect(_piscar_barra_arvore)
 	gerente_de_ondas.onda_iniciada.connect(_ao_iniciar_onda)
 	gerente_de_ondas.inimigo_nasceu.connect(_ao_nascer_inimigo)
 	_timer_aviso.timeout.connect(_aviso.hide)
@@ -60,3 +66,13 @@ func _ao_nascer_inimigo(inimigo: Node2D) -> void:
 
 func _ao_chefe_morrer(_posicao: Vector2) -> void:
 	_painel_chefe.hide()
+
+
+## Duas piscadas rápidas em vermelho.
+func _piscar_barra_arvore() -> void:
+	if _tween_barra_arvore:
+		_tween_barra_arvore.kill()
+	_tween_barra_arvore = create_tween()
+	for i in 2:
+		_tween_barra_arvore.tween_property(_barra_arvore, "modulate", COR_PISCAR_BARRA, 0.0)
+		_tween_barra_arvore.tween_property(_barra_arvore, "modulate", Color.WHITE, 0.15)

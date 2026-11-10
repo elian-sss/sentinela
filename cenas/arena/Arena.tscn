@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://cenas/hud/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaFimDePartida.tscn" id="6_tela_fim"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaPausa.tscn" id="7_tela_pausa"]
+[ext_resource type="Script" path="res://cenas/jogo/camera_tremor.gd" id="8_camera"]
 
 [node name="Arena" type="Node2D" unique_id=560938052]
 
@@ -45,3 +46,9 @@ gerente_de_ondas = NodePath("../GerenteDeOndas")
 gerente_do_jogo = NodePath("../GerenteDoJogo")
 
 [node name="TelaPausa" parent="." instance=ExtResource("7_tela_pausa")]
+
+[node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("heroi", "arvore")]
+anchor_mode = 0
+script = ExtResource("8_camera")
+heroi = NodePath("../Heroi")
+arvore = NodePath("../Arvore")

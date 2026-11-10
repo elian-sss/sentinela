@@ -43,6 +43,7 @@ var _tempo_ate_ataque_arvore: float = 0.0
 var _tempo_ate_invocacao: float = 0.0
 var _arvore: Arvore
 var _heroi: Heroi
+var _cor_original: Color
 
 @onready var _visual: ColorRect = $Visual
 @onready var _linha_aviso: Line2D = $LinhaAviso
@@ -52,6 +53,7 @@ func _ready() -> void:
 	_arvore = get_tree().get_first_node_in_group("arvore")
 	_heroi = get_tree().get_first_node_in_group("heroi")
 	vida_atual = vida_maxima
+	_cor_original = _visual.color
 	_tempo_ate_ataque_arvore = intervalo_ataque_arvore
 	_tempo_ate_invocacao = intervalo_invocacao
 	_mudar_estado(Estado.AVANCANDO)
@@ -80,6 +82,7 @@ func receber_dano(valor: int) -> void:
 		valor *= multiplicador_dano_atordoado
 	vida_atual = maxi(vida_atual - valor, 0)
 	vida_alterada.emit(vida_atual, vida_maxima)
+	Feedback.piscar_branco(self, _visual, _cor_original)
 	if vida_atual == 0:
 		_morrer()
 

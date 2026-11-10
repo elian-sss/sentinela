@@ -4,6 +4,7 @@ extends StaticBody2D
 
 signal vida_alterada(atual: int, maxima: int)
 signal destruida
+signal dano_recebido
 
 @export var vida_maxima: int = 300
 @export var vida_atual: int = 300:
@@ -11,7 +12,10 @@ signal destruida
 
 
 func receber_dano(valor: int) -> void:
+	var anterior: int = vida_atual
 	vida_atual -= valor
+	if vida_atual < anterior:
+		dano_recebido.emit()
 
 
 func curar(valor: int) -> void:

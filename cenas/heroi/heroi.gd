@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 signal vida_alterada(atual: int, maxima: int)
 signal morreu
+signal dano_recebido
 
 const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 
@@ -93,6 +94,7 @@ func receber_dano(valor: int) -> void:
 		return
 	vida_atual -= valor
 	_tempo_invencivel = duracao_invencibilidade
+	dano_recebido.emit()
 
 
 func curar(valor: int) -> void:

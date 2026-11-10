@@ -4,6 +4,7 @@ extends Area2D
 
 @export var dano: int = 10
 @export var duracao: float = 0.1
+@export var forca_empurrao: float = 250.0
 
 
 func _ready() -> void:
@@ -13,5 +14,9 @@ func _ready() -> void:
 
 
 func _ao_tocar(alvo: Node2D) -> void:
-	if alvo.is_in_group("inimigos"):
-		alvo.receber_dano(dano)
+	if not alvo.is_in_group("inimigos"):
+		return
+	alvo.receber_dano(dano)
+	if Feedback.EMPURRAR_INIMIGO_ATINGIDO and alvo.has_method("empurrar"):
+		var direcao: Vector2 = get_parent().global_position.direction_to(alvo.global_position)
+		alvo.empurrar(direcao * forca_empurrao)
