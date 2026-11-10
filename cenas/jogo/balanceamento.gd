@@ -14,7 +14,7 @@ const HEROI_DANO_ATAQUE: int = 10
 const HEROI_COOLDOWN_ATAQUE: float = 0.3
 const HEROI_DISTANCIA_GOLPE: float = 34.0 ## do centro do herói ao centro da hitbox
 const HEROI_DURACAO_GOLPE: float = 0.1 ## tempo em que a hitbox fica ativa
-const HEROI_INVENCIBILIDADE: float = 1.0 ## depois de levar dano
+const HEROI_INVENCIBILIDADE: float = 1.5 ## tempo sem levar dano depois de ser atingido (o herói pisca)
 
 # ---------------------------------------------------------------- árvore
 
@@ -86,11 +86,18 @@ const DROP_BONUS_POR_DANO_ARVORE: float = 0.005 ## soma à chance por ponto de d
 const DROP_CHANCE_MAXIMA: float = 0.55
 # Pesos do sorteio de qual item cai (não precisam somar 100). Hoje: 30% fruta, 30% erva,
 # 15% escudo, 12,5% velocidade, 12,5% força.
-const DROP_PESO_FRUTA: float = 3.0
+const DROP_PESO_FRUTA: float = 4.0
 const DROP_PESO_ERVA: float = 3.0
 const DROP_PESO_ESCUDO: float = 1.5
 const DROP_PESO_VELOCIDADE: float = 1.25
 const DROP_PESO_FORCA: float = 1.25
+# Herói com pouca vida: mais chance de cair item e mais chance de ser fruta.
+# Os dois bônus crescem conforme a vida cai (sem bônus com vida cheia, bônus inteiro com a vida no fim).
+const DROP_BONUS_CHANCE_VIDA_BAIXA: float = 0.3 ## soma à chance de cair item
+const DROP_MULTIPLICADOR_FRUTA_VIDA_BAIXA: float = 4.0 ## multiplica o peso da fruta
+# Frutas que aparecem perto da árvore ao fim de cada onda (menos a última do modo história).
+const FRUTAS_FIM_DE_ONDA: int = 1
+const FRUTAS_FIM_DE_ONDA_DISTANCIA: float = 100.0 ## da árvore, sempre abaixo dela para não ficar escondida na copa
 const ITEM_CURA_FRUTA: int = 25
 const ITEM_CURA_ERVA: int = 40
 const ITEM_DURACAO_ESCUDO: float = 4.0

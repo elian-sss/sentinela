@@ -120,8 +120,17 @@ func _soltar_fumaca() -> void:
 
 
 ## Quem já bateu mais na árvore tem mais chance de soltar item, até o limite.
+## Com o herói ferido, a chance sobe mais um pouco (além do limite).
 func _chance_de_item() -> float:
-	return minf(chance_item + _dano_causado_arvore * bonus_chance_por_dano_arvore, chance_item_maxima)
+	var chance: float = minf(chance_item + _dano_causado_arvore * bonus_chance_por_dano_arvore, chance_item_maxima)
+	return chance + _falta_de_vida_do_heroi() * Balanceamento.DROP_BONUS_CHANCE_VIDA_BAIXA
+
+
+## 0 com a vida cheia, 1 com a vida zerada.
+func _falta_de_vida_do_heroi() -> float:
+	if _heroi == null:
+		return 0.0
+	return 1.0 - float(_heroi.vida_atual) / _heroi.vida_maxima
 
 
 func _talvez_soltar_item() -> void:
@@ -134,10 +143,11 @@ func _talvez_soltar_item() -> void:
 	get_parent().add_child.call_deferred(item)
 
 
-## Sorteio por peso, com os pesos de Balanceamento.DROP_PESO_*.
+## Sorteio por peso, com os pesos de Balanceamento.DROP_PESO_*. A fruta pesa mais com o herói ferido.
 func _sortear_tipo_item() -> Item.Tipo:
+	var multiplicador_fruta: float = lerpf(1.0, Balanceamento.DROP_MULTIPLICADOR_FRUTA_VIDA_BAIXA, _falta_de_vida_do_heroi())
 	var pesos: Dictionary = {
-		Item.Tipo.FRUTA: Balanceamento.DROP_PESO_FRUTA,
+		Item.Tipo.FRUTA: Balanceamento.DROP_PESO_FRUTA * multiplicador_fruta,
 		Item.Tipo.ERVA: Balanceamento.DROP_PESO_ERVA,
 		Item.Tipo.ESCUDO: Balanceamento.DROP_PESO_ESCUDO,
 		Item.Tipo.VELOCIDADE: Balanceamento.DROP_PESO_VELOCIDADE,

@@ -5,6 +5,8 @@ extends Node
 signal derrota(onda: int)
 signal vitoria
 
+const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
+
 @export var arvore: Arvore
 @export var heroi: Heroi
 @export var gerente_de_ondas: GerenteDeOndas
@@ -17,6 +19,7 @@ func _ready() -> void:
 	heroi.morreu.connect(_perder)
 	gerente_de_ondas.vitoria.connect(_vencer)
 	gerente_de_ondas.onda_concluida.connect(_regenerar_arvore)
+	gerente_de_ondas.onda_concluida.connect(_soltar_frutas)
 
 
 func _perder() -> void:
@@ -30,6 +33,20 @@ func _perder() -> void:
 func _regenerar_arvore(onda: int) -> void:
 	if not gerente_de_ondas.eh_ultima_onda(onda):
 		arvore.curar(int(arvore.vida_maxima * Balanceamento.ARVORE_REGENERACAO_ENTRE_ONDAS))
+
+
+## Ao fim de cada onda, menos a última, caem frutas perto da árvore para o herói se curar na pausa.
+func _soltar_frutas(onda: int) -> void:
+	if gerente_de_ondas.eh_ultima_onda(onda):
+		return
+	for i in Balanceamento.FRUTAS_FIM_DE_ONDA:
+		var fruta: Item = CENA_ITEM.instantiate()
+		fruta.tipo = Item.Tipo.FRUTA
+		# Ângulo entre 20° e 160°: sempre abaixo da árvore, onde a copa não esconde.
+		var angulo: float = deg_to_rad(randf_range(20.0, 160.0))
+		fruta.position = arvore.global_position + Vector2.from_angle(angulo) * Balanceamento.FRUTAS_FIM_DE_ONDA_DISTANCIA
+		# Adiado: a onda termina dentro do callback de morte de um inimigo, onde não dá para criar áreas.
+		get_parent().add_child.call_deferred(fruta)
 
 
 func _vencer() -> void:
