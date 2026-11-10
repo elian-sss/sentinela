@@ -6,6 +6,7 @@
 size = Vector2(32, 32)
 
 [node name="Heroi" type="CharacterBody2D" groups=["heroi"]]
+collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_heroi")
 

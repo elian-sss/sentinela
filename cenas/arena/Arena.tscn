@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaFimDePartida.tscn" id="6_tela_fim"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaPausa.tscn" id="7_tela_pausa"]
 [ext_resource type="Script" path="res://cenas/jogo/camera_tremor.gd" id="8_camera"]
+[ext_resource type="PackedScene" path="res://cenas/cenario/Cenario.tscn" id="9_cenario"]
 
 [node name="Arena" type="Node2D" unique_id=560938052]
 
@@ -16,6 +17,8 @@ offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.18, 0.4, 0.2, 1)
+
+[node name="Cenario" parent="." instance=ExtResource("9_cenario")]
 
 [node name="Arvore" parent="." unique_id=970273876 instance=ExtResource("2_arvore")]
 position = Vector2(576, 324)
