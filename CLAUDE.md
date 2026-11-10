@@ -1,4 +1,4 @@
-# Game Jam Semana GameDev III — Guardião da Floresta
+# Game Jam Semana GameDev III — Sentinela
 
 ## Contexto
 Jogo 2D feito por uma pessoa só em 4 dias para a Game Jam da Semana GameDev III (Santarém, PA).
