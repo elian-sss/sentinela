@@ -6,6 +6,7 @@ extends Area2D
 signal morreu(posicao: Vector2)
 
 const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
+const TAMANHO_TEXTURA_BRASA: float = 64.0
 
 var vida: int = Balanceamento.FOGO_VIDA
 var dano: int = Balanceamento.FOGO_DANO_ARVORE
@@ -22,7 +23,8 @@ var _raio: float = 0.0
 var _tempo_ate_dano: float = 0.0
 
 @onready var _forma: CircleShape2D = $Colisao.shape
-@onready var _visual: ColorRect = $Visual
+@onready var _brasa: Sprite2D = $Visual/Brasa
+@onready var _chamas: CPUParticles2D = $Visual/Chamas
 
 
 ## O fogo escolhe sozinho onde nascer, num ponto aleatório em volta da árvore.
@@ -61,8 +63,11 @@ func _queimar_arvore_se_perto(delta: float) -> void:
 func _definir_raio(valor: float) -> void:
 	_raio = valor
 	_forma.radius = valor
-	_visual.size = Vector2.ONE * valor * 2.0
-	_visual.position = -Vector2.ONE * valor
+	# a brasa é achatada (visão 3/4) e as chamas ficam maiores conforme o fogo cresce
+	_brasa.scale = Vector2(1.0, 0.7) * valor / TAMANHO_TEXTURA_BRASA * 2.0
+	_chamas.emission_sphere_radius = valor * 0.75
+	_chamas.scale_amount_min = 2.0 + valor / 16.0
+	_chamas.scale_amount_max = 4.0 + valor / 10.0
 
 
 func _apagar() -> void:

@@ -1,6 +1,22 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://cenas/fogo/fogo.gd" id="1_fogo"]
+
+[sub_resource type="Gradient" id="Gradient_brasa"]
+offsets = PackedFloat32Array(0, 0.45, 0.8, 1)
+colors = PackedColorArray(1, 0.6, 0.15, 0.85, 0.85, 0.25, 0.05, 0.7, 0.25, 0.08, 0.04, 0.6, 0.1, 0.05, 0.03, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_brasa"]
+gradient = SubResource("Gradient_brasa")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_chamas"]
+offsets = PackedFloat32Array(0, 0.25, 0.6, 0.85, 1)
+colors = PackedColorArray(1, 0.95, 0.5, 1, 1, 0.7, 0.15, 1, 0.9, 0.25, 0.05, 0.9, 0.3, 0.25, 0.25, 0.5, 0.2, 0.2, 0.2, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fogo"]
 resource_local_to_scene = true
@@ -13,10 +29,23 @@ script = ExtResource("1_fogo")
 [node name="Colisao" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_fogo")
 
-[node name="Visual" type="ColorRect" parent="."]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-mouse_filter = 2
-color = Color(1, 0.2, 0.1, 0.7)
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Brasa" type="Sprite2D" parent="Visual"]
+scale = Vector2(0.5, 0.35)
+texture = SubResource("GradientTexture2D_brasa")
+
+[node name="Chamas" type="CPUParticles2D" parent="Visual"]
+amount = 48
+lifetime = 0.8
+preprocess = 0.8
+emission_shape = 1
+emission_sphere_radius = 12.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(0, -60)
+initial_velocity_min = 15.0
+initial_velocity_max = 40.0
+scale_amount_min = 3.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_chamas")
