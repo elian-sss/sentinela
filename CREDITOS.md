@@ -11,13 +11,21 @@ sem samples de terceiros. Para gerar de novo: `python tools/gerar_audio.py` (req
 
 ## Assets de terceiros (somente cenário)
 
-### Tiny Town
+### Dead Swamp
 
-- **Autor:** Kenney (www.kenney.nl)
-- **URL:** https://kenney.nl/assets/tiny-town
-- **Versão:** 1.1
-- **Licença:** Creative Commons Zero (CC0 1.0), domínio público. Crédito não obrigatório.
-  Arquivo original da licença: `assets/cenario/kenney_tiny_town/License.txt`
+- **Autor:** Sevarihk (também assina como "Aurora")
+- **URL:** https://sevarihk.itch.io/dead-swamp-tileset
+- **Licença:** Creative Commons Attribution 4.0 International (CC-BY 4.0), conforme a página do pack,
+  e os termos do `README.txt` do autor: uso comercial permitido, edição permitida, **crédito obrigatório**
+  ("Sevarihk" ou "Aurora"), não apresentar os assets como próprios.
+  Arquivo original dos termos: `assets/cenario/dead_swamp/README.txt`
 - **Data de acesso:** 10/11/2026
-- **Arquivos usados:** `assets/cenario/kenney_tiny_town/tilemap_packed.png` (tilemap 16x16 com chão de grama e terra, arbustos, pinheiros, pedras, broto, tronco, cerca, barril e poço)
+- **Arquivos usados** (renomeados para nomes sem espaço; conteúdo original):
+  - `dead_swamp_v4.png` ← `dead-swamp-v4.png` (chão de lama, árvores mortas, tronco quebrado, juncos, galhos)
+  - `tree_trunk_swamp.png` ← `tree-trunk-swamp.png` (toco gigante, montes de raiz, folhinhas)
+  - `dreck_auf_dreck.png` ← `dreck auf dreck.png` (terra da clareira)
+  - `agua_pantano.png`: primeiro quadro recortado de `swamp-brühe animated-v5.png` (poças)
 - **Onde:** `cenas/cenario/Cenario.tscn` (camadas `Chao` e `Decoracao`) e `cenas/cenario/cenario_tileset.tres`
+
+**Crédito sugerido para a página do itch.io e para o jogo:**
+"Cenário: Dead Swamp por Sevarihk (CC-BY 4.0) — https://sevarihk.itch.io/dead-swamp-tileset"

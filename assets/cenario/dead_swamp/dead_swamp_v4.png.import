@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3ydwhogtprtw"
-path="res://.godot/imported/tilemap_packed.png-8892704d169b4a857d7025f74c65b7c2.ctex"
+uid="uid://8cpuas7w6owd"
+path="res://.godot/imported/dead_swamp_v4.png-e0095ce9be0d22ffefe7b8deb2155f4d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/kenney_tiny_town/tilemap_packed.png"
-dest_files=["res://.godot/imported/tilemap_packed.png-8892704d169b4a857d7025f74c65b7c2.ctex"]
+source_file="res://assets/cenario/dead_swamp/dead_swamp_v4.png"
+dest_files=["res://.godot/imported/dead_swamp_v4.png-e0095ce9be0d22ffefe7b8deb2155f4d.ctex"]
 
 [params]
 
