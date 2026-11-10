@@ -2,6 +2,7 @@
 [ext_resource type="Texture2D" path="res://assets/personagens/arvore_sagrada.png" id="2_textura"]
 
 [ext_resource type="Script" path="res://cenas/arvore/arvore.gd" id="1_arvore"]
+[ext_resource type="Script" path="res://cenas/cenario/copa_transparente.gd" id="3_copa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arvore"]
 size = Vector2(64, 64)
@@ -16,3 +17,6 @@ shape = SubResource("RectangleShape2D_arvore")
 texture_filter = 1
 position = Vector2(0, -48)
 texture = ExtResource("2_textura")
+
+[node name="Copa" type="Area2D" parent="Visual"]
+script = ExtResource("3_copa")

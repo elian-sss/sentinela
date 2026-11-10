@@ -21,6 +21,8 @@
 
 [ext_resource type="Texture2D" path="res://assets/cenario/props/gramado.png" id="p_gramado"]
 
+[ext_resource type="Script" path="res://cenas/cenario/copa_transparente.gd" id="s_copa"]
+
 [sub_resource type="Gradient" id="Gradient_fsjn5"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(0, 0, 0, 0.05, 0.06, 0, 0, 0.2, 0.1, 0.01, 0, 0.45)
@@ -1013,6 +1015,57 @@ collision_mask = 0
 [node name="Colisao" type="CollisionShape2D" parent="Bordas/Arvore13/Tronco"]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_tronco_largo")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore1"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore2"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore3"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Palmeira1"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore4"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore5"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore6"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Palmeira2"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Palmeira3"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore7"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore8"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore9"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore10"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore11"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Palmeira4"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore12"]
+script = ExtResource("s_copa")
+
+[node name="Copa" type="Area2D" parent="Bordas/Arvore13"]
+script = ExtResource("s_copa")
 
 [node name="Atmosfera" type="Node2D" parent="." unique_id=50557821]
 z_index = 20
