@@ -294,10 +294,10 @@ def vitoria_regia(nome, semente, com_flor):
 
 # ------------------------------------------------------------------ gramado
 
-# Verdes escuros e úmidos, para combinar com o pântano.
-GRAMA = [(28, 44, 30), (36, 56, 34), (44, 68, 38), (54, 80, 42), (68, 94, 48)]
-GRAMA_FOLHA_CLARA = (86, 110, 56)
-GRAMA_SOMBRA = (22, 34, 24)
+# Verde-oliva apagado e úmido, puxando para a terra, para combinar com o pântano.
+GRAMA = [(34, 40, 30), (42, 49, 35), (51, 58, 40), (61, 68, 45), (74, 80, 52)]
+GRAMA_FOLHA_CLARA = (90, 96, 60)
+GRAMA_SOMBRA = (26, 30, 24)
 # Matriz de Bayer 4x4: faz a transição entre tons com padrão de pixel art, sem chiado.
 BAYER = np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]) / 16.0
 
