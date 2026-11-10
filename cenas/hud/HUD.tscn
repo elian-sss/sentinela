@@ -1,157 +1,455 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=13 format=3]
 
-[ext_resource type="Script" path="res://cenas/hud/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://cenas/hud/hud.gd" id="hud"]
+[ext_resource type="Script" path="res://cenas/hud/barra_vida.gd" id="barra"]
+[ext_resource type="Texture2D" path="res://assets/interface/retrato_sentinela.png" id="retrato"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_samauma.png" id="samauma"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_escavadeira.png" id="escavadeira"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_dash.png" id="dash"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_escudo.png" id="escudo"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_velocidade.png" id="velocidade"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_forca.png" id="forca"]
+[ext_resource type="Texture2D" path="res://assets/interface/mouse.png" id="mouse"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fundo_barra"]
-bg_color = Color(0.1, 0.07, 0.04, 0.85)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+[sub_resource type="Gradient" id="Gradient_perigo"]
+offsets = PackedFloat32Array(0.45, 0.8, 1)
+colors = PackedColorArray(0.7, 0.05, 0.03, 0, 0.7, 0.05, 0.03, 0.45, 0.6, 0.03, 0.02, 0.9)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_heroi"]
-bg_color = Color(0.2, 0.75, 0.95, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_arvore"]
-bg_color = Color(0.35, 0.9, 0.3, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_chefe"]
-bg_color = Color(0.9, 0.3, 0.2, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_perigo"]
+gradient = SubResource("Gradient_perigo")
+width = 256
+height = 144
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [node name="HUD" type="CanvasLayer"]
-script = ExtResource("1_hud")
+script = ExtResource("hud")
 
-[node name="PainelHeroi" type="VBoxContainer" parent="."]
+[node name="VinhetaPerigo" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_perigo")
+
+[node name="PainelHeroi" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
 offset_left = 16.0
-offset_top = 16.0
-offset_right = 256.0
-offset_bottom = 60.0
+offset_top = 12.0
+offset_right = 320.0
+offset_bottom = 92.0
 mouse_filter = 2
 
-[node name="Rotulo" type="Label" parent="PainelHeroi"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "Guardião"
+[node name="Retrato" type="TextureRect" parent="PainelHeroi"]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("retrato")
 
-[node name="BarraVida" type="ProgressBar" parent="PainelHeroi"]
-custom_minimum_size = Vector2(0, 16)
+[node name="Nome" type="Label" parent="PainelHeroi"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = -2.0
+offset_right = 220.0
+offset_bottom = 22.0
+text = "SENTINELA"
+
+[node name="Valor" type="Label" parent="PainelHeroi"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = -2.0
+offset_right = 282.0
+offset_bottom = 22.0
+theme_type_variation = &"LabelSuave"
+text = "100"
+horizontal_alignment = 2
+
+[node name="Barra" type="Control" parent="PainelHeroi"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 24.0
+offset_right = 282.0
+offset_bottom = 44.0
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.93, 0.43, 0.14, 1)
+
+[node name="Estados" type="HBoxContainer" parent="PainelHeroi"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 50.0
+offset_right = 320.0
+offset_bottom = 74.0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+
+[node name="Dash" type="HBoxContainer" parent="PainelHeroi/Estados"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vida_heroi")
-step = 1.0
-value = 100.0
-show_percentage = false
+theme_override_constants/separation = 4
 
-[node name="PainelArvore" type="VBoxContainer" parent="."]
+[node name="Icone" type="TextureRect" parent="PainelHeroi/Estados/Dash"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("dash")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Barra" type="Control" parent="PainelHeroi/Estados/Dash"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.47, 0.75, 0.9, 1)
+com_fantasma = false
+com_marcas = false
+pulsar_no_critico = false
+
+
+[node name="Escudo" type="HBoxContainer" parent="PainelHeroi/Estados"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icone" type="TextureRect" parent="PainelHeroi/Estados/Escudo"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("escudo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Barra" type="Control" parent="PainelHeroi/Estados/Escudo"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.45, 0.72, 0.92, 1)
+com_fantasma = false
+com_marcas = false
+pulsar_no_critico = false
+
+
+[node name="Velocidade" type="HBoxContainer" parent="PainelHeroi/Estados"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icone" type="TextureRect" parent="PainelHeroi/Estados/Velocidade"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("velocidade")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Barra" type="Control" parent="PainelHeroi/Estados/Velocidade"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.96, 0.8, 0.25, 1)
+com_fantasma = false
+com_marcas = false
+pulsar_no_critico = false
+
+
+[node name="Forca" type="HBoxContainer" parent="PainelHeroi/Estados"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icone" type="TextureRect" parent="PainelHeroi/Estados/Forca"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("forca")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Barra" type="Control" parent="PainelHeroi/Estados/Forca"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.7, 0.45, 0.88, 1)
+com_fantasma = false
+com_marcas = false
+pulsar_no_critico = false
+
+
+[node name="PainelArvore" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -256.0
-offset_top = 16.0
+offset_left = -316.0
+offset_top = 12.0
 offset_right = -16.0
-offset_bottom = 60.0
+offset_bottom = 92.0
 grow_horizontal = 0
 mouse_filter = 2
 
-[node name="Rotulo" type="Label" parent="PainelArvore"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "Árvore Sagrada"
+[node name="Icone" type="TextureRect" parent="PainelArvore"]
+layout_mode = 0
+offset_left = 252.0
+offset_right = 300.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("samauma")
+
+[node name="Nome" type="Label" parent="PainelArvore"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = -2.0
+offset_right = 242.0
+offset_bottom = 22.0
+text = "SAMAÚMA"
 horizontal_alignment = 2
 
-[node name="BarraVida" type="ProgressBar" parent="PainelArvore"]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vida_arvore")
-step = 1.0
-value = 100.0
-show_percentage = false
+[node name="Valor" type="Label" parent="PainelArvore"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = -2.0
+offset_right = 80.0
+offset_bottom = 22.0
+theme_type_variation = &"LabelSuave"
+text = "300"
 
-[node name="RotuloOnda" type="Label" parent="."]
+[node name="Barra" type="Control" parent="PainelArvore"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 24.0
+offset_right = 242.0
+offset_bottom = 44.0
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.41, 0.67, 0.28, 1)
+da_direita = true
+
+[node name="Perigo" type="Label" parent="PainelArvore"]
+visible = false
+layout_mode = 0
+offset_left = 18.0
+offset_top = 48.0
+offset_right = 242.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(1, 0.4, 0.3, 1)
+text = "Em perigo!"
+horizontal_alignment = 2
+
+[node name="PainelOnda" type="VBoxContainer" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -100.0
-offset_top = 12.0
-offset_right = 100.0
-offset_bottom = 46.0
+offset_left = -160.0
+offset_top = 8.0
+offset_right = 160.0
+offset_bottom = 96.0
 grow_horizontal = 2
 mouse_filter = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 24
+theme_override_constants/separation = 2
+
+[node name="RotuloOnda" type="Label" parent="PainelOnda"]
+layout_mode = 2
+theme_type_variation = &"LabelMedio"
 text = "Onda 1/5"
 horizontal_alignment = 1
 
-[node name="Aviso" type="Label" parent="."]
+[node name="Pips" type="HBoxContainer" parent="PainelOnda"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="RotuloRestam" type="Label" parent="PainelOnda"]
+layout_mode = 2
+theme_type_variation = &"LabelSuave"
+horizontal_alignment = 1
+
+[node name="Aviso" type="VBoxContainer" parent="."]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -140.0
-offset_right = 200.0
-offset_bottom = -80.0
+offset_left = -400.0
+offset_top = -210.0
+offset_right = 400.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(400, 55)
 mouse_filter = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 48
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Titulo" type="Label" parent="Aviso"]
+layout_mode = 2
+theme_type_variation = &"LabelTitulo"
 text = "Onda 1"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="TimerAviso" type="Timer" parent="."]
-one_shot = true
+[node name="Subtitulo" type="Label" parent="Aviso"]
+layout_mode = 2
+theme_type_variation = &"LabelMedio"
+text = "Lenhadores"
+horizontal_alignment = 1
 
-[node name="PainelChefe" type="VBoxContainer" parent="."]
+[node name="PainelChefe" type="Control" parent="."]
 visible = false
+layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -250.0
-offset_top = -64.0
-offset_right = 250.0
+offset_left = -270.0
+offset_top = -76.0
+offset_right = 270.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="Rotulo" type="Label" parent="PainelChefe"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "Escavadeira"
-horizontal_alignment = 1
-
-[node name="BarraVida" type="ProgressBar" parent="PainelChefe"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
+[node name="Icone" type="TextureRect" parent="PainelChefe"]
+layout_mode = 0
+offset_top = 6.0
+offset_right = 48.0
+offset_bottom = 54.0
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vida_chefe")
-step = 1.0
-value = 100.0
-show_percentage = false
+texture = ExtResource("escavadeira")
+
+[node name="Nome" type="Label" parent="PainelChefe"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 2.0
+offset_right = 260.0
+offset_bottom = 26.0
+text = "ESCAVADEIRA"
+
+[node name="Estado" type="Label" parent="PainelChefe"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 2.0
+offset_right = 540.0
+offset_bottom = 26.0
+theme_type_variation = &"LabelDestaque"
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+
+[node name="Barra" type="Control" parent="PainelChefe"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 28.0
+offset_right = 540.0
+offset_bottom = 52.0
+mouse_filter = 2
+script = ExtResource("barra")
+cor = Color(0.96, 0.78, 0.25, 1)
+listras = true
+pulsar_no_critico = false
+
+[node name="Dicas" type="HBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -52.0
+offset_right = 640.0
+offset_bottom = -14.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+
+[node name="TeclaW" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "W"
+
+
+[node name="TeclaA" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "A"
+
+
+[node name="TeclaS" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "S"
+
+
+[node name="TeclaD" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "D"
+
+
+[node name="Mover" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "mover   "
+
+
+[node name="Mouse" type="TextureRect" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("mouse")
+stretch_mode = 3
+
+
+[node name="Ou" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelSuave"
+text = "ou"
+
+
+[node name="TeclaJ" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "J"
+
+
+[node name="Atacar" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "atacar   "
+
+
+[node name="TeclaEspaco" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LabelTecla"
+text = "Espaço"
+
+
+[node name="DashTexto" type="Label" parent="Dicas"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "dash"
