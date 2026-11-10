@@ -1,5 +1,6 @@
 extends CharacterBody2D
-## Lenhador: anda em linha reta até a árvore e a ataca periodicamente.
+## Inimigo base (lenhador): anda em linha reta até a árvore e a ataca periodicamente.
+## Variantes (ex.: Motosserrista.tscn) herdam esta cena e só mudam os valores no Inspector.
 
 signal morreu(posicao: Vector2)
 

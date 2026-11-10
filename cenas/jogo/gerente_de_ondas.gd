@@ -6,23 +6,25 @@ signal onda_iniciada(numero: int)
 signal onda_concluida(numero: int)
 signal vitoria
 
-## Uma entrada por onda: tipo de inimigo, quantidade e intervalo (s) entre um nascimento e outro.
+## Uma entrada por onda: quantos inimigos de cada tipo e o intervalo (s) entre um nascimento e outro.
+## Numa onda com tipos misturados, a ordem de nascimento é sorteada.
 const ONDAS: Array[Dictionary] = [
-	{"inimigo": "lenhador", "quantidade": 5, "intervalo": 1.5},
-	{"inimigo": "lenhador", "quantidade": 8, "intervalo": 1.2},
-	{"inimigo": "lenhador", "quantidade": 10, "intervalo": 1.0},
-	{"inimigo": "lenhador", "quantidade": 14, "intervalo": 0.8},
-	{"inimigo": "lenhador", "quantidade": 1, "intervalo": 1.0}, # vira o chefe quando ele existir
+	{"inimigos": {"lenhador": 5}, "intervalo": 1.5},
+	{"inimigos": {"lenhador": 8}, "intervalo": 1.2},
+	{"inimigos": {"motosserrista": 10}, "intervalo": 1.0},
+	{"inimigos": {"lenhador": 8, "motosserrista": 8}, "intervalo": 0.8},
+	{"inimigos": {"lenhador": 1}, "intervalo": 1.0}, # vira o chefe quando ele existir
 ]
 const CENAS_INIMIGO: Dictionary = {
 	"lenhador": preload("res://cenas/inimigo/Inimigo.tscn"),
+	"motosserrista": preload("res://cenas/inimigo/Motosserrista.tscn"),
 }
 
 @export var pausa_entre_ondas: float = 3.0
 @export var margem_fora_da_tela: float = 40.0
 
 var _onda_atual: int = 0
-var _faltam_nascer: int = 0
+var _fila_nascimento: Array[String] = []
 var _vivos: int = 0
 
 @onready var _timer_nascimento: Timer = $TimerNascimento
@@ -42,22 +44,29 @@ func total_de_ondas() -> int:
 func _iniciar_proxima_onda() -> void:
 	_onda_atual += 1
 	var onda: Dictionary = ONDAS[_onda_atual - 1]
-	_faltam_nascer = onda["quantidade"]
+	_montar_fila_nascimento(onda["inimigos"])
 	onda_iniciada.emit(_onda_atual)
 	_timer_nascimento.start(onda["intervalo"])
 	_fazer_nascer_inimigo()
 
 
+## Transforma {"lenhador": 2, "motosserrista": 1} numa fila embaralhada de tipos.
+func _montar_fila_nascimento(quantidades: Dictionary) -> void:
+	_fila_nascimento.clear()
+	for tipo: String in quantidades:
+		for i in quantidades[tipo]:
+			_fila_nascimento.append(tipo)
+	_fila_nascimento.shuffle()
+
+
 func _fazer_nascer_inimigo() -> void:
-	var onda: Dictionary = ONDAS[_onda_atual - 1]
-	var cena: PackedScene = CENAS_INIMIGO[onda["inimigo"]]
+	var cena: PackedScene = CENAS_INIMIGO[_fila_nascimento.pop_back()]
 	var inimigo: Node2D = cena.instantiate()
 	inimigo.position = _posicao_fora_da_tela()
 	inimigo.morreu.connect(_ao_inimigo_morrer)
 	get_parent().add_child(inimigo)
 	_vivos += 1
-	_faltam_nascer -= 1
-	if _faltam_nascer == 0:
+	if _fila_nascimento.is_empty():
 		_timer_nascimento.stop()
 
 
@@ -79,7 +88,7 @@ func _posicao_fora_da_tela() -> Vector2:
 
 func _ao_inimigo_morrer(_posicao: Vector2) -> void:
 	_vivos -= 1
-	if _vivos == 0 and _faltam_nascer == 0:
+	if _vivos == 0 and _fila_nascimento.is_empty():
 		_concluir_onda()
 
 
