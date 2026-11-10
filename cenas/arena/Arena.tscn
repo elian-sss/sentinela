@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://cenas/heroi/Heroi.tscn" id="1_heroi"]
 [ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="2_arvore"]
 [ext_resource type="PackedScene" path="res://cenas/inimigo/Inimigo.tscn" id="3_inimigo"]
+[ext_resource type="Script" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
 
 [node name="Arena" type="Node2D"]
 
@@ -20,3 +21,8 @@ position = Vector2(576, 400)
 
 [node name="Inimigo" parent="." instance=ExtResource("3_inimigo")]
 position = Vector2(120, 100)
+
+[node name="GerenteDoJogo" type="Node" parent="." node_paths=PackedStringArray("arvore", "heroi")]
+script = ExtResource("4_gerente")
+arvore = NodePath("../Arvore")
+heroi = NodePath("../Heroi")

@@ -1,5 +1,9 @@
+class_name Heroi
 extends CharacterBody2D
-## Herói guardião da floresta: movimento em 8 direções, dash e ataque corpo a corpo.
+## Herói guardião da floresta: movimento em 8 direções, dash, ataque corpo a corpo e vida.
+
+signal vida_alterada(atual: int, maxima: int)
+signal morreu
 
 const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 
@@ -10,17 +14,26 @@ const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 @export var dano_ataque: int = 10
 @export var cooldown_ataque: float = 0.3
 @export var distancia_golpe: float = 34.0
+@export var vida_maxima: int = 100
+@export var vida_atual: int = 100:
+	set = _definir_vida
+@export var duracao_invencibilidade: float = 0.8
+@export var intervalo_piscar: float = 0.1
 
 var _direcao_olhar: Vector2 = Vector2.RIGHT
 var _direcao_dash: Vector2 = Vector2.ZERO
 var _tempo_dash_restante: float = 0.0
 var _tempo_cooldown_restante: float = 0.0
 var _tempo_cooldown_ataque: float = 0.0
+var _tempo_invencivel: float = 0.0
+
+@onready var _visual: ColorRect = $Visual
 
 
 func _physics_process(delta: float) -> void:
 	_tempo_cooldown_restante = maxf(_tempo_cooldown_restante - delta, 0.0)
 	_tempo_cooldown_ataque = maxf(_tempo_cooldown_ataque - delta, 0.0)
+	_atualizar_invencibilidade(delta)
 
 	var direcao: Vector2 = Input.get_vector("mover_esquerda", "mover_direita", "mover_cima", "mover_baixo")
 	if direcao != Vector2.ZERO:
@@ -70,3 +83,44 @@ func _direcao_do_ataque() -> Vector2:
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		return global_position.direction_to(get_global_mouse_position())
 	return _direcao_olhar
+
+
+func receber_dano(valor: int) -> void:
+	if esta_invencivel() or esta_morto():
+		return
+	vida_atual -= valor
+	_tempo_invencivel = duracao_invencibilidade
+
+
+func curar(valor: int) -> void:
+	if esta_morto():
+		return
+	vida_atual += valor
+
+
+func esta_invencivel() -> bool:
+	return _tempo_invencivel > 0.0
+
+
+func esta_morto() -> bool:
+	return vida_atual <= 0
+
+
+func _definir_vida(valor: int) -> void:
+	var anterior: int = vida_atual
+	vida_atual = clampi(valor, 0, vida_maxima)
+	if vida_atual == anterior:
+		return
+	vida_alterada.emit(vida_atual, vida_maxima)
+	if vida_atual == 0:
+		morreu.emit()
+
+
+## Conta o tempo de invencibilidade e faz o visual piscar enquanto ela dura.
+func _atualizar_invencibilidade(delta: float) -> void:
+	_tempo_invencivel = maxf(_tempo_invencivel - delta, 0.0)
+	if esta_invencivel():
+		var fase: int = int(_tempo_invencivel / intervalo_piscar)
+		_visual.visible = fase % 2 == 0
+	else:
+		_visual.visible = true
