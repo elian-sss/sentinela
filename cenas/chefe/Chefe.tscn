@@ -1,10 +1,21 @@
-[gd_scene load_steps=5 format=3]
-[ext_resource type="SpriteFrames" path="res://cenas/chefe/escavadeira_quadros.tres" id="2_quadros"]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://cenas/chefe/chefe.gd" id="1_chefe"]
+[ext_resource type="SpriteFrames" path="res://cenas/chefe/escavadeira_quadros.tres" id="2_quadros"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_chefe"]
 size = Vector2(96, 72)
+
+[sub_resource type="Gradient" id="Gradient_aviso"]
+colors = PackedColorArray(1, 0.25, 0.15, 0.55, 1, 0.25, 0.15, 0)
+
+[sub_resource type="Gradient" id="Gradient_estrelas"]
+offsets = PackedFloat32Array(0, 0.2, 0.8, 1)
+colors = PackedColorArray(1, 0.95, 0.5, 0, 1, 0.95, 0.5, 1, 1, 0.8, 0.3, 1, 1, 0.8, 0.3, 0)
+
+[sub_resource type="Gradient" id="Gradient_fumaca"]
+offsets = PackedFloat32Array(0, 0.3, 1)
+colors = PackedColorArray(0.2, 0.2, 0.22, 0, 0.2, 0.2, 0.22, 0.85, 0.35, 0.35, 0.37, 0)
 
 [node name="Chefe" type="CharacterBody2D" groups=["inimigos"]]
 collision_layer = 2
@@ -14,9 +25,10 @@ script = ExtResource("1_chefe")
 
 [node name="LinhaAviso" type="Line2D" parent="."]
 visible = false
+z_index = -1
 points = PackedVector2Array(0, 0, 100, 0)
 width = 72.0
-default_color = Color(1, 0.2, 0.15, 0.3)
+gradient = SubResource("Gradient_aviso")
 
 [node name="Colisao" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_chefe")
@@ -26,3 +38,46 @@ texture_filter = 1
 sprite_frames = ExtResource("2_quadros")
 animation = &"andando"
 autoplay = "andando"
+
+[node name="Alerta" type="Label" parent="."]
+visible = false
+z_index = 16
+offset_left = -40.0
+offset_top = -124.0
+offset_right = 40.0
+offset_bottom = -64.0
+theme_type_variation = &"LabelTitulo"
+theme_override_colors/font_color = Color(1, 0.3, 0.2, 1)
+text = "!"
+horizontal_alignment = 1
+
+[node name="Estrelas" type="CPUParticles2D" parent="."]
+z_index = 16
+position = Vector2(-8, -58)
+emitting = false
+amount = 8
+lifetime = 0.9
+emission_shape = 3
+emission_rect_extents = Vector2(34, 6)
+direction = Vector2(0, -1)
+spread = 40.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 8.0
+initial_velocity_max = 22.0
+scale_amount_min = 3.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_estrelas")
+
+[node name="FumacaDano" type="CPUParticles2D" parent="."]
+position = Vector2(24, -34)
+emitting = false
+amount = 12
+lifetime = 1.1
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, -20)
+initial_velocity_min = 20.0
+initial_velocity_max = 45.0
+scale_amount_min = 4.0
+scale_amount_max = 9.0
+color_ramp = SubResource("Gradient_fumaca")

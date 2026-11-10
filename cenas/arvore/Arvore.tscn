@@ -1,11 +1,22 @@
-[gd_scene load_steps=5 format=3]
-[ext_resource type="Texture2D" path="res://assets/personagens/arvore_sagrada.png" id="2_textura"]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://cenas/arvore/arvore.gd" id="1_arvore"]
+[ext_resource type="Texture2D" path="res://assets/personagens/arvore_sagrada.png" id="2_textura"]
 [ext_resource type="Script" path="res://cenas/cenario/copa_transparente.gd" id="3_copa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arvore"]
 size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_folhas"]
+offsets = PackedFloat32Array(0, 0.7, 1)
+colors = PackedColorArray(0.59, 0.8, 0.38, 1, 0.26, 0.54, 0.24, 1, 0.17, 0.41, 0.2, 0)
+
+[sub_resource type="Gradient" id="Gradient_cura"]
+offsets = PackedFloat32Array(0, 0.3, 1)
+colors = PackedColorArray(0.75, 1, 0.6, 0, 0.75, 1, 0.6, 1, 0.45, 0.9, 0.4, 0)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aditivo"]
+blend_mode = 1
 
 [node name="Arvore" type="StaticBody2D" groups=["arvore"]]
 script = ExtResource("1_arvore")
@@ -17,6 +28,44 @@ shape = SubResource("RectangleShape2D_arvore")
 texture_filter = 1
 position = Vector2(0, -48)
 texture = ExtResource("2_textura")
+hframes = 3
 
 [node name="Copa" type="Area2D" parent="Visual"]
 script = ExtResource("3_copa")
+
+[node name="Folhas" type="CPUParticles2D" parent="."]
+position = Vector2(0, -96)
+emitting = false
+amount = 14
+lifetime = 1.1
+one_shot = true
+explosiveness = 0.9
+emission_shape = 3
+emission_rect_extents = Vector2(60, 28)
+direction = Vector2(0, 1)
+spread = 70.0
+gravity = Vector2(0, 110)
+initial_velocity_min = 20.0
+initial_velocity_max = 70.0
+scale_amount_min = 3.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_folhas")
+
+[node name="Cura" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_aditivo")
+position = Vector2(0, -60)
+emitting = false
+amount = 20
+lifetime = 1.1
+one_shot = true
+explosiveness = 0.6
+emission_shape = 3
+emission_rect_extents = Vector2(56, 60)
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(0, -30)
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+color_ramp = SubResource("Gradient_cura")

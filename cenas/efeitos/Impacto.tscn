@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="Gradient" id="Gradient_impacto"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(1, 1, 0.85, 1, 0.75, 1, 0.5, 0.9, 0.35, 0.75, 0.3, 0)
+
+[node name="Impacto" type="CPUParticles2D"]
+z_index = 17
+emitting = true
+amount = 10
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(1, 0)
+spread = 55.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 200.0
+damping_min = 300.0
+damping_max = 400.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+color_ramp = SubResource("Gradient_impacto")
+
+[connection signal="finished" from="." to="." method="queue_free"]

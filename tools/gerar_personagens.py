@@ -84,8 +84,12 @@ def pernas(img, x_esq, x_dir, topo, base, fase, cor, cor_pe, largura=3):
 
 # ------------------------------------------------------------------ herói: guardião da floresta
 
-def heroi(fase, bob):
-    """Espírito guardião: cabelo de fogo, pintura de urucum, manto de folhas e um cajado com broto."""
+MARGEM_HEROI = 8  # folga dos dois lados do quadro, para o cajado caber nas poses de ataque
+
+
+def heroi(fase, bob, pose="normal"):
+    """Espírito guardião: cabelo de fogo, pintura de urucum, manto de folhas e um cajado com broto.
+    pose: 'normal' (cajado em pé), 'ataque_alto' (cajado erguido) ou 'ataque_baixo' (cajado descendo à frente)."""
     img = tela(32, 44)
     o = bob
     pernas(img, 12, 17, 32 + o, 42, fase, [PELE[0], PELE[1]], PELE[0])
@@ -111,10 +115,8 @@ def heroi(fase, bob):
     retangulo(img, 12, 8 + o, 20, 16 + o, PELE[1])
     retangulo(img, 12, 8 + o, 12, 15 + o, PELE[2])
     retangulo(img, 20, 9 + o, 20, 16 + o, PELE[0])
-    px(img, 14, 12 + o, OLHO)
-    px(img, 18, 12 + o, OLHO)
-    px(img, 14, 11 + o, (255, 255, 255))
-    px(img, 18, 11 + o, (255, 255, 255))
+    retangulo(img, 14, 11 + o, 14, 12 + o, OLHO)
+    retangulo(img, 18, 11 + o, 18, 12 + o, OLHO)
     linha(img, 13, 14 + o, 15, 14 + o, URUCUM)  # pintura de urucum
     linha(img, 17, 14 + o, 19, 14 + o, URUCUM)
     # cabelo de fogo em labaredas
@@ -128,13 +130,24 @@ def heroi(fase, bob):
             px(img, x, y, cor)
     retangulo(img, 10, 9 + o, 11, 14 + o, FOGO[1])  # mechas dos lados do rosto
     retangulo(img, 21, 9 + o, 22, 14 + o, FOGO[0])
-    # cajado com broto na ponta
-    retangulo(img, 25, 6 + o, 26, 42, MADEIRA[1])
-    retangulo(img, 25, 6 + o, 25, 42, MADEIRA[2])
+    # passa para o quadro largo e desenha o cajado com broto na ponta, conforme a pose
+    largo = tela(32 + MARGEM_HEROI * 2, 44)
+    largo[:, MARGEM_HEROI:MARGEM_HEROI + 32] = img
+    m = MARGEM_HEROI
+    if pose == "normal":
+        base, ponta = (25 + m, 42), (25 + m, 6 + o)
+    elif pose == "ataque_alto":
+        base, ponta = (22 + m, 30 + o), (33 + m, 3 + o)
+    else:
+        base, ponta = (22 + m, 20 + o), (39 + m, 30 + o)
+    linha(largo, base[0], base[1], ponta[0], ponta[1], MADEIRA[1], 2)
+    linha(largo, base[0], base[1], ponta[0], ponta[1], MADEIRA[2], 1)
+    if pose != "normal":
+        retangulo(largo, 23 + m, 21 + o, 25 + m, 23 + o, PELE[2])  # mão à frente
     for dx, dy, cor in ((-2, -2, FOLHA[3]), (-1, -3, FOLHA[2]), (2, -2, FOLHA[2]), (3, -3, FOLHA[3]), (0, -1, FOLHA[1]), (1, -1, FOLHA[1]), (0, -4, FOLHA[4])):
-        px(img, 25 + dx, 6 + o + dy, cor)
-    contornar(img)
-    return img
+        px(largo, ponta[0] + dx, ponta[1] + dy, cor)
+    contornar(largo)
+    return largo
 
 
 # ------------------------------------------------------------------ lenhador
@@ -265,7 +278,18 @@ def escavadeira(quadro):
 
 # ------------------------------------------------------------------ árvore sagrada: samaúma
 
-def arvore_sagrada(semente):
+# Círculos da copa (x, y, raio) em cada estado: 0 saudável, 1 ferida, 2 por um fio.
+COPA_SAMAUMA = [
+    [(84, 56, 40), (46, 66, 30), (122, 66, 30), (20, 78, 18), (148, 78, 18),
+     (62, 38, 28), (106, 38, 28), (84, 24, 24), (84, 84, 30)],
+    [(84, 56, 33), (46, 66, 23), (122, 66, 22), (62, 38, 23), (106, 40, 20), (84, 28, 19), (84, 82, 22)],
+    [(84, 58, 22), (50, 64, 14), (118, 66, 13), (70, 40, 15), (102, 44, 12)],
+]
+FOLHA_SECA = [(60, 58, 30), (92, 88, 42), (126, 116, 54), (156, 140, 66), (184, 166, 88)]
+
+
+def arvore_sagrada(semente, estado=0):
+    """Samaúma: tronco cinza com sapopemas e copa em guarda-chuva. O estado mostra o quanto ela já sofreu."""
     rng = random.Random(semente)
     img = tela(168, 184)
     sombra_eliptica(img, 84, 172, 70, 10)
@@ -281,20 +305,26 @@ def arvore_sagrada(semente):
             px(img, x, y, CASCA[indice])
     for x in (60, 108, 72, 96):  # vincos das raízes
         linha(img, 84 + (x - 84) * 0.3, 140, x, 175, CASCA[0])
-    # símbolo sagrado brilhando no tronco
+    # símbolo sagrado no tronco: brilha enquanto ela está bem e apaga quando está por um fio
+    cor_simbolo = [BRILHO_SAGRADO[0], (110, 170, 130), CASCA[0]][estado]
     for dx, dy in ((0, 0), (-1, 1), (1, 1), (0, 2), (-2, 3), (2, 3), (0, 4)):
-        px(img, 84 + dx, 118 + dy, BRILHO_SAGRADO[0])
-    # copa larga em guarda-chuva
-    blobs = [(84, 56, 40), (46, 66, 30), (122, 66, 30), (20, 78, 18), (148, 78, 18),
-             (62, 38, 28), (106, 38, 28), (84, 24, 24), (84, 84, 30)]
-    copa(img, blobs, FOLHA, rng)
-    for _ in range(14):  # cipós pendurados
+        px(img, 84 + dx, 118 + dy, cor_simbolo)
+    # galhos: ficam escondidos pela copa cheia e aparecem conforme ela perde folhas
+    for cx, cy, r in COPA_SAMAUMA[0]:
+        linha(img, 84, 100, cx, cy + r * 0.3, CASCA[1], 3)
+        linha(img, 84, 100, cx, cy + r * 0.3, CASCA[2], 1)
+        for lado in (-1, 1):
+            linha(img, cx, cy + r * 0.3, cx + lado * r * 0.5, cy - r * 0.2, CASCA[1], 2)
+    # copa larga em guarda-chuva, mais rala e mais seca a cada estado
+    blobs = COPA_SAMAUMA[estado]
+    copa(img, blobs, FOLHA if estado < 2 else FOLHA_SECA, rng)
+    for _ in range([14, 8, 3][estado]):  # cipós pendurados
         x = rng.randint(24, 144)
-        inicio = next((y for y in range(110, 0, -1) if img[y, x, 3]), None)
+        inicio = next((y for y in range(110, 0, -1) if img[y, x, 3] and tuple(img[y, x][:3]) not in CASCA), None)
         if inicio:
             for y in range(inicio, inicio + rng.randint(6, 16)):
                 px(img, x, y, FOLHA[1])
-    for _ in range(26):  # brilhos sagrados na copa
+    for _ in range([26, 10, 0][estado]):  # brilhos sagrados na copa
         cx, cy, r = rng.choice(blobs)
         x, y = cx + rng.randint(-r // 2, r // 2), cy + rng.randint(-r // 2, r // 2)
         if img[y, x, 3]:
@@ -443,9 +473,11 @@ PASSOS = ((1, 0), (0, 1), (3, 0), (0, 1))
 
 def main():
     quadros = [heroi(0, 0), heroi(0, 1)] + [heroi(f, b) for f, b in PASSOS]
+    quadros += [heroi(0, 0, "ataque_alto"), heroi(1, 1, "ataque_baixo")]
     tamanho = salvar_folha("heroi", quadros)
     salvar_quadros("cenas/heroi/heroi_quadros.tres", "heroi", tamanho,
-                   [("parado", [0, 1], 3, True), ("andando", [2, 3, 4, 5], 8, True)])
+                   [("parado", [0, 1], 3, True), ("andando", [2, 3, 4, 5], 8, True),
+                    ("atacando", [6, 7, 7], 16, False)])
 
     quadros = [lenhador(f, b, "ombro") for f, b in PASSOS] + [lenhador(0, 0, "alto"), lenhador(0, 1, "baixo")]
     tamanho = salvar_folha("lenhador", quadros)
@@ -461,7 +493,7 @@ def main():
     salvar_quadros("cenas/chefe/escavadeira_quadros.tres", "escavadeira", tamanho,
                    [("andando", [0, 1], 6, True)])
 
-    salvar_folha("arvore_sagrada", [arvore_sagrada(21)])
+    salvar_folha("arvore_sagrada", [arvore_sagrada(21, estado) for estado in range(3)])
 
     quadros = [golpe(-75, -25, 1.0), golpe(-75, 25, 1.0), golpe(-60, 70, 1.0), golpe(-20, 75, 0.6)]
     tamanho = salvar_folha("golpe", quadros)

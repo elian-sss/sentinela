@@ -1,9 +1,12 @@
 class_name GerenteDoJogo
 extends Node
 ## Escuta a árvore, o herói e as ondas e decide quando a partida termina.
+## Também guarda o tempo de partida e o motivo da derrota, para a tela final.
 
 signal derrota(onda: int)
 signal vitoria
+
+enum Motivo { NENHUM, ARVORE_CAIU, HEROI_CAIU }
 
 const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 
@@ -11,21 +14,30 @@ const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 @export var heroi: Heroi
 @export var gerente_de_ondas: GerenteDeOndas
 
+var motivo_da_derrota: Motivo = Motivo.NENHUM
+var tempo_de_partida: float = 0.0
+
 var _partida_encerrada: bool = false
 
 
 func _ready() -> void:
-	arvore.destruida.connect(_perder)
-	heroi.morreu.connect(_perder)
+	arvore.destruida.connect(_perder.bind(Motivo.ARVORE_CAIU))
+	heroi.morreu.connect(_perder.bind(Motivo.HEROI_CAIU))
 	gerente_de_ondas.vitoria.connect(_vencer)
 	gerente_de_ondas.onda_concluida.connect(_regenerar_arvore)
 	gerente_de_ondas.onda_concluida.connect(_soltar_frutas)
 
 
-func _perder() -> void:
+func _process(delta: float) -> void:
+	if not _partida_encerrada:
+		tempo_de_partida += delta
+
+
+func _perder(motivo: Motivo) -> void:
 	if _partida_encerrada:
 		return
 	_partida_encerrada = true
+	motivo_da_derrota = motivo
 	derrota.emit(gerente_de_ondas.onda_atual())
 
 

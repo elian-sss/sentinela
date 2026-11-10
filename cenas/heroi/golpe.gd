@@ -3,6 +3,8 @@ extends Area2D
 ## Ataque do herói: um arco de energia do cajado. A hitbox causa dano só durante `duracao`;
 ## o desenho termina a animação e o nó some quando ela acaba.
 
+signal acertou(alvo: Node2D)
+
 ## Os sprites são desenhados acima do centro da colisão, então o arco sobe junto para sair do tronco do herói.
 ## Só o desenho sobe; a hitbox continua no lugar.
 const DESLOCAMENTO_VISUAL: Vector2 = Vector2(0, -12)
@@ -30,7 +32,9 @@ func _desligar_hitbox() -> void:
 func _ao_tocar(alvo: Node2D) -> void:
 	if not alvo.is_in_group("inimigos"):
 		return
+	var direcao: Vector2 = get_parent().global_position.direction_to(alvo.global_position)
+	Feedback.impacto(alvo, direcao)
+	acertou.emit(alvo)
 	alvo.receber_dano(dano)
-	if Feedback.EMPURRAR_INIMIGO_ATINGIDO and alvo.has_method("empurrar"):
-		var direcao: Vector2 = get_parent().global_position.direction_to(alvo.global_position)
+	if Feedback.EMPURRAR_INIMIGO_ATINGIDO and alvo.has_method("empurrar") and is_instance_valid(alvo):
 		alvo.empurrar(direcao * forca_empurrao)

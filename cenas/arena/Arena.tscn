@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://cenas/jogo/camera_tremor.gd" id="8_camera"]
 [ext_resource type="PackedScene" path="res://cenas/cenario/Cenario.tscn" id="9_cenario"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaHistoria.tscn" id="10_tela_historia"]
+[ext_resource type="Script" path="res://cenas/jogo/ciclo_do_dia.gd" id="11_ciclo"]
 
 [node name="Arena" type="Node2D" unique_id=560938052]
 y_sort_enabled = true
@@ -41,6 +42,10 @@ one_shot = true
 script = ExtResource("4_gerente")
 arvore = NodePath("../Arvore")
 heroi = NodePath("../Heroi")
+gerente_de_ondas = NodePath("../GerenteDeOndas")
+
+[node name="CicloDoDia" type="CanvasModulate" parent="." node_paths=PackedStringArray("gerente_de_ondas")]
+script = ExtResource("11_ciclo")
 gerente_de_ondas = NodePath("../GerenteDeOndas")
 
 [node name="HUD" parent="." unique_id=874915791 node_paths=PackedStringArray("heroi", "arvore", "gerente_de_ondas") instance=ExtResource("5_hud")]

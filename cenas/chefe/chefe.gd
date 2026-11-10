@@ -3,18 +3,24 @@ extends CharacterBody2D
 ## Escavadeira, chefe da onda 5. Ciclo: avança devagar → para e pisca com uma linha de aviso →
 ## investe em linha reta até bater numa borda → fica atordoada e leva dano multiplicado.
 ## A investida passa por cima da árvore sem parar, então o atordoamento sempre acontece longe dela.
-## De tempos em tempos invoca lenhadores ao redor.
+## De tempos em tempos invoca lenhadores ao redor. Ao ser derrotada, desmonta em fumaça antes de sumir.
 
 signal vida_alterada(atual: int, maxima: int)
 signal morreu(posicao: Vector2)
 signal investiu
+signal estado_alterado(estado: Estado)
 
-enum Estado { AVANCANDO, AVISANDO, INVESTINDO, ATORDOADO }
+enum Estado { AVANCANDO, AVISANDO, INVESTINDO, ATORDOADO, DERROTADO }
 
 const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
 const CENA_LENHADOR: PackedScene = preload("res://cenas/inimigo/Inimigo.tscn")
 const COMPRIMENTO_LINHA_AVISO: float = 2000.0
 const COR_ATORDOADO: Color = Color(0.5, 0.7, 1.0)
+const COR_DERROTADO: Color = Color(0.45, 0.42, 0.4)
+const FRACAO_FUMACA_DE_DANO: float = 0.5 ## abaixo dessa fração de vida o motor solta fumaça escura
+const TEMPO_DESMONTANDO: float = 1.4 ## quanto dura a queda antes de sumir
+const INTERVALO_FUMACA_DERROTA: float = 0.2
+const TREMOR_DERROTA: float = 3.0 ## pixels que o desenho chacoalha enquanto desmonta
 
 var vida_maxima: int = Balanceamento.CHEFE_VIDA
 var velocidade_avanco: float = Balanceamento.CHEFE_VELOCIDADE_AVANCO
@@ -42,11 +48,15 @@ var _tempo_no_estado: float = 0.0
 var _direcao_investida: Vector2 = Vector2.ZERO
 var _tempo_ate_ataque_arvore: float = 0.0
 var _tempo_ate_invocacao: float = 0.0
+var _tempo_ate_fumaca: float = 0.0
 var _arvore: Arvore
 var _heroi: Heroi
 
 @onready var _visual: AnimatedSprite2D = $Visual
 @onready var _linha_aviso: Line2D = $LinhaAviso
+@onready var _alerta: Label = $Alerta
+@onready var _estrelas: CPUParticles2D = $Estrelas
+@onready var _fumaca_dano: CPUParticles2D = $FumacaDano
 
 
 func _ready() -> void:
@@ -70,6 +80,9 @@ func _physics_process(delta: float) -> void:
 		Estado.ATORDOADO:
 			if _tempo_no_estado >= tempo_atordoado:
 				_mudar_estado(Estado.AVANCANDO)
+		Estado.DERROTADO:
+			_desmontar(delta)
+			return
 	_contar_invocacao(delta)
 	_ferir_heroi_se_encostar()
 	_atualizar_animacao()
@@ -88,17 +101,24 @@ func _atualizar_animacao() -> void:
 func receber_dano(valor: int) -> void:
 	if vida_atual <= 0:
 		return
-	if _estado == Estado.ATORDOADO:
+	var forte: bool = _estado == Estado.ATORDOADO
+	if forte:
 		valor *= multiplicador_dano_atordoado
 	vida_atual = maxi(vida_atual - valor, 0)
 	vida_alterada.emit(vida_atual, vida_maxima)
 	Feedback.piscar_branco(self, _visual)
+	Feedback.numero(self, str(valor), Feedback.COR_DANO_FORTE if forte else Feedback.COR_DANO, forte)
+	_fumaca_dano.emitting = vida_atual < vida_maxima * FRACAO_FUMACA_DE_DANO
 	if vida_atual == 0:
-		_morrer()
+		_mudar_estado(Estado.DERROTADO)
 
 
 func esta_atordoado() -> bool:
 	return _estado == Estado.ATORDOADO
+
+
+func estado() -> Estado:
+	return _estado
 
 
 func _avancar(delta: float) -> void:
@@ -118,8 +138,11 @@ func _atacar_arvore(delta: float) -> void:
 		_tempo_ate_ataque_arvore = intervalo_ataque_arvore
 
 
+## Pisca o desenho e pulsa a linha de aviso até a hora de investir.
 func _avisar() -> void:
-	_visual.visible = int(_tempo_no_estado / intervalo_piscar_aviso) % 2 == 0
+	var aceso: bool = int(_tempo_no_estado / intervalo_piscar_aviso) % 2 == 0
+	_visual.visible = aceso
+	_linha_aviso.modulate.a = 1.0 if aceso else 0.6
 	if _tempo_no_estado >= tempo_aviso:
 		_mudar_estado(Estado.INVESTINDO)
 
@@ -128,6 +151,7 @@ func _investir() -> void:
 	velocity = _direcao_investida * velocidade_investida
 	move_and_slide()
 	if _bateu_na_borda():
+		Feedback.tremer(get_tree(), true)
 		_mudar_estado(Estado.ATORDOADO)
 
 
@@ -136,12 +160,27 @@ func _mudar_estado(novo: Estado) -> void:
 	_tempo_no_estado = 0.0
 	velocity = Vector2.ZERO
 	_visual.visible = true
-	_visual.modulate = COR_ATORDOADO if novo == Estado.ATORDOADO else Color.WHITE
+	_visual.modulate = _cor_do_estado(novo)
 	_linha_aviso.visible = novo == Estado.AVISANDO
+	_alerta.visible = novo == Estado.AVISANDO
+	_estrelas.emitting = novo == Estado.ATORDOADO
 	if novo == Estado.AVISANDO:
 		_mirar_no_heroi()
 	elif novo == Estado.INVESTINDO:
 		investiu.emit()
+	elif novo == Estado.DERROTADO:
+		_visual.pause()
+		_fumaca_dano.emitting = true
+	estado_alterado.emit(novo)
+
+
+func _cor_do_estado(qual: Estado) -> Color:
+	match qual:
+		Estado.ATORDOADO:
+			return COR_ATORDOADO
+		Estado.DERROTADO:
+			return COR_DERROTADO
+	return Color.WHITE
 
 
 ## Trava a direção da investida no herói e desenha a linha de aviso nessa direção.
@@ -149,6 +188,7 @@ func _mirar_no_heroi() -> void:
 	_direcao_investida = global_position.direction_to(_heroi.global_position)
 	if _direcao_investida == Vector2.ZERO:
 		_direcao_investida = Vector2.RIGHT
+	_visual.flip_h = _direcao_investida.x < 0.0
 	_linha_aviso.points = PackedVector2Array([Vector2.ZERO, _direcao_investida * COMPRIMENTO_LINHA_AVISO])
 
 
@@ -186,10 +226,26 @@ func _contar_invocacao(delta: float) -> void:
 		get_parent().add_child(lenhador)
 
 
-func _morrer() -> void:
+## Derrotada: chacoalha soltando fumaça por um instante e só então some e avisa que morreu.
+func _desmontar(delta: float) -> void:
+	_visual.offset = Vector2(randf_range(-TREMOR_DERROTA, TREMOR_DERROTA), randf_range(-TREMOR_DERROTA, TREMOR_DERROTA))
+	_tempo_ate_fumaca -= delta
+	if _tempo_ate_fumaca <= 0.0:
+		_tempo_ate_fumaca = INTERVALO_FUMACA_DERROTA
+		_soltar_fumaca(Vector2(randf_range(-40.0, 40.0), randf_range(-40.0, 20.0)), 1.5)
+	if _tempo_no_estado >= TEMPO_DESMONTANDO:
+		_sumir()
+
+
+func _sumir() -> void:
+	Feedback.tremer(get_tree(), true)
+	_soltar_fumaca(Vector2.ZERO, 3.0)
 	morreu.emit(global_position)
-	var fumaca: Node2D = CENA_FUMACA.instantiate()
-	fumaca.scale = Vector2.ONE * 3.0
-	get_parent().add_child(fumaca)
-	fumaca.global_position = global_position
 	queue_free()
+
+
+func _soltar_fumaca(desvio: Vector2, escala: float) -> void:
+	var fumaca: Node2D = CENA_FUMACA.instantiate()
+	fumaca.scale = Vector2.ONE * escala
+	get_parent().add_child(fumaca)
+	fumaca.global_position = global_position + desvio

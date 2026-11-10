@@ -6,6 +6,7 @@ signal onda_iniciada(numero: int)
 signal onda_concluida(numero: int)
 signal vitoria
 signal inimigo_nasceu(inimigo: Node2D)
+signal restantes_alterado(quantidade: int)
 
 ## As ondas estão em Balanceamento.ONDAS. Numa onda com tipos misturados, a ordem de nascimento é sorteada.
 ## O fogo ignora a posição fora da tela e escolhe sozinho um ponto perto da árvore.
@@ -27,6 +28,7 @@ var pausa_entre_ondas: float = Balanceamento.PAUSA_ENTRE_ONDAS
 var _onda_atual: int = 0
 var _fila_nascimento: Array[String] = []
 var _vivos: int = 0
+var _derrotados: int = 0
 
 @onready var _timer_nascimento: Timer = $TimerNascimento
 @onready var _timer_pausa: Timer = $TimerPausa
@@ -59,11 +61,27 @@ func eh_onda_do_chefe(numero: int) -> bool:
 	return _dados_da_onda(numero)["inimigos"].has("chefe")
 
 
+## Quantos inimigos de cada tipo a onda tem, ex.: {"lenhador": 6, "fogo": 2}.
+func inimigos_da_onda(numero: int) -> Dictionary:
+	return _dados_da_onda(numero)["inimigos"]
+
+
+## Inimigos da onda atual que ainda faltam derrotar (os vivos e os que ainda vão nascer).
+func inimigos_restantes() -> int:
+	return _vivos + _fila_nascimento.size()
+
+
+## Total de inimigos derrotados na partida (os lenhadores chamados pelo chefe não contam).
+func inimigos_derrotados() -> int:
+	return _derrotados
+
+
 func _iniciar_proxima_onda() -> void:
 	_onda_atual += 1
 	var onda: Dictionary = _dados_da_onda(_onda_atual)
 	_montar_fila_nascimento(onda["inimigos"])
 	onda_iniciada.emit(_onda_atual)
+	restantes_alterado.emit(inimigos_restantes())
 	_timer_nascimento.start(onda["intervalo"])
 	_fazer_nascer_inimigo()
 
@@ -106,6 +124,7 @@ func _fazer_nascer_inimigo() -> void:
 	get_parent().add_child(inimigo)
 	_vivos += 1
 	inimigo_nasceu.emit(inimigo)
+	restantes_alterado.emit(inimigos_restantes())
 	if _fila_nascimento.is_empty():
 		_timer_nascimento.stop()
 
@@ -128,6 +147,8 @@ func _posicao_fora_da_tela() -> Vector2:
 
 func _ao_inimigo_morrer(_posicao: Vector2) -> void:
 	_vivos -= 1
+	_derrotados += 1
+	restantes_alterado.emit(inimigos_restantes())
 	if _vivos == 0 and _fila_nascimento.is_empty():
 		_concluir_onda()
 

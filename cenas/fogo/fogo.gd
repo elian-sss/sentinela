@@ -46,6 +46,7 @@ func _physics_process(delta: float) -> void:
 func receber_dano(valor: int) -> void:
 	if vida <= 0:
 		return
+	Feedback.numero(self, str(valor), Feedback.COR_DANO)
 	vida -= valor
 	if vida <= 0:
 		_apagar()

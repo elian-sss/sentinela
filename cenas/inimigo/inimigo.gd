@@ -71,8 +71,9 @@ func _aplicar_balanceamento() -> void:
 
 
 func receber_dano(valor: int) -> void:
-	vida -= valor
+	Feedback.numero(self, str(valor), Feedback.COR_DANO)
 	Feedback.piscar_branco(self, _visual)
+	vida -= valor
 
 
 func empurrar(impulso: Vector2) -> void:
