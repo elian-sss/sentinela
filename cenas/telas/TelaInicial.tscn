@@ -57,7 +57,22 @@ custom_minimum_size = Vector2(240, 52)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
-text = "Jogar"
+text = "Modo história"
+
+[node name="BotaoInfinito" type="Button" parent="Centro/Menu"]
+custom_minimum_size = Vector2(240, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Ondas infinitas"
+
+[node name="RotuloRecorde" type="Label" parent="Centro/Menu"]
+visible = false
+modulate = Color(1, 0.9, 0.5, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Recorde: onda 0"
+horizontal_alignment = 1
 
 [node name="BotaoComoJogar" type="Button" parent="Centro/Menu"]
 custom_minimum_size = Vector2(240, 44)
@@ -95,7 +110,8 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
 theme_override_font_sizes/font_size = 22
-text = "Proteja a árvore sagrada por 5 ondas e derrote a escavadeira."
+text = "Modo história: proteja a árvore por 5 ondas e derrote a escavadeira.
+Ondas infinitas: resista o máximo que conseguir."
 horizontal_alignment = 1
 
 [node name="BotaoVoltar" type="Button" parent="Centro/ComoJogar"]

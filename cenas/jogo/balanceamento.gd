@@ -103,3 +103,12 @@ const ONDAS: Array[Dictionary] = [
 	{"inimigos": {"lenhador": 6, "motosserrista": 8, "fogo": 3}, "intervalo": 0.9},
 	{"inimigos": {"chefe": 1}, "intervalo": 1.0},
 ]
+
+# ---------------------------------------------------------------- modo ondas infinitas
+# Repete as ONDAS em ciclos de 5 (a 5ª de cada ciclo é sempre o chefe), cada ciclo mais pesado.
+# Ciclo 0 = ondas 1 a 5, ciclo 1 = ondas 6 a 10, e assim por diante.
+
+const INFINITO_AUMENTO_QUANTIDADE_POR_CICLO: float = 0.5 ## +50% de inimigos a cada ciclo (arredonda para cima)
+const INFINITO_REDUCAO_INTERVALO_POR_CICLO: float = 0.1 ## intervalo entre nascimentos cai 10% a cada ciclo
+const INFINITO_INTERVALO_MINIMO: float = 0.5
+const INFINITO_ESCOLTA_CHEFE_POR_CICLO: int = 3 ## lenhadores extras na onda do chefe a cada ciclo

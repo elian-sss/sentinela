@@ -23,7 +23,12 @@ func _unhandled_input(evento: InputEvent) -> void:
 
 
 func _ao_perder(onda: int) -> void:
-	_mostrar("Derrota", "Você caiu na onda %d." % onda)
+	if not GerenteDeOndas.eh_infinito():
+		_mostrar("Derrota", "Você caiu na onda %d." % onda)
+	elif Recorde.registrar(onda):
+		_mostrar("Novo recorde!", "Você chegou à onda %d." % onda)
+	else:
+		_mostrar("Fim da ronda", "Você chegou à onda %d.\nRecorde: onda %d." % [onda, Recorde.carregar()])
 
 
 func _ao_vencer() -> void:

@@ -173,12 +173,12 @@ func _ao_coletar_item(tipo: Item.Tipo) -> void:
 
 func _ao_iniciar_onda(numero: int, gerente: GerenteDeOndas) -> void:
 	tocar("onda_iniciada")
-	tocar_musica("chefe" if numero == gerente.total_de_ondas() else "combate")
+	tocar_musica("chefe" if gerente.eh_onda_do_chefe(numero) else "combate")
 
 
 ## Na pausa entre ondas volta o tema calmo. Depois da última onda quem decide é a vitória.
 func _ao_concluir_onda(numero: int, gerente: GerenteDeOndas) -> void:
-	if numero < gerente.total_de_ondas():
+	if not gerente.eh_ultima_onda(numero):
 		tocar_musica("menu")
 
 

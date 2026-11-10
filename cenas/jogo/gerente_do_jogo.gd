@@ -28,7 +28,7 @@ func _perder() -> void:
 
 ## Ao fim de cada onda, menos a última, a árvore recupera uma parte da vida.
 func _regenerar_arvore(onda: int) -> void:
-	if onda < gerente_de_ondas.total_de_ondas():
+	if not gerente_de_ondas.eh_ultima_onda(onda):
 		arvore.curar(int(arvore.vida_maxima * Balanceamento.ARVORE_REGENERACAO_ENTRE_ONDAS))
 
 

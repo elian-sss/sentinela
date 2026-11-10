@@ -33,8 +33,9 @@ func _ready() -> void:
 	_atualizar_barra(arvore.vida_atual, arvore.vida_maxima, _barra_arvore)
 
 
+## total = 0 mostra só o número da onda (modo infinito).
 func atualizar_onda(atual: int, total: int) -> void:
-	_rotulo_onda.text = "Onda %d/%d" % [atual, total]
+	_rotulo_onda.text = "Onda %d" % atual if total == 0 else "Onda %d/%d" % [atual, total]
 
 
 func _atualizar_barra(atual: int, maxima: int, barra: ProgressBar) -> void:
@@ -43,7 +44,8 @@ func _atualizar_barra(atual: int, maxima: int, barra: ProgressBar) -> void:
 
 
 func _ao_iniciar_onda(numero: int) -> void:
-	atualizar_onda(numero, gerente_de_ondas.total_de_ondas())
+	var total: int = 0 if GerenteDeOndas.eh_infinito() else gerente_de_ondas.total_de_ondas()
+	atualizar_onda(numero, total)
 	_mostrar_aviso("Onda %d" % numero, duracao_aviso_onda)
 
 

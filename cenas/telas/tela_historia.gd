@@ -54,7 +54,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 
 
 func _ao_iniciar_onda(numero: int) -> void:
-	if numero > TRECHOS.size() or numero in _ondas_ja_vistas:
+	if GerenteDeOndas.eh_infinito() or numero > TRECHOS.size() or numero in _ondas_ja_vistas:
 		return
 	_ondas_ja_vistas.append(numero)
 	var trecho: Dictionary = TRECHOS[numero - 1]

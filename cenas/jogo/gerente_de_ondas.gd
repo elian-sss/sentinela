@@ -16,6 +16,11 @@ const CENAS_INIMIGO: Dictionary = {
 	"chefe": preload("res://cenas/chefe/Chefe.tscn"),
 }
 
+enum Modo { HISTORIA, INFINITO }
+
+## Escolhido na tela inicial. É static para continuar valendo quando a partida é reiniciada.
+static var modo: Modo = Modo.HISTORIA
+
 var pausa_entre_ondas: float = Balanceamento.PAUSA_ENTRE_ONDAS
 @export var margem_fora_da_tela: float = 40.0
 
@@ -33,6 +38,10 @@ func _ready() -> void:
 	_iniciar_proxima_onda.call_deferred()
 
 
+static func eh_infinito() -> bool:
+	return modo == Modo.INFINITO
+
+
 func total_de_ondas() -> int:
 	return Balanceamento.ONDAS.size()
 
@@ -41,13 +50,43 @@ func onda_atual() -> int:
 	return _onda_atual
 
 
+## Só existe última onda no modo história.
+func eh_ultima_onda(numero: int) -> bool:
+	return not eh_infinito() and numero == total_de_ondas()
+
+
+func eh_onda_do_chefe(numero: int) -> bool:
+	return _dados_da_onda(numero)["inimigos"].has("chefe")
+
+
 func _iniciar_proxima_onda() -> void:
 	_onda_atual += 1
-	var onda: Dictionary = Balanceamento.ONDAS[_onda_atual - 1]
+	var onda: Dictionary = _dados_da_onda(_onda_atual)
 	_montar_fila_nascimento(onda["inimigos"])
 	onda_iniciada.emit(_onda_atual)
 	_timer_nascimento.start(onda["intervalo"])
 	_fazer_nascer_inimigo()
+
+
+## No modo infinito, a onda N reusa a onda base da mesma posição no ciclo,
+## com mais inimigos e nascimentos mais rápidos a cada ciclo.
+func _dados_da_onda(numero: int) -> Dictionary:
+	var total: int = total_de_ondas()
+	var base: Dictionary = Balanceamento.ONDAS[(numero - 1) % total]
+	@warning_ignore("integer_division")
+	var ciclo: int = (numero - 1) / total
+	if ciclo == 0:
+		return base
+	var multiplicador: float = 1.0 + ciclo * Balanceamento.INFINITO_AUMENTO_QUANTIDADE_POR_CICLO
+	var inimigos: Dictionary = {}
+	for tipo: String in base["inimigos"]:
+		var quantidade: int = base["inimigos"][tipo]
+		inimigos[tipo] = quantidade if tipo == "chefe" else ceili(quantidade * multiplicador)
+	if inimigos.has("chefe"):
+		inimigos["lenhador"] = inimigos.get("lenhador", 0) + ciclo * Balanceamento.INFINITO_ESCOLTA_CHEFE_POR_CICLO
+	var reducao: float = 1.0 - ciclo * Balanceamento.INFINITO_REDUCAO_INTERVALO_POR_CICLO
+	var intervalo: float = maxf(base["intervalo"] * reducao, Balanceamento.INFINITO_INTERVALO_MINIMO)
+	return {"inimigos": inimigos, "intervalo": intervalo}
 
 
 ## Transforma {"lenhador": 2, "motosserrista": 1} numa fila embaralhada de tipos.
@@ -95,7 +134,7 @@ func _ao_inimigo_morrer(_posicao: Vector2) -> void:
 
 func _concluir_onda() -> void:
 	onda_concluida.emit(_onda_atual)
-	if _onda_atual == Balanceamento.ONDAS.size():
+	if eh_ultima_onda(_onda_atual):
 		vitoria.emit()
 	else:
 		_timer_pausa.start(pausa_entre_ondas)
