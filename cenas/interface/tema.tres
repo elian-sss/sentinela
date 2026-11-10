@@ -1,0 +1,171 @@
+[gd_resource type="Theme" load_steps=22 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fontes/sentinela_pixel.ttf" id="1_fonte"]
+[ext_resource type="Texture2D" path="res://assets/interface/painel.png" id="2_painel"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_normal.png" id="3_normal"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_hover.png" id="4_hover"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_pressionado.png" id="5_pressionado"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_desativado.png" id="6_desativado"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_foco.png" id="7_foco"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_verde_normal.png" id="8_verde_normal"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_verde_hover.png" id="9_verde_hover"]
+[ext_resource type="Texture2D" path="res://assets/interface/botao_verde_pressionado.png" id="10_verde_pressionado"]
+[ext_resource type="Texture2D" path="res://assets/interface/tecla.png" id="11_tecla"]
+
+[sub_resource type="StyleBoxTexture" id="painel"]
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+texture = ExtResource("2_painel")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="botao_normal"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+texture = ExtResource("3_normal")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="botao_hover"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+texture = ExtResource("4_hover")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="botao_pressionado"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+texture = ExtResource("5_pressionado")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="botao_desativado"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_desativado")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="botao_foco"]
+texture = ExtResource("7_foco")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+draw_center = false
+
+[sub_resource type="StyleBoxTexture" id="verde_normal"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+texture = ExtResource("8_verde_normal")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="verde_hover"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+texture = ExtResource("9_verde_hover")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="verde_pressionado"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+texture = ExtResource("10_verde_pressionado")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="tecla"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+texture = ExtResource("11_tecla")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 10.0
+
+[resource]
+default_font = ExtResource("1_fonte")
+default_font_size = 16
+Button/colors/font_color = Color(0.925, 0.886, 0.745, 1)
+Button/colors/font_disabled_color = Color(0.55, 0.53, 0.47, 1)
+Button/colors/font_focus_color = Color(1, 0.96, 0.78, 1)
+Button/colors/font_hover_color = Color(1, 0.96, 0.78, 1)
+Button/colors/font_hover_pressed_color = Color(0.8, 0.76, 0.64, 1)
+Button/colors/font_pressed_color = Color(0.8, 0.76, 0.64, 1)
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 24
+Button/styles/disabled = SubResource("botao_desativado")
+Button/styles/focus = SubResource("botao_foco")
+Button/styles/hover = SubResource("botao_hover")
+Button/styles/normal = SubResource("botao_normal")
+Button/styles/pressed = SubResource("botao_pressionado")
+BotaoVerde/base_type = &"Button"
+BotaoVerde/styles/hover = SubResource("verde_hover")
+BotaoVerde/styles/normal = SubResource("verde_normal")
+BotaoVerde/styles/pressed = SubResource("verde_pressionado")
+BotaoPequeno/base_type = &"Button"
+BotaoPequeno/font_sizes/font_size = 16
+Label/colors/font_color = Color(0.925, 0.886, 0.745, 1)
+Label/colors/font_shadow_color = Color(0.04, 0.06, 0.04, 0.9)
+Label/constants/line_spacing = 2
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 2
+Label/constants/shadow_outline_size = 0
+Label/font_sizes/font_size = 16
+LabelTitulo/base_type = &"Label"
+LabelTitulo/colors/font_color = Color(0.98, 0.855, 0.47, 1)
+LabelTitulo/constants/shadow_offset_x = 4
+LabelTitulo/constants/shadow_offset_y = 4
+LabelTitulo/font_sizes/font_size = 48
+LabelSubtitulo/base_type = &"Label"
+LabelSubtitulo/colors/font_color = Color(0.98, 0.855, 0.47, 1)
+LabelSubtitulo/font_sizes/font_size = 32
+LabelMedio/base_type = &"Label"
+LabelMedio/font_sizes/font_size = 24
+LabelDestaque/base_type = &"Label"
+LabelDestaque/colors/font_color = Color(0.98, 0.855, 0.47, 1)
+LabelDestaque/font_sizes/font_size = 24
+LabelSuave/base_type = &"Label"
+LabelSuave/colors/font_color = Color(0.72, 0.74, 0.64, 1)
+LabelTecla/base_type = &"Label"
+LabelTecla/colors/font_color = Color(0.1, 0.11, 0.13, 1)
+LabelTecla/colors/font_shadow_color = Color(0, 0, 0, 0)
+LabelTecla/styles/normal = SubResource("tecla")
+PanelContainer/styles/panel = SubResource("painel")
