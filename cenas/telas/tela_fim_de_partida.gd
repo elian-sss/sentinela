@@ -27,7 +27,7 @@ func _ao_perder(onda: int) -> void:
 
 
 func _ao_vencer() -> void:
-	_mostrar("Vitória!", "A árvore sagrada está a salvo.")
+	_mostrar("Vitória!", TelaHistoria.TEXTO_VITORIA)
 
 
 func _mostrar(titulo: String, texto: String) -> void:
