@@ -3,29 +3,18 @@ extends Node
 ## Liga-se sozinho aos signals das cenas (os nós que já estão na árvore e os que entram depois),
 ## sem mexer na lógica do jogo. No navegador, o Godot só libera o som na primeira interação do jogador;
 ## até lá a música do menu fica em silêncio e começa sozinha no primeiro clique ou tecla.
+## Os arquivos são gerados por tools/gerar_audio.py. Um som que não existir é ignorado, sem erro.
 
-const EFEITOS: Dictionary = {
-	"golpe": preload("res://assets/audio/efeitos/golpe.ogg"),
-	"dash": preload("res://assets/audio/efeitos/dash.ogg"),
-	"dano_heroi": preload("res://assets/audio/efeitos/dano_heroi.ogg"),
-	"dano_arvore": preload("res://assets/audio/efeitos/dano_arvore.ogg"),
-	"inimigo_derrotado": preload("res://assets/audio/efeitos/inimigo_derrotado.ogg"),
-	"item_fruta": preload("res://assets/audio/efeitos/item_fruta.ogg"),
-	"item_erva": preload("res://assets/audio/efeitos/item_erva.ogg"),
-	"escudo": preload("res://assets/audio/efeitos/escudo.ogg"),
-	"onda_iniciada": preload("res://assets/audio/efeitos/onda_iniciada.ogg"),
-	"motosserra": preload("res://assets/audio/efeitos/motosserra.ogg"),
-	"escavadeira_investida": preload("res://assets/audio/efeitos/escavadeira_investida.ogg"),
-	"vitoria": preload("res://assets/audio/efeitos/vitoria.ogg"),
-	"derrota": preload("res://assets/audio/efeitos/derrota.ogg"),
-	"clique": preload("res://assets/audio/efeitos/clique.ogg"),
-	"pausa": preload("res://assets/audio/efeitos/pausa.ogg"),
-}
-const MUSICAS: Dictionary = {
-	"menu": preload("res://assets/audio/musica/musica_menu.ogg"),
-	"combate": preload("res://assets/audio/musica/musica_combate.ogg"),
-	"chefe": preload("res://assets/audio/musica/musica_chefe.ogg"),
-}
+const PASTA_EFEITOS: String = "res://assets/audio/efeitos/"
+const PASTA_MUSICAS: String = "res://assets/audio/musica/musica_"
+const NOMES_DOS_EFEITOS: Array[String] = [
+	"golpe", "golpe_acerto", "dash", "dano_heroi", "vida_baixa", "dano_arvore", "arvore_critica",
+	"arvore_curada", "inimigo_derrotado", "item_caiu", "item_fruta", "item_erva", "escudo",
+	"power_velocidade", "power_forca", "onda_iniciada", "onda_concluida", "fogo_nasce", "fogo_apagado",
+	"motosserra", "escavadeira_investida", "chefe_aviso", "chefe_atordoado", "chefe_derrotado",
+	"vitoria", "recorde", "derrota", "clique", "botao_foco", "pausa", "historia_avancar", "texto",
+]
+const NOMES_DAS_MUSICAS: Array[String] = ["menu", "calmaria", "combate", "chefe", "vitoria"]
 
 const VOLUME_MUSICA_DB: float = -6.0
 const VOLUME_EFEITOS_DB: float = 0.0
@@ -33,25 +22,35 @@ const DURACAO_FADE: float = 1.0
 const VOLUME_SILENCIO_DB: float = -40.0
 const VOZES_DE_EFEITO: int = 12
 const VARIACAO_PITCH: float = 0.08 ## ±8% nos sons que repetem muito
-const COM_VARIACAO_DE_PITCH: Array[String] = ["golpe", "dano_heroi", "dano_arvore", "inimigo_derrotado"]
+const COM_VARIACAO_DE_PITCH: Array[String] = [
+	"golpe", "golpe_acerto", "dano_heroi", "dano_arvore", "inimigo_derrotado", "texto",
+]
 ## Intervalo mínimo (s) entre dois toques do mesmo som, para não embolar quando muitos acontecem juntos.
-const INTERVALO_MINIMO: Dictionary = {"dano_arvore": 0.25, "motosserra": 0.6, "inimigo_derrotado": 0.05}
+const INTERVALO_MINIMO: Dictionary = {
+	"dano_arvore": 0.25, "motosserra": 0.6, "inimigo_derrotado": 0.05, "golpe_acerto": 0.04,
+	"item_caiu": 0.1, "vida_baixa": 2.5, "texto": 0.045, "botao_foco": 0.05, "fogo_nasce": 0.3,
+}
+## Volume (dB) dos sons que precisam ficar mais discretos que os outros.
+const VOLUME_DO_EFEITO: Dictionary = {"texto": -10.0, "botao_foco": -8.0, "item_caiu": -4.0, "golpe": -3.0}
 const PITCH_MOTOR_CHEFE: float = 0.6
-## Os power-ups reusam o som do escudo, mais agudo (velocidade) ou mais grave (força).
-const PITCH_POWER_UP_VELOCIDADE: float = 1.5
-const PITCH_POWER_UP_FORCA: float = 0.7
+const FRACAO_VIDA_BAIXA: float = 0.3 ## abaixo disso, levar dano toca o aviso de vida baixa
+const ESPERA_MUSICA_DA_VITORIA: float = 2.3 ## a música da vitória entra depois da fanfarra
 const BUS_MUSICA: String = "Musica"
 const BUS_EFEITOS: String = "Efeitos"
 const CENA_MENU: String = "res://cenas/telas/TelaInicial.tscn"
 const CENA_PAUSA: String = "res://cenas/telas/TelaPausa.tscn"
 const CENA_MOTOSSERRISTA: String = "res://cenas/inimigo/Motosserrista.tscn"
 
+var _efeitos: Dictionary = {}
+var _musicas: Dictionary = {}
 var _vozes: Array[AudioStreamPlayer] = []
 var _proxima_voz: int = 0
 var _ultimo_toque: Dictionary = {}
 var _musica_ativa: AudioStreamPlayer
 var _musica_reserva: AudioStreamPlayer
 var _musica_atual: String = ""
+var _pedido_de_musica: int = 0 ## muda a cada troca; cancela uma música agendada que ficou velha
+var _fades: Dictionary = {} ## player -> Tween do fade em andamento
 
 
 func _ready() -> void:
@@ -62,8 +61,7 @@ func _ready() -> void:
 		_vozes.append(_novo_player(BUS_EFEITOS))
 	_musica_ativa = _novo_player(BUS_MUSICA)
 	_musica_reserva = _novo_player(BUS_MUSICA)
-	for musica: AudioStreamOggVorbis in MUSICAS.values():
-		musica.loop = true
+	_carregar_sons()
 	get_tree().node_added.connect(_ao_adicionar_no)
 	_ligar_nos_existentes(get_tree().root)
 
@@ -71,6 +69,8 @@ func _ready() -> void:
 # ---------------------------------------------------------------- API pública
 
 func tocar(nome: String, pitch: float = 1.0) -> void:
+	if not _efeitos.has(nome):
+		return
 	var agora: float = Time.get_ticks_msec() / 1000.0
 	if agora - _ultimo_toque.get(nome, -INF) < INTERVALO_MINIMO.get(nome, 0.0):
 		return
@@ -79,20 +79,22 @@ func tocar(nome: String, pitch: float = 1.0) -> void:
 	_proxima_voz = (_proxima_voz + 1) % _vozes.size()
 	if nome in COM_VARIACAO_DE_PITCH:
 		pitch *= 1.0 + randf_range(-VARIACAO_PITCH, VARIACAO_PITCH)
-	voz.stream = EFEITOS[nome]
+	voz.stream = _efeitos[nome]
 	voz.pitch_scale = pitch
+	voz.volume_db = VOLUME_DO_EFEITO.get(nome, 0.0)
 	voz.play()
 
 
 ## Troca de música com fade cruzado. Repetir a música atual não reinicia nada.
 func tocar_musica(nome: String) -> void:
-	if nome == _musica_atual:
+	_pedido_de_musica += 1
+	if nome == _musica_atual or not _musicas.has(nome):
 		return
 	_musica_atual = nome
 	var saindo: AudioStreamPlayer = _musica_ativa
 	_musica_ativa = _musica_reserva
 	_musica_reserva = saindo
-	_musica_ativa.stream = MUSICAS[nome]
+	_musica_ativa.stream = _musicas[nome]
 	_musica_ativa.volume_db = VOLUME_SILENCIO_DB
 	_musica_ativa.play()
 	_fade(_musica_ativa, 0.0)
@@ -100,6 +102,7 @@ func tocar_musica(nome: String) -> void:
 
 
 func parar_musica() -> void:
+	_pedido_de_musica += 1
 	_musica_atual = ""
 	_fade(_musica_ativa, VOLUME_SILENCIO_DB, true)
 
@@ -132,21 +135,22 @@ func _ligar_nos_existentes(no: Node) -> void:
 
 func _ao_adicionar_no(no: Node) -> void:
 	if no is Button:
-		no.pressed.connect(tocar.bind("clique"))
+		_ligar_botao(no)
 	elif no is Heroi:
-		no.atacou.connect(tocar.bind("golpe"))
-		no.dash_iniciado.connect(tocar.bind("dash"))
-		no.dano_recebido.connect(tocar.bind("dano_heroi"))
+		_ligar_heroi(no)
+	elif no is Golpe:
+		no.acertou.connect(tocar.bind("golpe_acerto").unbind(1))
 	elif no is Arvore:
-		no.dano_recebido.connect(tocar.bind("dano_arvore"))
+		_ligar_arvore(no)
 	elif no is Item:
 		no.coletado.connect(_ao_coletar_item)
+		tocar("item_caiu")
 	elif no is GerenteDeOndas:
 		no.onda_iniciada.connect(_ao_iniciar_onda.bind(no))
 		no.onda_concluida.connect(_ao_concluir_onda.bind(no))
 	elif no is GerenteDoJogo:
-		no.vitoria.connect(_ao_terminar_partida.bind("vitoria"))
-		no.derrota.connect(_ao_terminar_partida.bind("derrota").unbind(1))
+		no.vitoria.connect(_ao_vencer)
+		no.derrota.connect(_ao_perder.unbind(1))
 	elif no.scene_file_path == CENA_PAUSA:
 		no.visibility_changed.connect(_ao_mudar_pausa.bind(no))
 	elif no.scene_file_path == CENA_MENU:
@@ -155,13 +159,57 @@ func _ao_adicionar_no(no: Node) -> void:
 		_ligar_inimigo(no)
 
 
+func _ligar_botao(botao: Button) -> void:
+	botao.pressed.connect(tocar.bind("clique"))
+	botao.mouse_entered.connect(tocar.bind("botao_foco"))
+	botao.focus_entered.connect(tocar.bind("botao_foco"))
+
+
+func _ligar_heroi(heroi: Heroi) -> void:
+	heroi.atacou.connect(tocar.bind("golpe"))
+	heroi.dash_iniciado.connect(tocar.bind("dash"))
+	heroi.dano_recebido.connect(_ao_ferir_heroi.bind(heroi))
+
+
+func _ligar_arvore(arvore: Arvore) -> void:
+	arvore.dano_recebido.connect(tocar.bind("dano_arvore"))
+	arvore.curada.connect(tocar.bind("arvore_curada").unbind(1))
+	arvore.estado_alterado.connect(_ao_mudar_estado_da_arvore)
+
+
 func _ligar_inimigo(inimigo: Node) -> void:
-	inimigo.morreu.connect(tocar.bind("inimigo_derrotado").unbind(1))
-	if inimigo is Chefe:
+	if inimigo is Fogo:
+		tocar("fogo_nasce")
+		inimigo.morreu.connect(tocar.bind("fogo_apagado").unbind(1))
+	elif inimigo is Chefe:
 		inimigo.investiu.connect(tocar.bind("escavadeira_investida"))
+		inimigo.estado_alterado.connect(_ao_mudar_estado_do_chefe)
 		tocar("motosserra", PITCH_MOTOR_CHEFE)
-	elif inimigo.scene_file_path == CENA_MOTOSSERRISTA:
-		tocar("motosserra")
+	else:
+		inimigo.morreu.connect(tocar.bind("inimigo_derrotado").unbind(1))
+		if inimigo.scene_file_path == CENA_MOTOSSERRISTA:
+			tocar("motosserra")
+
+
+func _ao_ferir_heroi(heroi: Heroi) -> void:
+	tocar("dano_heroi")
+	if heroi.vida_atual > 0 and heroi.vida_atual < heroi.vida_maxima * FRACAO_VIDA_BAIXA:
+		tocar("vida_baixa")
+
+
+func _ao_mudar_estado_da_arvore(estado: Arvore.Estado) -> void:
+	if estado == Arvore.Estado.CRITICA:
+		tocar("arvore_critica")
+
+
+func _ao_mudar_estado_do_chefe(estado: Chefe.Estado) -> void:
+	match estado:
+		Chefe.Estado.AVISANDO:
+			tocar("chefe_aviso")
+		Chefe.Estado.ATORDOADO:
+			tocar("chefe_atordoado")
+		Chefe.Estado.DERROTADO:
+			tocar("chefe_derrotado")
 
 
 func _ao_coletar_item(tipo: Item.Tipo) -> void:
@@ -173,9 +221,9 @@ func _ao_coletar_item(tipo: Item.Tipo) -> void:
 		Item.Tipo.ESCUDO:
 			tocar("escudo")
 		Item.Tipo.VELOCIDADE:
-			tocar("escudo", PITCH_POWER_UP_VELOCIDADE)
+			tocar("power_velocidade")
 		Item.Tipo.FORCA:
-			tocar("escudo", PITCH_POWER_UP_FORCA)
+			tocar("power_forca")
 
 
 func _ao_iniciar_onda(numero: int, gerente: GerenteDeOndas) -> void:
@@ -183,15 +231,26 @@ func _ao_iniciar_onda(numero: int, gerente: GerenteDeOndas) -> void:
 	tocar_musica("chefe" if gerente.eh_onda_do_chefe(numero) else "combate")
 
 
-## Na pausa entre ondas volta o tema calmo. Depois da última onda quem decide é a vitória.
+## Na pausa entre ondas entra o tema calmo. Depois da última onda quem decide é a vitória.
 func _ao_concluir_onda(numero: int, gerente: GerenteDeOndas) -> void:
 	if not gerente.eh_ultima_onda(numero):
-		tocar_musica("menu")
+		tocar("onda_concluida")
+		tocar_musica("calmaria")
 
 
-func _ao_terminar_partida(efeito: String) -> void:
+## Fanfarra e, logo depois, a música da vitória (se o jogador não tiver saído da tela antes).
+func _ao_vencer() -> void:
 	parar_musica()
-	tocar(efeito)
+	tocar("vitoria")
+	var pedido: int = _pedido_de_musica
+	await get_tree().create_timer(ESPERA_MUSICA_DA_VITORIA, true).timeout
+	if pedido == _pedido_de_musica:
+		tocar_musica("vitoria")
+
+
+func _ao_perder() -> void:
+	parar_musica()
+	tocar("derrota")
 
 
 func _ao_mudar_pausa(tela: CanvasLayer) -> void:
@@ -200,6 +259,19 @@ func _ao_mudar_pausa(tela: CanvasLayer) -> void:
 
 
 # ---------------------------------------------------------------- internos
+
+func _carregar_sons() -> void:
+	for nome: String in NOMES_DOS_EFEITOS:
+		var caminho: String = PASTA_EFEITOS + nome + ".ogg"
+		if ResourceLoader.exists(caminho):
+			_efeitos[nome] = load(caminho)
+	for nome: String in NOMES_DAS_MUSICAS:
+		var caminho: String = PASTA_MUSICAS + nome + ".ogg"
+		if ResourceLoader.exists(caminho):
+			var musica: AudioStreamOggVorbis = load(caminho)
+			musica.loop = true
+			_musicas[nome] = musica
+
 
 func _criar_bus(nome: String, volume_db: float) -> void:
 	if AudioServer.get_bus_index(nome) != -1:
@@ -218,8 +290,12 @@ func _novo_player(bus: String) -> AudioStreamPlayer:
 	return player
 
 
+## Cada player tem um fade por vez: o novo cancela o anterior, para um fade antigo não calar a música nova.
 func _fade(player: AudioStreamPlayer, volume_final_db: float, parar_no_fim: bool = false) -> void:
+	if _fades.has(player):
+		(_fades[player] as Tween).kill()
 	var tween: Tween = create_tween()
+	_fades[player] = tween
 	tween.tween_property(player, "volume_db", volume_final_db, DURACAO_FADE)
 	if parar_no_fim:
 		tween.tween_callback(player.stop)
