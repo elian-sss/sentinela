@@ -9,13 +9,6 @@ signal destruida
 @export var vida_atual: int = 300:
 	set = _definir_vida
 
-@onready var _barra_vida: ProgressBar = $BarraVida
-
-
-func _ready() -> void:
-	vida_alterada.connect(_atualizar_barra)
-	_atualizar_barra(vida_atual, vida_maxima)
-
 
 func receber_dano(valor: int) -> void:
 	vida_atual -= valor
@@ -37,8 +30,3 @@ func _definir_vida(valor: int) -> void:
 	vida_alterada.emit(vida_atual, vida_maxima)
 	if vida_atual == 0:
 		destruida.emit()
-
-
-func _atualizar_barra(atual: int, maxima: int) -> void:
-	_barra_vida.max_value = maxima
-	_barra_vida.value = atual

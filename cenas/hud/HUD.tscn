@@ -1,0 +1,94 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://cenas/hud/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fundo_barra"]
+bg_color = Color(0.1, 0.07, 0.04, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_heroi"]
+bg_color = Color(0.2, 0.75, 0.95, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vida_arvore"]
+bg_color = Color(0.35, 0.9, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="PainelHeroi" type="VBoxContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 256.0
+offset_bottom = 60.0
+mouse_filter = 2
+
+[node name="Rotulo" type="Label" parent="PainelHeroi"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Guardião"
+
+[node name="BarraVida" type="ProgressBar" parent="PainelHeroi"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vida_heroi")
+step = 1.0
+value = 100.0
+show_percentage = false
+
+[node name="PainelArvore" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 60.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="Rotulo" type="Label" parent="PainelArvore"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Árvore Sagrada"
+horizontal_alignment = 2
+
+[node name="BarraVida" type="ProgressBar" parent="PainelArvore"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_fundo_barra")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vida_arvore")
+step = 1.0
+value = 100.0
+show_percentage = false
+
+[node name="RotuloOnda" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 12.0
+offset_right = 100.0
+offset_bottom = 46.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Onda 1/5"
+horizontal_alignment = 1
