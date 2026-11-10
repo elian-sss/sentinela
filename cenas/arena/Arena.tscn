@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://du82jsmy3j8s1" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
 [ext_resource type="PackedScene" path="res://cenas/hud/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" path="res://cenas/telas/TelaFimDePartida.tscn" id="6_tela_fim"]
+[ext_resource type="PackedScene" path="res://cenas/telas/TelaPausa.tscn" id="7_tela_pausa"]
 
 [node name="Arena" type="Node2D" unique_id=560938052]
 
@@ -42,3 +43,5 @@ gerente_de_ondas = NodePath("../GerenteDeOndas")
 
 [node name="TelaFimDePartida" parent="." unique_id=1592875656 node_paths=PackedStringArray("gerente_do_jogo") instance=ExtResource("6_tela_fim")]
 gerente_do_jogo = NodePath("../GerenteDoJogo")
+
+[node name="TelaPausa" parent="." instance=ExtResource("7_tela_pausa")]

@@ -9,7 +9,7 @@ extends Area2D
 func _ready() -> void:
 	body_entered.connect(_ao_tocar)
 	area_entered.connect(_ao_tocar) # o fogo é uma área, não um corpo
-	get_tree().create_timer(duracao).timeout.connect(queue_free)
+	get_tree().create_timer(duracao, false).timeout.connect(queue_free)
 
 
 func _ao_tocar(alvo: Node2D) -> void:
