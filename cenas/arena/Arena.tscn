@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://cenas/heroi/Heroi.tscn" id="1_heroi"]
 [ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="2_arvore"]
-[ext_resource type="PackedScene" path="res://cenas/inimigo/Inimigo.tscn" id="3_inimigo"]
+[ext_resource type="Script" path="res://cenas/jogo/gerente_de_ondas.gd" id="3_ondas"]
 [ext_resource type="Script" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
 [ext_resource type="PackedScene" path="res://cenas/hud/HUD.tscn" id="5_hud"]
 
@@ -20,14 +20,21 @@ position = Vector2(576, 324)
 [node name="Heroi" parent="." instance=ExtResource("1_heroi")]
 position = Vector2(576, 400)
 
-[node name="Inimigo" parent="." instance=ExtResource("3_inimigo")]
-position = Vector2(120, 100)
+[node name="GerenteDeOndas" type="Node" parent="."]
+script = ExtResource("3_ondas")
 
-[node name="GerenteDoJogo" type="Node" parent="." node_paths=PackedStringArray("arvore", "heroi")]
+[node name="TimerNascimento" type="Timer" parent="GerenteDeOndas"]
+
+[node name="TimerPausa" type="Timer" parent="GerenteDeOndas"]
+one_shot = true
+
+[node name="GerenteDoJogo" type="Node" parent="." node_paths=PackedStringArray("arvore", "heroi", "gerente_de_ondas")]
 script = ExtResource("4_gerente")
 arvore = NodePath("../Arvore")
 heroi = NodePath("../Heroi")
+gerente_de_ondas = NodePath("../GerenteDeOndas")
 
-[node name="HUD" parent="." node_paths=PackedStringArray("heroi", "arvore") instance=ExtResource("5_hud")]
+[node name="HUD" parent="." node_paths=PackedStringArray("heroi", "arvore", "gerente_de_ondas") instance=ExtResource("5_hud")]
 heroi = NodePath("../Heroi")
 arvore = NodePath("../Arvore")
+gerente_de_ondas = NodePath("../GerenteDeOndas")
