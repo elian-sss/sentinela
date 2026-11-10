@@ -5,6 +5,7 @@ extends CharacterBody2D
 signal morreu(posicao: Vector2)
 
 const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
+const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 
 @export var vida: int = 30:
 	set = _definir_vida
@@ -15,8 +16,13 @@ const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
 @export var dano_heroi: int = 10
 @export var raio_dano_heroi: float = 40.0
 @export var intervalo_dano_heroi: float = 1.0
+@export var chance_item: float = 0.15
+@export var bonus_chance_por_dano_arvore: float = 0.005
+@export var chance_item_maxima: float = 0.4
+@export var chance_erva: float = 0.5
 
 var _arvore: Arvore
+var _dano_causado_arvore: int = 0
 var _heroi: Heroi
 var _tempo_ate_ataque: float = 0.0
 var _tempo_ate_dano_heroi: float = 0.0
@@ -51,6 +57,7 @@ func _atacar_arvore(delta: float) -> void:
 	_tempo_ate_ataque -= delta
 	if _tempo_ate_ataque <= 0.0:
 		_arvore.receber_dano(dano)
+		_dano_causado_arvore += dano
 		_tempo_ate_ataque = intervalo_ataque
 
 
@@ -69,6 +76,7 @@ func _definir_vida(valor: int) -> void:
 	if vida == 0 and is_inside_tree() and not is_queued_for_deletion():
 		morreu.emit(global_position)
 		_soltar_fumaca()
+		_talvez_soltar_item()
 		queue_free()
 
 
@@ -76,3 +84,18 @@ func _soltar_fumaca() -> void:
 	var fumaca: Node2D = CENA_FUMACA.instantiate()
 	get_parent().add_child(fumaca)
 	fumaca.global_position = global_position
+
+
+## Quem já bateu mais na árvore tem mais chance de soltar item, até o limite.
+func _chance_de_item() -> float:
+	return minf(chance_item + _dano_causado_arvore * bonus_chance_por_dano_arvore, chance_item_maxima)
+
+
+func _talvez_soltar_item() -> void:
+	if randf() >= _chance_de_item():
+		return
+	var item: Item = CENA_ITEM.instantiate()
+	item.tipo = Item.Tipo.ERVA if randf() < chance_erva else Item.Tipo.FRUTA
+	item.position = global_position
+	# Adiado: o inimigo costuma morrer dentro de um callback de física, onde não dá para criar áreas.
+	get_parent().add_child.call_deferred(item)
