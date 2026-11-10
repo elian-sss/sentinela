@@ -7,16 +7,8 @@ signal onda_concluida(numero: int)
 signal vitoria
 signal inimigo_nasceu(inimigo: Node2D)
 
-## Uma entrada por onda: quantos inimigos de cada tipo e o intervalo (s) entre um nascimento e outro.
-## Numa onda com tipos misturados, a ordem de nascimento é sorteada.
+## As ondas estão em Balanceamento.ONDAS. Numa onda com tipos misturados, a ordem de nascimento é sorteada.
 ## O fogo ignora a posição fora da tela e escolhe sozinho um ponto perto da árvore.
-const ONDAS: Array[Dictionary] = [
-	{"inimigos": {"lenhador": 5}, "intervalo": 1.5},
-	{"inimigos": {"lenhador": 8, "fogo": 2}, "intervalo": 1.2},
-	{"inimigos": {"motosserrista": 10}, "intervalo": 1.0},
-	{"inimigos": {"lenhador": 8, "motosserrista": 8, "fogo": 3}, "intervalo": 0.8},
-	{"inimigos": {"chefe": 1}, "intervalo": 1.0},
-]
 const CENAS_INIMIGO: Dictionary = {
 	"lenhador": preload("res://cenas/inimigo/Inimigo.tscn"),
 	"motosserrista": preload("res://cenas/inimigo/Motosserrista.tscn"),
@@ -24,7 +16,7 @@ const CENAS_INIMIGO: Dictionary = {
 	"chefe": preload("res://cenas/chefe/Chefe.tscn"),
 }
 
-@export var pausa_entre_ondas: float = 3.0
+var pausa_entre_ondas: float = Balanceamento.PAUSA_ENTRE_ONDAS
 @export var margem_fora_da_tela: float = 40.0
 
 var _onda_atual: int = 0
@@ -42,7 +34,7 @@ func _ready() -> void:
 
 
 func total_de_ondas() -> int:
-	return ONDAS.size()
+	return Balanceamento.ONDAS.size()
 
 
 func onda_atual() -> int:
@@ -51,7 +43,7 @@ func onda_atual() -> int:
 
 func _iniciar_proxima_onda() -> void:
 	_onda_atual += 1
-	var onda: Dictionary = ONDAS[_onda_atual - 1]
+	var onda: Dictionary = Balanceamento.ONDAS[_onda_atual - 1]
 	_montar_fila_nascimento(onda["inimigos"])
 	onda_iniciada.emit(_onda_atual)
 	_timer_nascimento.start(onda["intervalo"])
@@ -103,7 +95,7 @@ func _ao_inimigo_morrer(_posicao: Vector2) -> void:
 
 func _concluir_onda() -> void:
 	onda_concluida.emit(_onda_atual)
-	if _onda_atual == ONDAS.size():
+	if _onda_atual == Balanceamento.ONDAS.size():
 		vitoria.emit()
 	else:
 		_timer_pausa.start(pausa_entre_ondas)

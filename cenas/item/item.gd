@@ -15,10 +15,10 @@ const CORES: Dictionary = {
 }
 
 @export var tipo: Tipo = Tipo.FRUTA
-@export var cura_fruta: int = 25
-@export var cura_erva: int = 40
-@export var duracao_escudo: float = 4.0
-@export var tempo_no_chao: float = 8.0
+var cura_fruta: int = Balanceamento.ITEM_CURA_FRUTA
+var cura_erva: int = Balanceamento.ITEM_CURA_ERVA
+var duracao_escudo: float = Balanceamento.ITEM_DURACAO_ESCUDO
+var tempo_no_chao: float = Balanceamento.ITEM_TEMPO_NO_CHAO
 @export var tempo_piscando: float = 3.0
 @export var intervalo_piscar: float = 0.15
 

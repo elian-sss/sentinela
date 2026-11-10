@@ -2,8 +2,8 @@ class_name Golpe
 extends Area2D
 ## Hitbox temporária do ataque do herói. Causa dano aos inimigos que tocar e some.
 
-@export var dano: int = 10
-@export var duracao: float = 0.1
+var dano: int = Balanceamento.HEROI_DANO_ATAQUE
+var duracao: float = Balanceamento.HEROI_DURACAO_GOLPE
 @export var forca_empurrao: float = 250.0
 
 

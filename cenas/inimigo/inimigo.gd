@@ -1,27 +1,30 @@
 extends CharacterBody2D
-## Inimigo base (lenhador): anda em linha reta até a árvore e a ataca periodicamente.
-## Variantes (ex.: Motosserrista.tscn) herdam esta cena e só mudam os valores no Inspector.
+## Inimigo base: anda em linha reta até a árvore e a ataca periodicamente.
+## Os números de cada tipo vêm de Balanceamento.INIMIGOS[tipo]. Variantes (ex.: Motosserrista.tscn)
+## herdam esta cena e só mudam o `tipo` e a cor.
 
 signal morreu(posicao: Vector2)
 
 const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
 const CENA_ITEM: PackedScene = preload("res://cenas/item/Item.tscn")
 
-@export var vida: int = 30:
-	set = _definir_vida
-@export var velocidade: float = 60.0
-@export var dano: int = 5
-@export var intervalo_ataque: float = 1.0
-@export var alcance_ataque: float = 56.0
-@export var dano_heroi: int = 10
-@export var raio_dano_heroi: float = 40.0
-@export var intervalo_dano_heroi: float = 1.0
-@export var chance_item: float = 0.15
-@export var bonus_chance_por_dano_arvore: float = 0.005
-@export var chance_item_maxima: float = 0.4
+@export var tipo: String = "lenhador" ## chave em Balanceamento.INIMIGOS
 @export var atrito_empurrao: float = 1500.0 ## quão rápido o empurrão perde força (px/s²)
-@export var chance_escudo: float = 0.2 ## entre os itens que caem, fração que é escudo
-@export var chance_erva: float = 0.5 ## entre os que não são escudo, fração que é erva
+
+var vida: int = 0:
+	set = _definir_vida
+var velocidade: float = 0.0
+var dano: int = 0
+var intervalo_ataque: float = 0.0
+var alcance_ataque: float = 0.0
+var dano_heroi: int = 0
+var raio_dano_heroi: float = 0.0
+var intervalo_dano_heroi: float = 0.0
+var chance_item: float = Balanceamento.DROP_CHANCE_BASE
+var bonus_chance_por_dano_arvore: float = Balanceamento.DROP_BONUS_POR_DANO_ARVORE
+var chance_item_maxima: float = Balanceamento.DROP_CHANCE_MAXIMA
+var chance_escudo: float = Balanceamento.DROP_FRACAO_ESCUDO
+var chance_erva: float = Balanceamento.DROP_FRACAO_ERVA
 
 var _arvore: Arvore
 var _dano_causado_arvore: int = 0
@@ -35,6 +38,7 @@ var _cor_original: Color
 
 
 func _ready() -> void:
+	_aplicar_balanceamento()
 	_arvore = get_tree().get_first_node_in_group("arvore")
 	_heroi = get_tree().get_first_node_in_group("heroi")
 	_cor_original = _visual.color
@@ -58,6 +62,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = Vector2.ZERO
 		_atacar_arvore(delta)
+
+
+## Copia os números do tipo (vida, velocidade, danos...) para as variáveis de mesmo nome.
+func _aplicar_balanceamento() -> void:
+	var valores: Dictionary = Balanceamento.INIMIGOS[tipo]
+	for nome: String in valores:
+		set(nome, valores[nome])
 
 
 func receber_dano(valor: int) -> void:

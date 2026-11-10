@@ -6,8 +6,8 @@ signal vida_alterada(atual: int, maxima: int)
 signal destruida
 signal dano_recebido
 
-@export var vida_maxima: int = 300
-@export var vida_atual: int = 300:
+var vida_maxima: int = Balanceamento.ARVORE_VIDA
+var vida_atual: int = Balanceamento.ARVORE_VIDA:
 	set = _definir_vida
 
 

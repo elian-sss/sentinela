@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+Balanceamento="*res://cenas/jogo/balanceamento.gd"
 AudioManager="*res://cenas/audio/audio_manager.gd"
 
 [display]

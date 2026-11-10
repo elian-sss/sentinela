@@ -10,17 +10,17 @@ signal dash_iniciado
 
 const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 
-@export var velocidade: float = 220.0
-@export var velocidade_dash: float = 700.0
-@export var duracao_dash: float = 0.15
-@export var cooldown_dash: float = 1.5
-@export var dano_ataque: int = 10
-@export var cooldown_ataque: float = 0.3
-@export var distancia_golpe: float = 34.0
-@export var vida_maxima: int = 100
-@export var vida_atual: int = 100:
+var velocidade: float = Balanceamento.HEROI_VELOCIDADE
+var velocidade_dash: float = Balanceamento.HEROI_VELOCIDADE_DASH
+var duracao_dash: float = Balanceamento.HEROI_DURACAO_DASH
+var cooldown_dash: float = Balanceamento.HEROI_COOLDOWN_DASH
+var dano_ataque: int = Balanceamento.HEROI_DANO_ATAQUE
+var cooldown_ataque: float = Balanceamento.HEROI_COOLDOWN_ATAQUE
+var distancia_golpe: float = Balanceamento.HEROI_DISTANCIA_GOLPE
+var vida_maxima: int = Balanceamento.HEROI_VIDA
+var vida_atual: int = Balanceamento.HEROI_VIDA:
 	set = _definir_vida
-@export var duracao_invencibilidade: float = 0.8
+var duracao_invencibilidade: float = Balanceamento.HEROI_INVENCIBILIDADE
 @export var intervalo_piscar: float = 0.1
 
 var _direcao_olhar: Vector2 = Vector2.RIGHT

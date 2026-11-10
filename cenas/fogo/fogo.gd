@@ -7,15 +7,15 @@ signal morreu(posicao: Vector2)
 
 const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
 
-@export var vida: int = 30
-@export var dano: int = 4
-@export var intervalo_dano: float = 1.0
-@export var raio_inicial: float = 16.0
-@export var raio_maximo: float = 64.0
-@export var velocidade_crescimento: float = 3.0 ## pixels de raio por segundo
-@export var alcance_dano_arvore: float = 40.0 ## distância além da borda do fogo que ainda queima a árvore
-@export var distancia_minima_arvore: float = 60.0
-@export var distancia_maxima_arvore: float = 100.0
+var vida: int = Balanceamento.FOGO_VIDA
+var dano: int = Balanceamento.FOGO_DANO_ARVORE
+var intervalo_dano: float = Balanceamento.FOGO_INTERVALO_DANO
+var raio_inicial: float = Balanceamento.FOGO_RAIO_INICIAL
+var raio_maximo: float = Balanceamento.FOGO_RAIO_MAXIMO
+var velocidade_crescimento: float = Balanceamento.FOGO_VELOCIDADE_CRESCIMENTO
+var alcance_dano_arvore: float = Balanceamento.FOGO_ALCANCE_DANO_ARVORE
+var distancia_minima_arvore: float = Balanceamento.FOGO_DISTANCIA_MINIMA_ARVORE
+var distancia_maxima_arvore: float = Balanceamento.FOGO_DISTANCIA_MAXIMA_ARVORE
 
 var _arvore: Arvore
 var _raio: float = 0.0

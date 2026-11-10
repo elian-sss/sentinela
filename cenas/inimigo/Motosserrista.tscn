@@ -3,10 +3,7 @@
 [ext_resource type="PackedScene" path="res://cenas/inimigo/Inimigo.tscn" id="1_base"]
 
 [node name="Motosserrista" instance=ExtResource("1_base")]
-vida = 20
-velocidade = 100.0
-dano = 8
-dano_heroi = 15
+tipo = "motosserrista"
 
 [node name="Visual" parent="." index="1"]
 color = Color(0.95, 0.8, 0.15, 1)
