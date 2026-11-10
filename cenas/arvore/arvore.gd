@@ -1,3 +1,4 @@
+class_name Arvore
 extends StaticBody2D
 ## Árvore sagrada que o herói protege. Se a vida chegar a zero, o jogo é perdido.
 

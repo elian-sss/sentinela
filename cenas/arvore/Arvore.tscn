@@ -11,7 +11,7 @@ bg_color = Color(0.15, 0.1, 0.05, 0.85)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preenchimento_barra"]
 bg_color = Color(0.35, 0.9, 0.3, 1)
 
-[node name="Arvore" type="StaticBody2D"]
+[node name="Arvore" type="StaticBody2D" groups=["arvore"]]
 script = ExtResource("1_arvore")
 
 [node name="Colisao" type="CollisionShape2D" parent="."]

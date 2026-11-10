@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://cenas/inimigo/inimigo.gd" id="1_inimigo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_inimigo"]
+size = Vector2(28, 28)
+
+[node name="Inimigo" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_inimigo")
+
+[node name="Colisao" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_inimigo")
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.9, 0.35, 0.15, 1)
