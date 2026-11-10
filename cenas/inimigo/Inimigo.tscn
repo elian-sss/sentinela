@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_inimigo"]
 size = Vector2(28, 28)
 
-[node name="Inimigo" type="CharacterBody2D"]
+[node name="Inimigo" type="CharacterBody2D" groups=["inimigos"]]
 motion_mode = 1
 script = ExtResource("1_inimigo")
 

@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal morreu(posicao: Vector2)
 
+const CENA_FUMACA: PackedScene = preload("res://cenas/efeitos/Fumaca.tscn")
+
 @export var vida: int = 30:
 	set = _definir_vida
 @export var velocidade: float = 60.0
@@ -47,4 +49,11 @@ func _definir_vida(valor: int) -> void:
 	vida = maxi(valor, 0)
 	if vida == 0 and is_inside_tree() and not is_queued_for_deletion():
 		morreu.emit(global_position)
+		_soltar_fumaca()
 		queue_free()
+
+
+func _soltar_fumaca() -> void:
+	var fumaca: Node2D = CENA_FUMACA.instantiate()
+	get_parent().add_child(fumaca)
+	fumaca.global_position = global_position

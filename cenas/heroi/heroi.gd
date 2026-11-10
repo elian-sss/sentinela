@@ -1,19 +1,26 @@
 extends CharacterBody2D
-## Herói guardião da floresta: movimento em 8 direções e dash.
+## Herói guardião da floresta: movimento em 8 direções, dash e ataque corpo a corpo.
+
+const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 
 @export var velocidade: float = 220.0
 @export var velocidade_dash: float = 700.0
 @export var duracao_dash: float = 0.15
 @export var cooldown_dash: float = 1.5
+@export var dano_ataque: int = 10
+@export var cooldown_ataque: float = 0.3
+@export var distancia_golpe: float = 34.0
 
 var _direcao_olhar: Vector2 = Vector2.RIGHT
 var _direcao_dash: Vector2 = Vector2.ZERO
 var _tempo_dash_restante: float = 0.0
 var _tempo_cooldown_restante: float = 0.0
+var _tempo_cooldown_ataque: float = 0.0
 
 
 func _physics_process(delta: float) -> void:
 	_tempo_cooldown_restante = maxf(_tempo_cooldown_restante - delta, 0.0)
+	_tempo_cooldown_ataque = maxf(_tempo_cooldown_ataque - delta, 0.0)
 
 	var direcao: Vector2 = Input.get_vector("mover_esquerda", "mover_direita", "mover_cima", "mover_baixo")
 	if direcao != Vector2.ZERO:
@@ -21,6 +28,9 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("dash") and _pode_dar_dash():
 		_iniciar_dash()
+
+	if Input.is_action_just_pressed("atacar") and _tempo_cooldown_ataque <= 0.0:
+		_atacar()
 
 	if esta_em_dash():
 		_tempo_dash_restante -= delta
@@ -43,3 +53,20 @@ func _iniciar_dash() -> void:
 	_direcao_dash = _direcao_olhar
 	_tempo_dash_restante = duracao_dash
 	_tempo_cooldown_restante = cooldown_dash
+
+
+func _atacar() -> void:
+	_tempo_cooldown_ataque = cooldown_ataque
+	var direcao: Vector2 = _direcao_do_ataque()
+	var golpe: Golpe = CENA_GOLPE.instantiate()
+	golpe.dano = dano_ataque
+	golpe.position = direcao * distancia_golpe
+	golpe.rotation = direcao.angle()
+	add_child(golpe)
+
+
+## Clique mira no mouse; tecla J ataca na última direção de movimento.
+func _direcao_do_ataque() -> Vector2:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		return global_position.direction_to(get_global_mouse_position())
+	return _direcao_olhar
