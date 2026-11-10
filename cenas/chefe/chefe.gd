@@ -7,6 +7,7 @@ extends CharacterBody2D
 
 signal vida_alterada(atual: int, maxima: int)
 signal morreu(posicao: Vector2)
+signal investiu
 
 enum Estado { AVANCANDO, AVISANDO, INVESTINDO, ATORDOADO }
 
@@ -130,6 +131,8 @@ func _mudar_estado(novo: Estado) -> void:
 	_linha_aviso.visible = novo == Estado.AVISANDO
 	if novo == Estado.AVISANDO:
 		_mirar_no_heroi()
+	elif novo == Estado.INVESTINDO:
+		investiu.emit()
 
 
 ## Trava a direção da investida no herói e desenha a linha de aviso nessa direção.

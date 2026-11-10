@@ -4,6 +4,11 @@
 
 Herói, inimigos (lenhador, motosserrista, fogo), chefe (escavadeira), árvore sagrada e itens: arte original do autor do jogo.
 
+## Áudio original
+
+Todos os efeitos sonoros e músicas (`assets/audio/`) foram sintetizados por código pelo próprio projeto,
+sem samples de terceiros. Para gerar de novo: `python tools/gerar_audio.py` (requer numpy, scipy e ffmpeg).
+
 ## Assets de terceiros (somente cenário)
 
 ### Tiny Town

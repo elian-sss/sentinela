@@ -4,6 +4,8 @@ extends Area2D
 ## e o escudo deixa o herói imune a dano por alguns segundos.
 ## Some depois de um tempo no chão, piscando no fim.
 
+signal coletado(tipo: Tipo)
+
 enum Tipo { FRUTA, ERVA, ESCUDO }
 
 const CORES: Dictionary = {
@@ -42,6 +44,7 @@ func _process(delta: float) -> void:
 func _ao_tocar_corpo(corpo: Node2D) -> void:
 	if corpo is Heroi:
 		_aplicar_efeito(corpo)
+		coletado.emit(tipo)
 		queue_free()
 
 

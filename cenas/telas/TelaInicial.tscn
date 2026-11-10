@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://cenas/telas/tela_inicial.gd" id="1_tela_inicial"]
+[ext_resource type="PackedScene" path="res://cenas/telas/BotoesSom.tscn" id="2_botoes_som"]
 
 [node name="TelaInicial" type="Control"]
 layout_mode = 3
@@ -64,6 +65,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Como jogar"
+
+[node name="BotoesSom" parent="Centro/Menu" instance=ExtResource("2_botoes_som")]
+layout_mode = 2
 
 [node name="ComoJogar" type="VBoxContainer" parent="Centro"]
 visible = false

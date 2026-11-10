@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://cenas/telas/tela_pausa.gd" id="1_tela_pausa"]
+[ext_resource type="PackedScene" path="res://cenas/telas/BotoesSom.tscn" id="2_botoes_som"]
 
 [node name="TelaPausa" type="CanvasLayer"]
 process_mode = 3
@@ -55,3 +56,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Menu inicial"
+
+[node name="BotoesSom" parent="Centro/Caixa" instance=ExtResource("2_botoes_som")]
+layout_mode = 2

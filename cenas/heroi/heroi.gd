@@ -5,6 +5,8 @@ extends CharacterBody2D
 signal vida_alterada(atual: int, maxima: int)
 signal morreu
 signal dano_recebido
+signal atacou
+signal dash_iniciado
 
 const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
 
@@ -70,6 +72,7 @@ func _iniciar_dash() -> void:
 	_direcao_dash = _direcao_olhar
 	_tempo_dash_restante = duracao_dash
 	_tempo_cooldown_restante = cooldown_dash
+	dash_iniciado.emit()
 
 
 func _atacar() -> void:
@@ -80,6 +83,7 @@ func _atacar() -> void:
 	golpe.position = direcao * distancia_golpe
 	golpe.rotation = direcao.angle()
 	add_child(golpe)
+	atacou.emit()
 
 
 ## Clique mira no mouse; tecla J ataca na última direção de movimento.

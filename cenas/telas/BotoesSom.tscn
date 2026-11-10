@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://cenas/telas/botoes_som.gd" id="1_botoes_som"]
+
+[node name="BotoesSom" type="HBoxContainer"]
+alignment = 1
+theme_override_constants/separation = 12
+script = ExtResource("1_botoes_som")
+
+[node name="BotaoMusica" type="Button" parent="."]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Música: ligada"
+
+[node name="BotaoEfeitos" type="Button" parent="."]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Efeitos: ligados"
