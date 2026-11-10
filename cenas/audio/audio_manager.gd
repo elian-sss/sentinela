@@ -37,6 +37,9 @@ const COM_VARIACAO_DE_PITCH: Array[String] = ["golpe", "dano_heroi", "dano_arvor
 ## Intervalo mínimo (s) entre dois toques do mesmo som, para não embolar quando muitos acontecem juntos.
 const INTERVALO_MINIMO: Dictionary = {"dano_arvore": 0.25, "motosserra": 0.6, "inimigo_derrotado": 0.05}
 const PITCH_MOTOR_CHEFE: float = 0.6
+## Os power-ups reusam o som do escudo, mais agudo (velocidade) ou mais grave (força).
+const PITCH_POWER_UP_VELOCIDADE: float = 1.5
+const PITCH_POWER_UP_FORCA: float = 0.7
 const BUS_MUSICA: String = "Musica"
 const BUS_EFEITOS: String = "Efeitos"
 const CENA_MENU: String = "res://cenas/telas/TelaInicial.tscn"
@@ -169,6 +172,10 @@ func _ao_coletar_item(tipo: Item.Tipo) -> void:
 			tocar("item_erva")
 		Item.Tipo.ESCUDO:
 			tocar("escudo")
+		Item.Tipo.VELOCIDADE:
+			tocar("escudo", PITCH_POWER_UP_VELOCIDADE)
+		Item.Tipo.FORCA:
+			tocar("escudo", PITCH_POWER_UP_FORCA)
 
 
 func _ao_iniciar_onda(numero: int, gerente: GerenteDeOndas) -> void:

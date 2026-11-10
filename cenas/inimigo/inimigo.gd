@@ -23,8 +23,6 @@ var intervalo_dano_heroi: float = 0.0
 var chance_item: float = Balanceamento.DROP_CHANCE_BASE
 var bonus_chance_por_dano_arvore: float = Balanceamento.DROP_BONUS_POR_DANO_ARVORE
 var chance_item_maxima: float = Balanceamento.DROP_CHANCE_MAXIMA
-var chance_escudo: float = Balanceamento.DROP_FRACAO_ESCUDO
-var chance_erva: float = Balanceamento.DROP_FRACAO_ERVA
 
 var _arvore: Arvore
 var _dano_causado_arvore: int = 0
@@ -135,7 +133,18 @@ func _talvez_soltar_item() -> void:
 	get_parent().add_child.call_deferred(item)
 
 
+## Sorteio por peso, com os pesos de Balanceamento.DROP_PESO_*.
 func _sortear_tipo_item() -> Item.Tipo:
-	if randf() < chance_escudo:
-		return Item.Tipo.ESCUDO
-	return Item.Tipo.ERVA if randf() < chance_erva else Item.Tipo.FRUTA
+	var pesos: Dictionary = {
+		Item.Tipo.FRUTA: Balanceamento.DROP_PESO_FRUTA,
+		Item.Tipo.ERVA: Balanceamento.DROP_PESO_ERVA,
+		Item.Tipo.ESCUDO: Balanceamento.DROP_PESO_ESCUDO,
+		Item.Tipo.VELOCIDADE: Balanceamento.DROP_PESO_VELOCIDADE,
+		Item.Tipo.FORCA: Balanceamento.DROP_PESO_FORCA,
+	}
+	var sorteio: float = randf() * pesos.values().reduce(func(soma: float, peso: float) -> float: return soma + peso, 0.0)
+	for tipo_item: Item.Tipo in pesos:
+		sorteio -= pesos[tipo_item]
+		if sorteio < 0.0:
+			return tipo_item
+	return Item.Tipo.FRUTA

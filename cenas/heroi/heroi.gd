@@ -9,6 +9,9 @@ signal atacou
 signal dash_iniciado
 
 const CENA_GOLPE: PackedScene = preload("res://cenas/heroi/Golpe.tscn")
+## Tons aplicados ao visual do herói enquanto um power-up dura (a força tem prioridade).
+const TOM_VELOCIDADE: Color = Color(1.6, 1.5, 0.5)
+const TOM_FORCA: Color = Color(1.5, 0.7, 1.6)
 
 var velocidade: float = Balanceamento.HEROI_VELOCIDADE
 var velocidade_dash: float = Balanceamento.HEROI_VELOCIDADE_DASH
@@ -21,6 +24,9 @@ var vida_maxima: int = Balanceamento.HEROI_VIDA
 var vida_atual: int = Balanceamento.HEROI_VIDA:
 	set = _definir_vida
 var duracao_invencibilidade: float = Balanceamento.HEROI_INVENCIBILIDADE
+var multiplicador_velocidade: float = Balanceamento.ITEM_MULTIPLICADOR_VELOCIDADE
+var multiplicador_dano_forca: int = Balanceamento.ITEM_MULTIPLICADOR_DANO_FORCA
+var escala_golpe_forca: float = Balanceamento.ITEM_ESCALA_GOLPE_FORCA
 @export var intervalo_piscar: float = 0.1
 
 var _direcao_olhar: Vector2 = Vector2.RIGHT
@@ -30,6 +36,8 @@ var _tempo_cooldown_restante: float = 0.0
 var _tempo_cooldown_ataque: float = 0.0
 var _tempo_invencivel: float = 0.0
 var _tempo_escudo: float = 0.0
+var _tempo_velocidade: float = 0.0
+var _tempo_forca: float = 0.0
 
 @onready var _visual: ColorRect = $Visual
 @onready var _indicador_escudo: Line2D = $Escudo
@@ -40,6 +48,7 @@ func _physics_process(delta: float) -> void:
 	_tempo_cooldown_ataque = maxf(_tempo_cooldown_ataque - delta, 0.0)
 	_atualizar_invencibilidade(delta)
 	_atualizar_escudo(delta)
+	_atualizar_power_ups(delta)
 
 	var direcao: Vector2 = Input.get_vector("mover_esquerda", "mover_direita", "mover_cima", "mover_baixo")
 	if direcao != Vector2.ZERO:
@@ -55,7 +64,7 @@ func _physics_process(delta: float) -> void:
 		_tempo_dash_restante -= delta
 		velocity = _direcao_dash * velocidade_dash
 	else:
-		velocity = direcao * velocidade
+		velocity = direcao * velocidade * (multiplicador_velocidade if tem_velocidade() else 1.0)
 
 	move_and_slide()
 
@@ -82,6 +91,11 @@ func _atacar() -> void:
 	golpe.dano = dano_ataque
 	golpe.position = direcao * distancia_golpe
 	golpe.rotation = direcao.angle()
+	if tem_forca():
+		golpe.dano *= multiplicador_dano_forca
+		golpe.scale = Vector2.ONE * escala_golpe_forca
+		golpe.position *= escala_golpe_forca
+		golpe.modulate = TOM_FORCA
 	add_child(golpe)
 	atacou.emit()
 
@@ -121,6 +135,23 @@ func tem_escudo() -> bool:
 	return _tempo_escudo > 0.0
 
 
+## Pegar outro power-up igual renova a duração, sem somar.
+func ativar_velocidade(duracao: float) -> void:
+	_tempo_velocidade = maxf(_tempo_velocidade, duracao)
+
+
+func ativar_forca(duracao: float) -> void:
+	_tempo_forca = maxf(_tempo_forca, duracao)
+
+
+func tem_velocidade() -> bool:
+	return _tempo_velocidade > 0.0
+
+
+func tem_forca() -> bool:
+	return _tempo_forca > 0.0
+
+
 func esta_morto() -> bool:
 	return vida_atual <= 0
 
@@ -151,3 +182,15 @@ func _atualizar_escudo(delta: float) -> void:
 	_tempo_escudo = maxf(_tempo_escudo - delta, 0.0)
 	if not tem_escudo():
 		_indicador_escudo.hide()
+
+
+## Conta o tempo dos power-ups e tinge o visual do herói enquanto algum dura.
+func _atualizar_power_ups(delta: float) -> void:
+	_tempo_velocidade = maxf(_tempo_velocidade - delta, 0.0)
+	_tempo_forca = maxf(_tempo_forca - delta, 0.0)
+	if tem_forca():
+		_visual.modulate = TOM_FORCA
+	elif tem_velocidade():
+		_visual.modulate = TOM_VELOCIDADE
+	else:
+		_visual.modulate = Color.WHITE

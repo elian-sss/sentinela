@@ -84,11 +84,21 @@ const CHEFE_DISTANCIA_INVOCACAO: float = 80.0
 const DROP_CHANCE_BASE: float = 0.3
 const DROP_BONUS_POR_DANO_ARVORE: float = 0.005 ## soma à chance por ponto de dano que o inimigo causou na árvore
 const DROP_CHANCE_MAXIMA: float = 0.55
-const DROP_FRACAO_ESCUDO: float = 0.2 ## entre os itens que caem, fração que é escudo
-const DROP_FRACAO_ERVA: float = 0.5 ## entre os que não são escudo, fração que é erva (o resto é fruta)
+# Pesos do sorteio de qual item cai (não precisam somar 100). Hoje: 30% fruta, 30% erva,
+# 15% escudo, 12,5% velocidade, 12,5% força.
+const DROP_PESO_FRUTA: float = 3.0
+const DROP_PESO_ERVA: float = 3.0
+const DROP_PESO_ESCUDO: float = 1.5
+const DROP_PESO_VELOCIDADE: float = 1.25
+const DROP_PESO_FORCA: float = 1.25
 const ITEM_CURA_FRUTA: int = 25
 const ITEM_CURA_ERVA: int = 40
 const ITEM_DURACAO_ESCUDO: float = 4.0
+const ITEM_DURACAO_VELOCIDADE: float = 6.0
+const ITEM_MULTIPLICADOR_VELOCIDADE: float = 1.4 ## só no andar, o dash não muda
+const ITEM_DURACAO_FORCA: float = 6.0
+const ITEM_MULTIPLICADOR_DANO_FORCA: int = 2
+const ITEM_ESCALA_GOLPE_FORCA: float = 1.3 ## golpe maior, com hitbox maior junto
 const ITEM_TEMPO_NO_CHAO: float = 8.0
 
 # ---------------------------------------------------------------- ondas
