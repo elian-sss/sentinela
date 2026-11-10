@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://cenas/telas/tela_inicial.gd" id="1_tela_inicial"]
+
+[node name="TelaInicial" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tela_inicial")
+
+[node name="Fundo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.1, 0.25, 0.12, 1)
+
+[node name="Centro" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Centro"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titulo" type="Label" parent="Centro/Menu"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 56
+text = "Sentinela"
+horizontal_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="Centro/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Proteja a árvore sagrada da Amazônia."
+horizontal_alignment = 1
+
+[node name="Espaco" type="Control" parent="Centro/Menu"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="BotaoJogar" type="Button" parent="Centro/Menu"]
+custom_minimum_size = Vector2(240, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Jogar"
+
+[node name="BotaoComoJogar" type="Button" parent="Centro/Menu"]
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Como jogar"
+
+[node name="ComoJogar" type="VBoxContainer" parent="Centro"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titulo" type="Label" parent="Centro/ComoJogar"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "Como jogar"
+horizontal_alignment = 1
+
+[node name="Controles" type="Label" parent="Centro/ComoJogar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "WASD ou setas: mover
+J ou clique: atacar
+Espaço: dash
+Esc: pausar"
+horizontal_alignment = 1
+
+[node name="Objetivo" type="Label" parent="Centro/ComoJogar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_font_sizes/font_size = 22
+text = "Proteja a árvore sagrada por 5 ondas e derrote a escavadeira."
+horizontal_alignment = 1
+
+[node name="BotaoVoltar" type="Button" parent="Centro/ComoJogar"]
+custom_minimum_size = Vector2(200, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Voltar"
