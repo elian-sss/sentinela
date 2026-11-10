@@ -81,9 +81,9 @@ const CHEFE_DISTANCIA_INVOCACAO: float = 80.0
 
 # ---------------------------------------------------------------- itens e drops
 
-const DROP_CHANCE_BASE: float = 0.2
+const DROP_CHANCE_BASE: float = 0.3
 const DROP_BONUS_POR_DANO_ARVORE: float = 0.005 ## soma à chance por ponto de dano que o inimigo causou na árvore
-const DROP_CHANCE_MAXIMA: float = 0.4
+const DROP_CHANCE_MAXIMA: float = 0.55
 const DROP_FRACAO_ESCUDO: float = 0.2 ## entre os itens que caem, fração que é escudo
 const DROP_FRACAO_ERVA: float = 0.5 ## entre os que não são escudo, fração que é erva (o resto é fruta)
 const ITEM_CURA_FRUTA: int = 25
