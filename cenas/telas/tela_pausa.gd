@@ -1,11 +1,11 @@
 extends CanvasLayer
-## Pausa com Esc. Só abre se o jogo não estiver pausado por outro motivo (ex.: tela de vitória/derrota).
+## Pausa com Esc. Só abre se o jogo não estiver pausado por outro motivo (ex.: diálogo ou tela de vitória/derrota).
 
 const CENA_MENU: String = "res://cenas/telas/TelaInicial.tscn"
 
-@onready var _botao_continuar: Button = $Centro/Caixa/BotaoContinuar
-@onready var _botao_reiniciar: Button = $Centro/Caixa/BotaoReiniciar
-@onready var _botao_menu: Button = $Centro/Caixa/BotaoMenu
+@onready var _botao_continuar: Button = $Centro/Painel/Caixa/BotaoContinuar
+@onready var _botao_reiniciar: Button = $Centro/Painel/Caixa/BotaoReiniciar
+@onready var _botao_menu: Button = $Centro/Painel/Caixa/BotaoMenu
 
 
 func _ready() -> void:
@@ -37,10 +37,8 @@ func _continuar() -> void:
 
 
 func _reiniciar() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	Transicao.recarregar()
 
 
 func _ir_para_menu() -> void:
-	get_tree().paused = false
-	get_tree().change_scene_to_file(CENA_MENU)
+	Transicao.ir_para(CENA_MENU)

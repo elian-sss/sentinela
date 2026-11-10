@@ -14,7 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.5)
+color = Color(0.02, 0.04, 0.03, 0.72)
 
 [node name="Centro" type="CenterContainer" parent="."]
 anchors_preset = 15
@@ -24,38 +24,40 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Caixa" type="VBoxContainer" parent="Centro"]
+[node name="Painel" type="PanelContainer" parent="Centro"]
+layout_mode = 2
+
+[node name="Caixa" type="VBoxContainer" parent="Centro/Painel"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Titulo" type="Label" parent="Centro/Caixa"]
+[node name="Titulo" type="Label" parent="Centro/Painel/Caixa"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 48
+theme_type_variation = &"LabelTitulo"
 text = "Pausa"
 horizontal_alignment = 1
 
-[node name="BotaoContinuar" type="Button" parent="Centro/Caixa"]
-custom_minimum_size = Vector2(220, 48)
+[node name="BotaoContinuar" type="Button" parent="Centro/Painel/Caixa"]
+custom_minimum_size = Vector2(300, 52)
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 22
+theme_type_variation = &"BotaoVerde"
 text = "Continuar"
 
-[node name="BotaoReiniciar" type="Button" parent="Centro/Caixa"]
-custom_minimum_size = Vector2(220, 44)
+[node name="BotaoReiniciar" type="Button" parent="Centro/Painel/Caixa"]
+custom_minimum_size = Vector2(300, 48)
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
 text = "Reiniciar"
 
-[node name="BotaoMenu" type="Button" parent="Centro/Caixa"]
-custom_minimum_size = Vector2(220, 44)
+[node name="BotaoMenu" type="Button" parent="Centro/Painel/Caixa"]
+custom_minimum_size = Vector2(300, 48)
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
 text = "Menu inicial"
 
-[node name="BotoesSom" parent="Centro/Caixa" instance=ExtResource("2_botoes_som")]
+[node name="Lembrete" type="Label" parent="Centro/Painel/Caixa"]
+layout_mode = 2
+theme_type_variation = &"LabelSuave"
+text = "WASD mover  •  clique ou J atacar  •  Espaço dash"
+horizontal_alignment = 1
+
+[node name="BotoesSom" parent="Centro/Painel/Caixa" instance=ExtResource("2_botoes_som")]
 layout_mode = 2

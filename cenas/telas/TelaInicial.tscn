@@ -1,7 +1,26 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=15 format=3]
 
-[ext_resource type="Script" path="res://cenas/telas/tela_inicial.gd" id="1_tela_inicial"]
-[ext_resource type="PackedScene" path="res://cenas/telas/BotoesSom.tscn" id="2_botoes_som"]
+[ext_resource type="Script" path="res://cenas/telas/tela_inicial.gd" id="script"]
+[ext_resource type="PackedScene" path="res://cenas/cenario/Cenario.tscn" id="cenario"]
+[ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="arvore"]
+[ext_resource type="SpriteFrames" path="res://cenas/heroi/heroi_quadros.tres" id="heroi"]
+[ext_resource type="Texture2D" path="res://assets/interface/logo.png" id="logo"]
+[ext_resource type="PackedScene" path="res://cenas/telas/BotoesSom.tscn" id="som"]
+[ext_resource type="Texture2D" path="res://assets/interface/mouse.png" id="mouse"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_fruta.png" id="fruta"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_erva.png" id="erva"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_escudo.png" id="escudo"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_velocidade.png" id="velocidade"]
+[ext_resource type="Texture2D" path="res://assets/personagens/item_forca.png" id="forca"]
+
+[sub_resource type="Gradient" id="Gradient_sombra"]
+offsets = PackedFloat32Array(0, 0.42, 0.7)
+colors = PackedColorArray(0.03, 0.05, 0.035, 0.94, 0.03, 0.05, 0.035, 0.7, 0.03, 0.05, 0.035, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sombra"]
+gradient = SubResource("Gradient_sombra")
+width = 256
+height = 4
 
 [node name="TelaInicial" type="Control"]
 layout_mode = 3
@@ -10,19 +29,138 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_tela_inicial")
+script = ExtResource("script")
 
-[node name="Fundo" type="ColorRect" parent="."]
-layout_mode = 1
+[node name="Mundo" type="Node2D" parent="."]
+position = Vector2(-64, -150)
+scale = Vector2(1.5, 1.5)
+y_sort_enabled = true
+
+[node name="Cenario" parent="Mundo" instance=ExtResource("cenario")]
+
+[node name="Arvore" parent="Mundo" instance=ExtResource("arvore")]
+position = Vector2(576, 324)
+
+[node name="Sentinela" type="AnimatedSprite2D" parent="Mundo"]
+position = Vector2(500, 372)
+scale = Vector2(1.5, 1.5)
+sprite_frames = ExtResource("heroi")
+animation = &"parado"
+autoplay = "parado"
+
+[node name="Luz" type="CanvasModulate" parent="."]
+color = Color(0.8, 0.86, 1, 1)
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Sombra" type="TextureRect" parent="Interface"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.1, 0.25, 0.12, 1)
+texture = SubResource("GradientTexture2D_sombra")
 
-[node name="Centro" type="CenterContainer" parent="."]
+[node name="Logo" type="TextureRect" parent="Interface"]
+offset_left = 40.0
+offset_top = 34.0
+offset_right = 624.0
+offset_bottom = 166.0
+mouse_filter = 2
+texture = ExtResource("logo")
+
+[node name="Subtitulo" type="Label" parent="Interface"]
+offset_left = 66.0
+offset_top = 170.0
+offset_right = 620.0
+offset_bottom = 206.0
+theme_type_variation = &"LabelDestaque"
+text = "Guardião da Samaúma"
+
+[node name="Menu" type="VBoxContainer" parent="Interface"]
+offset_left = 66.0
+offset_top = 234.0
+offset_right = 366.0
+offset_bottom = 520.0
+theme_override_constants/separation = 10
+
+[node name="BotaoHistoria" type="Button" parent="Interface/Menu"]
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+theme_type_variation = &"BotaoVerde"
+text = "Modo história"
+
+[node name="BotaoInfinito" type="Button" parent="Interface/Menu"]
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+text = "Ondas infinitas"
+
+[node name="RotuloRecorde" type="Label" parent="Interface/Menu"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelDestaque"
+theme_override_font_sizes/font_size = 16
+text = "Recorde: onda 0"
+horizontal_alignment = 1
+
+[node name="BotaoComoJogar" type="Button" parent="Interface/Menu"]
+custom_minimum_size = Vector2(300, 48)
+layout_mode = 2
+text = "Como jogar"
+
+[node name="BotaoCreditos" type="Button" parent="Interface/Menu"]
+custom_minimum_size = Vector2(300, 48)
+layout_mode = 2
+text = "Créditos"
+
+[node name="BotoesSom" parent="Interface" instance=ExtResource("som")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_top = -76.0
+offset_right = 170.0
+offset_bottom = -28.0
+grow_vertical = 0
+alignment = 0
+
+[node name="Rodape" type="Label" parent="Interface"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -48.0
+offset_right = -24.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_type_variation = &"LabelSuave"
+text = "Game Jam Semana GameDev III  •  Santarém, PA"
+horizontal_alignment = 2
+
+
+[node name="ComoJogar" type="Control" parent="Interface"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Escurecer" type="ColorRect" parent="Interface/ComoJogar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.03, 0.72)
+
+[node name="Centro" type="CenterContainer" parent="Interface/ComoJogar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,93 +168,336 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Menu" type="VBoxContainer" parent="Centro"]
+[node name="Painel" type="PanelContainer" parent="Interface/ComoJogar/Centro"]
 layout_mode = 2
-theme_override_constants/separation = 16
 
-[node name="Titulo" type="Label" parent="Centro/Menu"]
+[node name="Caixa" type="VBoxContainer" parent="Interface/ComoJogar/Centro/Painel"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 56
-text = "Sentinela"
+theme_override_constants/separation = 14
+
+[node name="Titulo" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa"]
+layout_mode = 2
+theme_type_variation = &"LabelSubtitulo"
+text = "Como jogar"
 horizontal_alignment = 1
 
-[node name="Subtitulo" type="Label" parent="Centro/Menu"]
+
+[node name="Colunas" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Proteja a árvore sagrada da Amazônia."
+theme_override_constants/separation = 48
+
+
+[node name="Controles" type="VBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Cabecalho" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles"]
+layout_mode = 2
+theme_type_variation = &"LabelDestaque"
+text = "Controles"
+
+
+[node name="Itens" type="VBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Cabecalho" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_type_variation = &"LabelDestaque"
+text = "Itens"
+
+
+[node name="Mover" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+
+[node name="Tecla0" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Mover"]
+layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
 horizontal_alignment = 1
+text = "W"
 
-[node name="Espaco" type="Control" parent="Centro/Menu"]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
 
-[node name="BotaoJogar" type="Button" parent="Centro/Menu"]
-custom_minimum_size = Vector2(240, 52)
+[node name="Tecla1" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Mover"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
-text = "Modo história"
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "A"
 
-[node name="BotaoInfinito" type="Button" parent="Centro/Menu"]
-custom_minimum_size = Vector2(240, 52)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
-text = "Ondas infinitas"
 
-[node name="RotuloRecorde" type="Label" parent="Centro/Menu"]
-visible = false
-modulate = Color(1, 0.9, 0.5, 1)
+[node name="Tecla2" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Mover"]
 layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "S"
+
+
+[node name="Tecla3" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Mover"]
+layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "D"
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Mover"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "ou setas: mover"
+
+
+[node name="Atacar" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+
+[node name="Mouse" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Atacar"]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("mouse")
+stretch_mode = 3
+
+
+[node name="Ou" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Atacar"]
+layout_mode = 2
+theme_type_variation = &"LabelSuave"
+size_flags_vertical = 4
+text = "ou"
+
+
+[node name="Tecla1" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Atacar"]
+layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "J"
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Atacar"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "atacar"
+
+
+[node name="Dash" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+
+[node name="Tecla0" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Dash"]
+layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "Espaço"
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Dash"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "dash (esquiva rápida)"
+
+
+[node name="Pausar" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+
+[node name="Tecla0" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Pausar"]
+layout_mode = 2
+theme_type_variation = &"LabelTecla"
+size_flags_vertical = 4
+horizontal_alignment = 1
+text = "Esc"
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Controles/Pausar"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "pausar"
+
+
+[node name="Fruta" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Icone" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Fruta"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("fruta")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Fruta"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Fruta: cura o Sentinela"
+
+
+[node name="Erva" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Icone" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Erva"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("erva")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Erva"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Erva: cura a Samaúma"
+
+
+[node name="Casco" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Icone" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Casco"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("escudo")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Casco"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Casco de jabuti: protege de dano"
+
+
+[node name="Pena" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Icone" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Pena"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("velocidade")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Pena"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Pena de gavião: mais velocidade"
+
+
+[node name="Acai" type="HBoxContainer" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Icone" type="TextureRect" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Acai"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("forca")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Descricao" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa/Colunas/Itens/Acai"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Açaí: golpe mais forte"
+
+
+[node name="Objetivo" type="Label" parent="Interface/ComoJogar/Centro/Painel/Caixa"]
+layout_mode = 2
+theme_type_variation = &"LabelDestaque"
 theme_override_font_sizes/font_size = 16
-text = "Recorde: onda 0"
 horizontal_alignment = 1
+text = "Proteja a Samaúma por 5 ondas e derrote a escavadeira.\nSe a árvore cair, ou se você cair, a floresta perde."
 
-[node name="BotaoComoJogar" type="Button" parent="Centro/Menu"]
-custom_minimum_size = Vector2(240, 44)
+
+[node name="BotaoVoltar" type="Button" parent="Interface/ComoJogar/Centro/Painel/Caixa"]
+custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
-text = "Como jogar"
+text = "Voltar"
 
-[node name="BotoesSom" parent="Centro/Menu" instance=ExtResource("2_botoes_som")]
-layout_mode = 2
 
-[node name="ComoJogar" type="VBoxContainer" parent="Centro"]
+[node name="Creditos" type="Control" parent="Interface"]
 visible = false
-layout_mode = 2
-theme_override_constants/separation = 16
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Titulo" type="Label" parent="Centro/ComoJogar"]
+[node name="Escurecer" type="ColorRect" parent="Interface/Creditos"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.03, 0.72)
+
+[node name="Centro" type="CenterContainer" parent="Interface/Creditos"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Painel" type="PanelContainer" parent="Interface/Creditos/Centro"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 40
-text = "Como jogar"
+
+[node name="Caixa" type="VBoxContainer" parent="Interface/Creditos/Centro/Painel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titulo" type="Label" parent="Interface/Creditos/Centro/Painel/Caixa"]
+layout_mode = 2
+theme_type_variation = &"LabelSubtitulo"
+text = "Créditos"
 horizontal_alignment = 1
 
-[node name="Controles" type="Label" parent="Centro/ComoJogar"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "WASD ou setas: mover
-J ou clique: atacar
-Espaço: dash
-Esc: pausar"
-horizontal_alignment = 1
 
-[node name="Objetivo" type="Label" parent="Centro/ComoJogar"]
+[node name="Texto" type="Label" parent="Interface/Creditos/Centro/Painel/Caixa"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
-theme_override_font_sizes/font_size = 22
-text = "Modo história: proteja a árvore por 5 ondas e derrote a escavadeira.
-Ondas infinitas: resista o máximo que conseguir."
 horizontal_alignment = 1
+text = "Um jogo de Elian Sousa\nGame Jam da Semana GameDev III  •  Santarém, Pará\nTema: Heróis da Amazônia"
 
-[node name="BotaoVoltar" type="Button" parent="Centro/ComoJogar"]
-custom_minimum_size = Vector2(200, 44)
+
+[node name="Arte" type="Label" parent="Interface/Creditos/Centro/Painel/Caixa"]
+layout_mode = 2
+theme_type_variation = &"LabelSuave"
+horizontal_alignment = 1
+text = "Personagens, itens, plantas, interface e fonte:\npixel art original, gerada por código pelo projeto.\nMúsica e efeitos: sintetizados por código, sem samples."
+
+
+[node name="Terceiros" type="Label" parent="Interface/Creditos/Centro/Painel/Caixa"]
+layout_mode = 2
+horizontal_alignment = 1
+text = "Chão e árvores secas do pântano: Dead Swamp, de Sevarihk\n(CC-BY 4.0, sevarihk.itch.io)\nFeito com Godot Engine (licença MIT)"
+
+
+[node name="BotaoVoltar" type="Button" parent="Interface/Creditos/Centro/Painel/Caixa"]
+custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
 text = "Voltar"

@@ -1,20 +1,24 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://cenas/telas/botoes_som.gd" id="1_botoes_som"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_musica_ligado.png" id="2_musica"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_efeitos_ligado.png" id="3_efeitos"]
 
 [node name="BotoesSom" type="HBoxContainer"]
 alignment = 1
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 script = ExtResource("1_botoes_som")
 
 [node name="BotaoMusica" type="Button" parent="."]
-custom_minimum_size = Vector2(170, 36)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Música: ligada"
+tooltip_text = "Música"
+icon = ExtResource("2_musica")
+icon_alignment = 1
 
 [node name="BotaoEfeitos" type="Button" parent="."]
-custom_minimum_size = Vector2(170, 36)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Efeitos: ligados"
+tooltip_text = "Efeitos sonoros"
+icon = ExtResource("3_efeitos")
+icon_alignment = 1

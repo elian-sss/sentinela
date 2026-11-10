@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://cenas/telas/tela_historia.gd" id="1_tela_historia"]
+[ext_resource type="Texture2D" path="res://assets/interface/icone_samauma.png" id="2_samauma"]
+[ext_resource type="Texture2D" path="res://assets/interface/seta_continuar.png" id="3_seta"]
 
 [node name="TelaHistoria" type="CanvasLayer"]
 process_mode = 3
@@ -13,39 +15,65 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.7)
-
-[node name="Centro" type="CenterContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
+color = Color(0.02, 0.04, 0.03, 0.45)
 
-[node name="Caixa" type="VBoxContainer" parent="Centro"]
+[node name="Caixa" type="PanelContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -196.0
+offset_right = 440.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Conteudo" type="HBoxContainer" parent="Caixa"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Titulo" type="Label" parent="Centro/Caixa"]
+[node name="Retrato" type="TextureRect" parent="Caixa/Conteudo"]
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 44
-text = "O despertar"
-horizontal_alignment = 1
+size_flags_vertical = 4
+texture = ExtResource("2_samauma")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Texto" type="Label" parent="Centro/Caixa"]
+[node name="Falas" type="VBoxContainer" parent="Caixa/Conteudo"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 22
-text = "Texto do trecho."
-horizontal_alignment = 1
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
 
-[node name="Dica" type="Label" parent="Centro/Caixa"]
-modulate = Color(1, 1, 1, 0.7)
+[node name="Nome" type="Label" parent="Caixa/Conteudo/Falas"]
 layout_mode = 2
+theme_type_variation = &"LabelDestaque"
 theme_override_font_sizes/font_size = 16
-text = "Clique ou Espaço para continuar"
-horizontal_alignment = 1
+text = "SAMAÚMA"
+
+[node name="Texto" type="Label" parent="Caixa/Conteudo/Falas"]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"LabelMedio"
+text = "Acorde, Sentinela."
+autowrap_mode = 3
+
+[node name="Rodape" type="HBoxContainer" parent="Caixa/Conteudo/Falas"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="Dica" type="Label" parent="Caixa/Conteudo/Falas/Rodape"]
+layout_mode = 2
+theme_type_variation = &"LabelSuave"
+text = "Clique ou Espaço"
+
+[node name="Seta" type="TextureRect" parent="Caixa/Conteudo/Falas/Rodape"]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_seta")
+stretch_mode = 3
