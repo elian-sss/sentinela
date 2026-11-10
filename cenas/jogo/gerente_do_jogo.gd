@@ -16,6 +16,7 @@ func _ready() -> void:
 	arvore.destruida.connect(_perder)
 	heroi.morreu.connect(_perder)
 	gerente_de_ondas.vitoria.connect(_vencer)
+	gerente_de_ondas.onda_concluida.connect(_regenerar_arvore)
 
 
 func _perder() -> void:
@@ -23,6 +24,12 @@ func _perder() -> void:
 		return
 	_partida_encerrada = true
 	derrota.emit(gerente_de_ondas.onda_atual())
+
+
+## Ao fim de cada onda, menos a última, a árvore recupera uma parte da vida.
+func _regenerar_arvore(onda: int) -> void:
+	if onda < gerente_de_ondas.total_de_ondas():
+		arvore.curar(int(arvore.vida_maxima * Balanceamento.ARVORE_REGENERACAO_ENTRE_ONDAS))
 
 
 func _vencer() -> void:

@@ -14,11 +14,12 @@ const HEROI_DANO_ATAQUE: int = 10
 const HEROI_COOLDOWN_ATAQUE: float = 0.3
 const HEROI_DISTANCIA_GOLPE: float = 34.0 ## do centro do herói ao centro da hitbox
 const HEROI_DURACAO_GOLPE: float = 0.1 ## tempo em que a hitbox fica ativa
-const HEROI_INVENCIBILIDADE: float = 0.8 ## depois de levar dano
+const HEROI_INVENCIBILIDADE: float = 1.0 ## depois de levar dano
 
 # ---------------------------------------------------------------- árvore
 
 const ARVORE_VIDA: int = 300
+const ARVORE_REGENERACAO_ENTRE_ONDAS: float = 0.1 ## fração da vida máxima curada ao fim de cada onda (menos a última)
 
 # ---------------------------------------------------------------- inimigos
 # As chaves de cada tipo são os nomes das variáveis em inimigo.gd.
@@ -31,14 +32,14 @@ const INIMIGOS: Dictionary = {
 		"dano": 5,
 		"intervalo_ataque": 1.0,
 		"alcance_ataque": 56.0,
-		"dano_heroi": 10,
+		"dano_heroi": 8,
 		"raio_dano_heroi": 40.0,
 		"intervalo_dano_heroi": 1.0,
 	},
 	"motosserrista": {
 		"vida": 20,
-		"velocidade": 100.0,
-		"dano": 8,
+		"velocidade": 90.0,
+		"dano": 7,
 		"intervalo_ataque": 1.0,
 		"alcance_ataque": 56.0,
 		"dano_heroi": 15,
@@ -56,7 +57,7 @@ const FOGO_RAIO_INICIAL: float = 16.0
 const FOGO_RAIO_MAXIMO: float = 64.0
 const FOGO_VELOCIDADE_CRESCIMENTO: float = 3.0 ## pixels de raio por segundo
 const FOGO_ALCANCE_DANO_ARVORE: float = 40.0 ## além da borda do fogo
-const FOGO_DISTANCIA_MINIMA_ARVORE: float = 60.0
+const FOGO_DISTANCIA_MINIMA_ARVORE: float = 80.0
 const FOGO_DISTANCIA_MAXIMA_ARVORE: float = 100.0
 
 # ---------------------------------------------------------------- chefe (escavadeira)
@@ -66,7 +67,7 @@ const CHEFE_VELOCIDADE_AVANCO: float = 35.0
 const CHEFE_TEMPO_AVANCO: float = 4.0
 const CHEFE_TEMPO_AVISO: float = 1.0
 const CHEFE_VELOCIDADE_INVESTIDA: float = 420.0
-const CHEFE_TEMPO_ATORDOADO: float = 2.0
+const CHEFE_TEMPO_ATORDOADO: float = 2.5
 const CHEFE_MULTIPLICADOR_DANO_ATORDOADO: int = 3
 const CHEFE_DANO_CONTATO_HEROI: int = 10
 const CHEFE_DANO_INVESTIDA_HEROI: int = 20
@@ -74,13 +75,13 @@ const CHEFE_RAIO_CONTATO_HEROI: float = 56.0
 const CHEFE_DANO_ARVORE: int = 10
 const CHEFE_INTERVALO_ATAQUE_ARVORE: float = 1.5
 const CHEFE_RAIO_CONTATO_ARVORE: float = 80.0
-const CHEFE_INTERVALO_INVOCACAO: float = 15.0
+const CHEFE_INTERVALO_INVOCACAO: float = 18.0
 const CHEFE_LENHADORES_POR_INVOCACAO: int = 2
 const CHEFE_DISTANCIA_INVOCACAO: float = 80.0
 
 # ---------------------------------------------------------------- itens e drops
 
-const DROP_CHANCE_BASE: float = 0.15
+const DROP_CHANCE_BASE: float = 0.2
 const DROP_BONUS_POR_DANO_ARVORE: float = 0.005 ## soma à chance por ponto de dano que o inimigo causou na árvore
 const DROP_CHANCE_MAXIMA: float = 0.4
 const DROP_FRACAO_ESCUDO: float = 0.2 ## entre os itens que caem, fração que é escudo
@@ -94,11 +95,11 @@ const ITEM_TEMPO_NO_CHAO: float = 8.0
 # Uma entrada por onda: quantos inimigos de cada tipo e o intervalo entre um nascimento e outro.
 # Tipos: "lenhador", "motosserrista", "fogo", "chefe".
 
-const PAUSA_ENTRE_ONDAS: float = 3.0
+const PAUSA_ENTRE_ONDAS: float = 4.0
 const ONDAS: Array[Dictionary] = [
-	{"inimigos": {"lenhador": 5}, "intervalo": 1.5},
-	{"inimigos": {"lenhador": 8, "fogo": 2}, "intervalo": 1.2},
-	{"inimigos": {"motosserrista": 10}, "intervalo": 1.0},
-	{"inimigos": {"lenhador": 8, "motosserrista": 8, "fogo": 3}, "intervalo": 0.8},
+	{"inimigos": {"lenhador": 4}, "intervalo": 2.0},
+	{"inimigos": {"lenhador": 6, "fogo": 2}, "intervalo": 1.5},
+	{"inimigos": {"lenhador": 4, "motosserrista": 8}, "intervalo": 1.1},
+	{"inimigos": {"lenhador": 6, "motosserrista": 8, "fogo": 3}, "intervalo": 0.9},
 	{"inimigos": {"chefe": 1}, "intervalo": 1.0},
 ]
