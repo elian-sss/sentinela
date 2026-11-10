@@ -4,6 +4,10 @@
 
 Herói, inimigos (lenhador, motosserrista, fogo), chefe (escavadeira), árvore sagrada e itens: arte original do autor do jogo.
 
+Props coloridos do cenário (`assets/cenario/props/`: árvores com copa, açaizeiro, arbustos, samambaias,
+flores, cogumelos e vitórias-régias): pixel art original, gerada por código pelo próprio projeto.
+Para gerar de novo: `python tools/gerar_props.py` (requer Pillow e numpy).
+
 ## Áudio original
 
 Todos os efeitos sonoros e músicas (`assets/audio/`) foram sintetizados por código pelo próprio projeto,
