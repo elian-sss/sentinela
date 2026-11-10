@@ -39,7 +39,7 @@ var _tempo_escudo: float = 0.0
 var _tempo_velocidade: float = 0.0
 var _tempo_forca: float = 0.0
 
-@onready var _visual: ColorRect = $Visual
+@onready var _visual: AnimatedSprite2D = $Visual
 @onready var _indicador_escudo: Line2D = $Escudo
 
 
@@ -67,6 +67,14 @@ func _physics_process(delta: float) -> void:
 		velocity = direcao * velocidade * (multiplicador_velocidade if tem_velocidade() else 1.0)
 
 	move_and_slide()
+	_atualizar_animacao()
+
+
+## Vira para o lado em que olha e troca entre parado e andando.
+func _atualizar_animacao() -> void:
+	if _direcao_olhar.x != 0.0:
+		_visual.flip_h = _direcao_olhar.x < 0.0
+	_visual.play("andando" if velocity != Vector2.ZERO else "parado")
 
 
 func esta_em_dash() -> bool:

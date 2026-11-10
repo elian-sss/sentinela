@@ -2,7 +2,9 @@
 
 ## Arte original
 
-Herói, inimigos (lenhador, motosserrista, fogo), chefe (escavadeira), árvore sagrada e itens: arte original do autor do jogo.
+Herói, inimigos (lenhador, motosserrista), chefe (escavadeira), árvore sagrada e itens (`assets/personagens/`):
+pixel art original, gerada por código pelo próprio projeto. Para gerar de novo: `python tools/gerar_personagens.py`
+(requer Pillow e numpy).
 
 Props coloridos do cenário (`assets/cenario/props/`: árvores com copa, açaizeiro, arbustos, samambaias,
 flores, cogumelos e vitórias-régias): pixel art original, gerada por código pelo próprio projeto.

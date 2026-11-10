@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/personagens/lenhador.png" id="1_folha"]
+
+[sub_resource type="AtlasTexture" id="quadro_0"]
+atlas = ExtResource("1_folha")
+region = Rect2(0, 0, 28, 38)
+
+[sub_resource type="AtlasTexture" id="quadro_1"]
+atlas = ExtResource("1_folha")
+region = Rect2(28, 0, 28, 38)
+
+[sub_resource type="AtlasTexture" id="quadro_2"]
+atlas = ExtResource("1_folha")
+region = Rect2(56, 0, 28, 38)
+
+[sub_resource type="AtlasTexture" id="quadro_3"]
+atlas = ExtResource("1_folha")
+region = Rect2(84, 0, 28, 38)
+
+[sub_resource type="AtlasTexture" id="quadro_4"]
+atlas = ExtResource("1_folha")
+region = Rect2(112, 0, 28, 38)
+
+[sub_resource type="AtlasTexture" id="quadro_5"]
+atlas = ExtResource("1_folha")
+region = Rect2(140, 0, 28, 38)
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("quadro_0")}, {"duration": 1.0, "texture": SubResource("quadro_1")}, {"duration": 1.0, "texture": SubResource("quadro_2")}, {"duration": 1.0, "texture": SubResource("quadro_3")}],
+"loop": true,
+"name": &"andando",
+"speed": 7.0
+}, {
+"frames": [{"duration": 1.0, "texture": SubResource("quadro_4")}, {"duration": 1.0, "texture": SubResource("quadro_5")}],
+"loop": true,
+"name": &"atacando",
+"speed": 2.0
+}]

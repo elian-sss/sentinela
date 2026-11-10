@@ -30,16 +30,14 @@ var _heroi: Heroi
 var _tempo_ate_ataque: float = 0.0
 var _tempo_ate_dano_heroi: float = 0.0
 var _empurrao: Vector2 = Vector2.ZERO
-var _cor_original: Color
 
-@onready var _visual: ColorRect = $Visual
+@onready var _visual: AnimatedSprite2D = $Visual
 
 
 func _ready() -> void:
 	_aplicar_balanceamento()
 	_arvore = get_tree().get_first_node_in_group("arvore")
 	_heroi = get_tree().get_first_node_in_group("heroi")
-	_cor_original = _visual.color
 	_tempo_ate_ataque = intervalo_ataque
 
 
@@ -54,12 +52,15 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
+	_visual.flip_h = _arvore.global_position.x < global_position.x
 	if global_position.distance_to(_arvore.global_position) > alcance_ataque:
 		velocity = global_position.direction_to(_arvore.global_position) * velocidade
 		move_and_slide()
+		_visual.play("andando")
 	else:
 		velocity = Vector2.ZERO
 		_atacar_arvore(delta)
+		_visual.play("atacando")
 
 
 ## Copia os números do tipo (vida, velocidade, danos...) para as variáveis de mesmo nome.
@@ -71,7 +72,7 @@ func _aplicar_balanceamento() -> void:
 
 func receber_dano(valor: int) -> void:
 	vida -= valor
-	Feedback.piscar_branco(self, _visual, _cor_original)
+	Feedback.piscar_branco(self, _visual)
 
 
 func empurrar(impulso: Vector2) -> void:

@@ -9,13 +9,15 @@ signal coletado(tipo: Tipo)
 
 enum Tipo { FRUTA, ERVA, ESCUDO, VELOCIDADE, FORCA }
 
-const CORES: Dictionary = {
-	Tipo.FRUTA: Color(0.95, 0.25, 0.35),
-	Tipo.ERVA: Color(0.6, 1.0, 0.45),
-	Tipo.ESCUDO: Color(0.55, 0.85, 1.0),
-	Tipo.VELOCIDADE: Color(1.0, 0.85, 0.2),
-	Tipo.FORCA: Color(0.75, 0.4, 1.0),
+const TEXTURAS: Dictionary = {
+	Tipo.FRUTA: preload("res://assets/personagens/item_fruta.png"),
+	Tipo.ERVA: preload("res://assets/personagens/item_erva.png"),
+	Tipo.ESCUDO: preload("res://assets/personagens/item_escudo.png"),
+	Tipo.VELOCIDADE: preload("res://assets/personagens/item_velocidade.png"),
+	Tipo.FORCA: preload("res://assets/personagens/item_forca.png"),
 }
+const ALTURA_FLUTUAR: float = 2.0 ## pixels que o item sobe e desce no chão
+const VELOCIDADE_FLUTUAR: float = 4.0
 
 @export var tipo: Tipo = Tipo.FRUTA
 var cura_fruta: int = Balanceamento.ITEM_CURA_FRUTA
@@ -29,17 +31,18 @@ var tempo_no_chao: float = Balanceamento.ITEM_TEMPO_NO_CHAO
 
 var _tempo_restante: float = 0.0
 
-@onready var _visual: ColorRect = $Visual
+@onready var _visual: Sprite2D = $Visual
 
 
 func _ready() -> void:
 	_tempo_restante = tempo_no_chao
-	_visual.color = CORES[tipo]
+	_visual.texture = TEXTURAS[tipo]
 	body_entered.connect(_ao_tocar_corpo)
 
 
 func _process(delta: float) -> void:
 	_tempo_restante -= delta
+	_visual.position.y = sin(_tempo_restante * VELOCIDADE_FLUTUAR) * ALTURA_FLUTUAR
 	if _tempo_restante <= 0.0:
 		queue_free()
 	elif _tempo_restante <= tempo_piscando:

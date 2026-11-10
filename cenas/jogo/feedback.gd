@@ -10,13 +10,15 @@ const TREMER_CAMERA: bool = ATIVO
 const PISCAR_BARRA_ARVORE: bool = ATIVO
 
 const DURACAO_PISCAR_BRANCO: float = 0.1
+const BRILHO_PISCAR: Color = Color(3, 3, 3) ## acima de 1 clareia o sprite até quase branco
 
 
-## Deixa o visual branco por um instante e volta à cor original. O tween morre junto com o nó.
-static func piscar_branco(no: Node, visual: ColorRect, cor_original: Color) -> void:
+## Clareia o visual por um instante e volta ao normal. O tween morre junto com o nó.
+## Usa self_modulate para não brigar com o modulate (tons de power-up e do chefe atordoado).
+static func piscar_branco(no: Node, visual: CanvasItem) -> void:
 	if not PISCAR_INIMIGO_ATINGIDO:
 		return
-	visual.color = Color.WHITE
+	visual.self_modulate = BRILHO_PISCAR
 	var tween: Tween = no.create_tween()
 	tween.tween_interval(DURACAO_PISCAR_BRANCO)
-	tween.tween_callback(func() -> void: visual.color = cor_original)
+	tween.tween_callback(func() -> void: visual.self_modulate = Color.WHITE)

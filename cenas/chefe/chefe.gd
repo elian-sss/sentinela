@@ -44,9 +44,8 @@ var _tempo_ate_ataque_arvore: float = 0.0
 var _tempo_ate_invocacao: float = 0.0
 var _arvore: Arvore
 var _heroi: Heroi
-var _cor_original: Color
 
-@onready var _visual: ColorRect = $Visual
+@onready var _visual: AnimatedSprite2D = $Visual
 @onready var _linha_aviso: Line2D = $LinhaAviso
 
 
@@ -54,7 +53,6 @@ func _ready() -> void:
 	_arvore = get_tree().get_first_node_in_group("arvore")
 	_heroi = get_tree().get_first_node_in_group("heroi")
 	vida_atual = vida_maxima
-	_cor_original = _visual.color
 	_tempo_ate_ataque_arvore = intervalo_ataque_arvore
 	_tempo_ate_invocacao = intervalo_invocacao
 	_mudar_estado(Estado.AVANCANDO)
@@ -74,6 +72,17 @@ func _physics_process(delta: float) -> void:
 				_mudar_estado(Estado.AVANCANDO)
 	_contar_invocacao(delta)
 	_ferir_heroi_se_encostar()
+	_atualizar_animacao()
+
+
+## As esteiras só giram quando a escavadeira se move. O braço aponta para onde ela vai.
+func _atualizar_animacao() -> void:
+	if velocity.x != 0.0:
+		_visual.flip_h = velocity.x < 0.0
+	if velocity == Vector2.ZERO:
+		_visual.pause()
+	else:
+		_visual.play("andando")
 
 
 func receber_dano(valor: int) -> void:
@@ -83,7 +92,7 @@ func receber_dano(valor: int) -> void:
 		valor *= multiplicador_dano_atordoado
 	vida_atual = maxi(vida_atual - valor, 0)
 	vida_alterada.emit(vida_atual, vida_maxima)
-	Feedback.piscar_branco(self, _visual, _cor_original)
+	Feedback.piscar_branco(self, _visual)
 	if vida_atual == 0:
 		_morrer()
 

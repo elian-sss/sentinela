@@ -1,0 +1,19 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/personagens/escavadeira.png" id="1_folha"]
+
+[sub_resource type="AtlasTexture" id="quadro_0"]
+atlas = ExtResource("1_folha")
+region = Rect2(0, 0, 124, 96)
+
+[sub_resource type="AtlasTexture" id="quadro_1"]
+atlas = ExtResource("1_folha")
+region = Rect2(124, 0, 124, 96)
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("quadro_0")}, {"duration": 1.0, "texture": SubResource("quadro_1")}],
+"loop": true,
+"name": &"andando",
+"speed": 6.0
+}]

@@ -1,4 +1,5 @@
 [gd_scene load_steps=5 format=3]
+[ext_resource type="SpriteFrames" path="res://cenas/heroi/heroi_quadros.tres" id="2_quadros"]
 
 [ext_resource type="Script" path="res://cenas/heroi/heroi.gd" id="1_heroi"]
 
@@ -25,15 +26,18 @@ script = ExtResource("1_heroi")
 [node name="Colisao" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_heroi")
 
-[node name="Visual" type="ColorRect" parent="."]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-mouse_filter = 2
-color = Color(0.2, 0.75, 0.95, 1)
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -15)
+scale = Vector2(1.5, 1.5)
+sprite_frames = ExtResource("2_quadros")
+animation = &"parado"
+autoplay = "parado"
+
 
 [node name="Escudo" type="Line2D" parent="."]
+position = Vector2(0, -15)
+scale = Vector2(1.4, 1.4)
 visible = false
 points = PackedVector2Array(26.00, 0.00, 25.11, 6.73, 22.52, 13.00, 18.38, 18.38, 13.00, 22.52, 6.73, 25.11, 0.00, 26.00, -6.73, 25.11, -13.00, 22.52, -18.38, 18.38, -22.52, 13.00, -25.11, 6.73, -26.00, 0.00, -25.11, -6.73, -22.52, -13.00, -18.38, -18.38, -13.00, -22.52, -6.73, -25.11, -0.00, -26.00, 6.73, -25.11, 13.00, -22.52, 18.38, -18.38, 22.52, -13.00, 25.11, -6.73)
 closed = true
@@ -42,5 +46,6 @@ default_color = Color(0.55, 0.85, 1, 0.9)
 
 [node name="Sombra" type="Sprite2D" parent="."]
 z_index = -1
-position = Vector2(0, 21)
+position = Vector2(0, 18)
+scale = Vector2(1.5, 1.5)
 texture = SubResource("GradientTexture2D_sombra")
