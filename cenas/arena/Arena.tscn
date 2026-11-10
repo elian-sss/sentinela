@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://cenas/heroi/Heroi.tscn" id="1_heroi"]
 [ext_resource type="PackedScene" path="res://cenas/arvore/Arvore.tscn" id="2_arvore"]
 [ext_resource type="Script" path="res://cenas/jogo/gerente_de_ondas.gd" id="3_ondas"]
 [ext_resource type="Script" path="res://cenas/jogo/gerente_do_jogo.gd" id="4_gerente"]
 [ext_resource type="PackedScene" path="res://cenas/hud/HUD.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://cenas/telas/TelaFimDePartida.tscn" id="6_tela_fim"]
 
 [node name="Arena" type="Node2D"]
 
@@ -38,3 +39,6 @@ gerente_de_ondas = NodePath("../GerenteDeOndas")
 heroi = NodePath("../Heroi")
 arvore = NodePath("../Arvore")
 gerente_de_ondas = NodePath("../GerenteDeOndas")
+
+[node name="TelaFimDePartida" parent="." node_paths=PackedStringArray("gerente_do_jogo") instance=ExtResource("6_tela_fim")]
+gerente_do_jogo = NodePath("../GerenteDoJogo")

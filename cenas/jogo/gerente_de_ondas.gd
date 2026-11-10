@@ -41,6 +41,10 @@ func total_de_ondas() -> int:
 	return ONDAS.size()
 
 
+func onda_atual() -> int:
+	return _onda_atual
+
+
 func _iniciar_proxima_onda() -> void:
 	_onda_atual += 1
 	var onda: Dictionary = ONDAS[_onda_atual - 1]

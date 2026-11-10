@@ -19,7 +19,6 @@ func _ready() -> void:
 	heroi.vida_alterada.connect(_atualizar_barra.bind(_barra_heroi))
 	arvore.vida_alterada.connect(_atualizar_barra.bind(_barra_arvore))
 	gerente_de_ondas.onda_iniciada.connect(_ao_iniciar_onda)
-	gerente_de_ondas.vitoria.connect(_mostrar_aviso.bind("Vitória!", 0.0))
 	_timer_aviso.timeout.connect(_aviso.hide)
 	_atualizar_barra(heroi.vida_atual, heroi.vida_maxima, _barra_heroi)
 	_atualizar_barra(arvore.vida_atual, arvore.vida_maxima, _barra_arvore)
@@ -39,10 +38,8 @@ func _ao_iniciar_onda(numero: int) -> void:
 	_mostrar_aviso("Onda %d" % numero, duracao_aviso_onda)
 
 
-## Mostra um texto grande no centro. Com duração zero, o texto fica na tela.
+## Mostra um texto grande no centro por alguns segundos.
 func _mostrar_aviso(texto: String, duracao: float) -> void:
 	_aviso.text = texto
 	_aviso.show()
-	_timer_aviso.stop()
-	if duracao > 0.0:
-		_timer_aviso.start(duracao)
+	_timer_aviso.start(duracao)

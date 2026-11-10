@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://cenas/telas/tela_fim_de_partida.gd" id="1_tela"]
+
+[node name="TelaFimDePartida" type="CanvasLayer"]
+process_mode = 3
+layer = 10
+script = ExtResource("1_tela")
+
+[node name="Escurecer" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Centro" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Caixa" type="VBoxContainer" parent="Centro"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titulo" type="Label" parent="Centro/Caixa"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 56
+text = "Derrota"
+horizontal_alignment = 1
+
+[node name="Texto" type="Label" parent="Centro/Caixa"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 22
+text = "Você caiu na onda 1."
+horizontal_alignment = 1
+
+[node name="BotaoJogarDeNovo" type="Button" parent="Centro/Caixa"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Jogar de novo (R)"
