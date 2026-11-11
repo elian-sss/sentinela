@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2f0wxplewffn"
-path="res://.godot/imported/vitoria_regia_sem_flor.png-7bc757ddc678c7a9b487d4b43b758abe.ctex"
+uid="uid://dnrpv5ow5gjm2"
+path="res://.godot/imported/arvore_chorona.png-3f88b35617d700e508071c989c3a2576.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/vitoria_regia_sem_flor.png"
-dest_files=["res://.godot/imported/vitoria_regia_sem_flor.png-7bc757ddc678c7a9b487d4b43b758abe.ctex"]
+source_file="res://assets/cenario/props/arvore_chorona.png"
+dest_files=["res://.godot/imported/arvore_chorona.png-3f88b35617d700e508071c989c3a2576.ctex"]
 
 [params]
 

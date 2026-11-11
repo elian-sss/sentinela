@@ -5,19 +5,19 @@
 [ext_resource type="Texture2D" path="res://assets/cenario/dead_swamp/tree_trunk_swamp.png" id="3_ywr6m"]
 
 [ext_resource type="Texture2D" path="res://assets/cenario/props/arvore_frondosa.png" id="p_arvore_frondosa"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/arvore_frondosa_flores.png" id="p_arvore_frondosa_flores"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/arvore_alta.png" id="p_arvore_alta"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/palmeira_acai.png" id="p_palmeira_acai"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/arvore_pequena.png" id="p_arvore_pequena"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/arvore_chorona.png" id="p_arvore_chorona"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/palmeira.png" id="p_palmeira"]
 [ext_resource type="Texture2D" path="res://assets/cenario/props/arbusto.png" id="p_arbusto"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/arbusto_flores_vermelhas.png" id="p_arbusto_flores_vermelhas"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/arbusto_flores_amarelas.png" id="p_arbusto_flores_amarelas"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/samambaia.png" id="p_samambaia"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/flores_vermelhas.png" id="p_flores_vermelhas"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/flores_amarelas.png" id="p_flores_amarelas"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/folhagem.png" id="p_folhagem"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/touceira.png" id="p_touceira"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/folhas_largas.png" id="p_folhas_largas"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/flores_rosas.png" id="p_flores_rosas"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/flores_brancas.png" id="p_flores_brancas"]
 [ext_resource type="Texture2D" path="res://assets/cenario/props/flores_roxas.png" id="p_flores_roxas"]
 [ext_resource type="Texture2D" path="res://assets/cenario/props/cogumelos.png" id="p_cogumelos"]
 [ext_resource type="Texture2D" path="res://assets/cenario/props/vitoria_regia.png" id="p_vitoria_regia"]
-[ext_resource type="Texture2D" path="res://assets/cenario/props/vitoria_regia_sem_flor.png" id="p_vitoria_regia_sem_flor"]
+[ext_resource type="Texture2D" path="res://assets/cenario/props/vitoria_regia_pequena.png" id="p_vitoria_regia_pequena"]
 
 [ext_resource type="Texture2D" path="res://assets/cenario/props/gramado.png" id="p_gramado"]
 
@@ -594,289 +594,289 @@ y_sort_enabled = true
 [node name="Arvore1" type="Sprite2D" parent="Bordas"]
 position = Vector2(40, 110)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 
 [node name="Arvore2" type="Sprite2D" parent="Bordas"]
 position = Vector2(165, 105)
-texture = ExtResource("p_arvore_alta")
-offset = Vector2(-40, -144)
+texture = ExtResource("p_arvore_chorona")
+offset = Vector2(-47, -122)
 centered = false
 flip_h = true
 
 [node name="Arbusto1" type="Sprite2D" parent="Bordas"]
 position = Vector2(275, 70)
-texture = ExtResource("p_arbusto_flores_amarelas")
-offset = Vector2(-24, -36)
+texture = ExtResource("p_touceira")
+offset = Vector2(-16, -32)
 centered = false
 
 [node name="Arvore3" type="Sprite2D" parent="Bordas"]
 position = Vector2(455, 125)
-texture = ExtResource("p_arvore_frondosa_flores")
-offset = Vector2(-56, -128)
+texture = ExtResource("p_arvore_pequena")
+offset = Vector2(-39, -92)
 centered = false
 flip_h = true
 
 [node name="Palmeira1" type="Sprite2D" parent="Bordas"]
 position = Vector2(580, 120)
-texture = ExtResource("p_palmeira_acai")
-offset = Vector2(-48, -136)
+texture = ExtResource("p_palmeira")
+offset = Vector2(-109, -121)
 centered = false
 
 [node name="Arvore4" type="Sprite2D" parent="Bordas"]
 position = Vector2(705, 128)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 flip_h = true
 
 [node name="Arvore5" type="Sprite2D" parent="Bordas"]
 position = Vector2(835, 110)
-texture = ExtResource("p_arvore_alta")
-offset = Vector2(-40, -144)
+texture = ExtResource("p_arvore_chorona")
+offset = Vector2(-47, -122)
 centered = false
 
 [node name="Arvore6" type="Sprite2D" parent="Bordas"]
 position = Vector2(960, 100)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 flip_h = true
 
 [node name="Palmeira2" type="Sprite2D" parent="Bordas"]
 position = Vector2(1100, 120)
-texture = ExtResource("p_palmeira_acai")
-offset = Vector2(-48, -136)
+texture = ExtResource("p_palmeira")
+offset = Vector2(-109, -121)
 centered = false
 
 [node name="Palmeira3" type="Sprite2D" parent="Bordas"]
 position = Vector2(55, 665)
-texture = ExtResource("p_palmeira_acai")
-offset = Vector2(-48, -136)
+texture = ExtResource("p_palmeira")
+offset = Vector2(-109, -121)
 centered = false
 flip_h = true
 
 [node name="Arvore7" type="Sprite2D" parent="Bordas"]
 position = Vector2(185, 690)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 
 [node name="Arvore8" type="Sprite2D" parent="Bordas"]
 position = Vector2(320, 700)
-texture = ExtResource("p_arvore_alta")
-offset = Vector2(-40, -144)
+texture = ExtResource("p_arvore_chorona")
+offset = Vector2(-47, -122)
 centered = false
 flip_h = true
 
 [node name="Arbusto2" type="Sprite2D" parent="Bordas"]
 position = Vector2(455, 650)
-texture = ExtResource("p_arbusto_flores_vermelhas")
-offset = Vector2(-24, -36)
+texture = ExtResource("p_folhagem")
+offset = Vector2(-15, -19)
 centered = false
 
 [node name="Arvore9" type="Sprite2D" parent="Bordas"]
 position = Vector2(560, 695)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 flip_h = true
 
 [node name="Arbusto3" type="Sprite2D" parent="Bordas"]
 position = Vector2(660, 652)
 texture = ExtResource("p_arbusto")
-offset = Vector2(-24, -36)
+offset = Vector2(-15, -31)
 centered = false
 
 [node name="Arvore10" type="Sprite2D" parent="Bordas"]
 position = Vector2(880, 690)
-texture = ExtResource("p_arvore_frondosa_flores")
-offset = Vector2(-56, -128)
+texture = ExtResource("p_arvore_pequena")
+offset = Vector2(-39, -92)
 centered = false
 flip_h = true
 
 [node name="Arvore11" type="Sprite2D" parent="Bordas"]
 position = Vector2(22, 215)
-texture = ExtResource("p_arvore_frondosa_flores")
-offset = Vector2(-56, -128)
+texture = ExtResource("p_arvore_pequena")
+offset = Vector2(-39, -92)
 centered = false
 
 [node name="Palmeira4" type="Sprite2D" parent="Bordas"]
 position = Vector2(18, 345)
-texture = ExtResource("p_palmeira_acai")
-offset = Vector2(-48, -136)
+texture = ExtResource("p_palmeira")
+offset = Vector2(-109, -121)
 centered = false
 flip_h = true
 
 [node name="Arbusto4" type="Sprite2D" parent="Bordas"]
 position = Vector2(14, 480)
 texture = ExtResource("p_arbusto")
-offset = Vector2(-24, -36)
+offset = Vector2(-15, -31)
 centered = false
 
 [node name="Arvore12" type="Sprite2D" parent="Bordas"]
 position = Vector2(1128, 230)
-texture = ExtResource("p_arvore_alta")
-offset = Vector2(-40, -144)
+texture = ExtResource("p_arvore_chorona")
+offset = Vector2(-47, -122)
 centered = false
 flip_h = true
 
 [node name="Arvore13" type="Sprite2D" parent="Bordas"]
 position = Vector2(1125, 365)
 texture = ExtResource("p_arvore_frondosa")
-offset = Vector2(-56, -128)
+offset = Vector2(-62, -129)
 centered = false
 
 [node name="Arbusto5" type="Sprite2D" parent="Bordas"]
 position = Vector2(1138, 120)
-texture = ExtResource("p_arbusto_flores_vermelhas")
-offset = Vector2(-24, -36)
+texture = ExtResource("p_folhagem")
+offset = Vector2(-15, -19)
 centered = false
 flip_h = true
 
 [node name="Flores1" type="Sprite2D" parent="Decoracao"]
 position = Vector2(120, 300)
-texture = ExtResource("p_flores_vermelhas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_rosas")
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores2" type="Sprite2D" parent="Decoracao"]
 position = Vector2(250, 560)
-texture = ExtResource("p_flores_amarelas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_brancas")
+offset = Vector2(-8, -16)
 centered = false
 flip_h = true
 
 [node name="Flores3" type="Sprite2D" parent="Decoracao"]
 position = Vector2(400, 130)
 texture = ExtResource("p_flores_roxas")
-offset = Vector2(-12, -20)
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores4" type="Sprite2D" parent="Decoracao"]
 position = Vector2(760, 140)
-texture = ExtResource("p_flores_vermelhas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_rosas")
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores5" type="Sprite2D" parent="Decoracao"]
 position = Vector2(1010, 300)
-texture = ExtResource("p_flores_amarelas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_brancas")
+offset = Vector2(-8, -16)
 centered = false
 flip_h = true
 
 [node name="Flores6" type="Sprite2D" parent="Decoracao"]
 position = Vector2(930, 560)
 texture = ExtResource("p_flores_roxas")
-offset = Vector2(-12, -20)
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores7" type="Sprite2D" parent="Decoracao"]
 position = Vector2(470, 250)
-texture = ExtResource("p_flores_amarelas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_brancas")
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores8" type="Sprite2D" parent="Decoracao"]
 position = Vector2(690, 420)
 texture = ExtResource("p_flores_roxas")
-offset = Vector2(-12, -20)
+offset = Vector2(-8, -16)
 centered = false
 flip_h = true
 
 [node name="Flores9" type="Sprite2D" parent="Decoracao"]
 position = Vector2(345, 470)
-texture = ExtResource("p_flores_vermelhas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_rosas")
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Flores10" type="Sprite2D" parent="Decoracao"]
 position = Vector2(820, 330)
-texture = ExtResource("p_flores_amarelas")
-offset = Vector2(-12, -20)
+texture = ExtResource("p_flores_brancas")
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Samambaia1" type="Sprite2D" parent="Decoracao"]
 position = Vector2(90, 250)
-texture = ExtResource("p_samambaia")
-offset = Vector2(-22, -32)
+texture = ExtResource("p_folhas_largas")
+offset = Vector2(-25, -39)
 centered = false
 flip_h = true
 
 [node name="Samambaia2" type="Sprite2D" parent="Decoracao"]
 position = Vector2(1050, 470)
-texture = ExtResource("p_samambaia")
-offset = Vector2(-22, -32)
+texture = ExtResource("p_folhas_largas")
+offset = Vector2(-25, -39)
 centered = false
 
 [node name="Samambaia3" type="Sprite2D" parent="Decoracao"]
 position = Vector2(420, 590)
-texture = ExtResource("p_samambaia")
-offset = Vector2(-22, -32)
+texture = ExtResource("p_folhas_largas")
+offset = Vector2(-25, -39)
 centered = false
 
 [node name="Samambaia4" type="Sprite2D" parent="Decoracao"]
 position = Vector2(240, 110)
-texture = ExtResource("p_samambaia")
-offset = Vector2(-22, -32)
+texture = ExtResource("p_folhas_largas")
+offset = Vector2(-25, -39)
 centered = false
 flip_h = true
 
 [node name="Samambaia5" type="Sprite2D" parent="Decoracao"]
 position = Vector2(900, 130)
-texture = ExtResource("p_samambaia")
-offset = Vector2(-22, -32)
+texture = ExtResource("p_folhas_largas")
+offset = Vector2(-25, -39)
 centered = false
 
 [node name="Cogumelos1" type="Sprite2D" parent="Decoracao"]
 position = Vector2(160, 430)
 texture = ExtResource("p_cogumelos")
-offset = Vector2(-14, -24)
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="Cogumelos2" type="Sprite2D" parent="Decoracao"]
 position = Vector2(990, 210)
 texture = ExtResource("p_cogumelos")
-offset = Vector2(-14, -24)
+offset = Vector2(-8, -16)
 centered = false
 flip_h = true
 
 [node name="Cogumelos3" type="Sprite2D" parent="Decoracao"]
 position = Vector2(620, 600)
 texture = ExtResource("p_cogumelos")
-offset = Vector2(-14, -24)
+offset = Vector2(-8, -16)
 centered = false
 
 [node name="VitoriaRegia1" type="Sprite2D" parent="Decoracao"]
 position = Vector2(735, 565)
 texture = ExtResource("p_vitoria_regia")
-offset = Vector2(-20, -28)
+offset = Vector2(-29, -52)
 centered = false
 
 [node name="VitoriaRegia2" type="Sprite2D" parent="Decoracao"]
 position = Vector2(705, 540)
-texture = ExtResource("p_vitoria_regia_sem_flor")
-offset = Vector2(-20, -28)
+texture = ExtResource("p_vitoria_regia_pequena")
+offset = Vector2(-16, -30)
 centered = false
 flip_h = true
 
 [node name="VitoriaRegia3" type="Sprite2D" parent="Decoracao"]
 position = Vector2(80, 430)
 texture = ExtResource("p_vitoria_regia")
-offset = Vector2(-20, -28)
+offset = Vector2(-29, -52)
 centered = false
 
 [node name="VitoriaRegia4" type="Sprite2D" parent="Decoracao"]
 position = Vector2(1020, 210)
-texture = ExtResource("p_vitoria_regia_sem_flor")
-offset = Vector2(-20, -28)
+texture = ExtResource("p_vitoria_regia_pequena")
+offset = Vector2(-16, -30)
 centered = false
 
 [node name="VitoriaRegia5" type="Sprite2D" parent="Decoracao"]
 position = Vector2(350, 70)
 texture = ExtResource("p_vitoria_regia")
-offset = Vector2(-20, -28)
+offset = Vector2(-29, -52)
 centered = false
 flip_h = true
 

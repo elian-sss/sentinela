@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjtgsksh82mj6"
-path="res://.godot/imported/palmeira_acai.png-9f93e8dba85cf15b6cefe03a7db9091c.ctex"
+uid="uid://b7wchuqb8xkoo"
+path="res://.godot/imported/vitoria_regia_pequena.png-3086b450c3968a7e59d555b755781d34.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/palmeira_acai.png"
-dest_files=["res://.godot/imported/palmeira_acai.png-9f93e8dba85cf15b6cefe03a7db9091c.ctex"]
+source_file="res://assets/cenario/props/vitoria_regia_pequena.png"
+dest_files=["res://.godot/imported/vitoria_regia_pequena.png-3086b450c3968a7e59d555b755781d34.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqwcqflsovvdp"
-path="res://.godot/imported/samambaia.png-6a0a2cede8aae69a19255b0e765492b7.ctex"
+uid="uid://bmd42mpgjgvfs"
+path="res://.godot/imported/flores_rosas.png-de2b64c755c352bd38725b666263eba9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/samambaia.png"
-dest_files=["res://.godot/imported/samambaia.png-6a0a2cede8aae69a19255b0e765492b7.ctex"]
+source_file="res://assets/cenario/props/flores_rosas.png"
+dest_files=["res://.godot/imported/flores_rosas.png-de2b64c755c352bd38725b666263eba9.ctex"]
 
 [params]
 
