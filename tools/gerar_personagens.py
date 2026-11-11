@@ -1,5 +1,4 @@
-"""Gera os sprites animados do herói, dos inimigos e do chefe em pixel art.
-A Samaúma e os itens vêm de packs licenciados: veja tools/montar_assets_licenciados.py.
+"""Gera os sprites animados do herói, da árvore sagrada, dos inimigos e do chefe em pixel art.
 
 Saída:
 - assets/personagens/<nome>.png: uma folha por personagem, com os quadros lado a lado.
@@ -11,11 +10,12 @@ Os desenhos são feitos de frente, levemente de cima (visão 3/4), e viram para 
 
 import math
 import os
+import random
 
 import numpy as np
 from PIL import Image
 
-from pixel_base import FOLHA, contornar, copa, sombra_eliptica, tela
+from gerar_props import FOLHA, contornar, copa, sombra_eliptica, tela
 
 RAIZ = os.path.join(os.path.dirname(__file__), "..")
 PASTA_PNG = os.path.join(RAIZ, "assets", "personagens")
@@ -38,6 +38,8 @@ AMARELO = [(150, 104, 20), (210, 158, 36), (246, 200, 64), (255, 232, 140)]
 LARANJA = [(170, 72, 20), (226, 116, 34), (252, 160, 60)]
 CINZA = [(40, 42, 48), (62, 64, 72), (94, 98, 106), (130, 134, 142)]
 VIDRO = [(44, 74, 92), (78, 122, 146), (150, 196, 214)]
+CASCA = [(78, 70, 60), (110, 100, 86), (146, 136, 118), (180, 172, 150)]
+BRILHO_SAGRADO = [(150, 255, 180), (255, 236, 140)]
 
 
 # ------------------------------------------------------------------ primitivas
@@ -277,6 +279,141 @@ def escavadeira(quadro):
 # ------------------------------------------------------------------ árvore sagrada: samaúma
 
 # Círculos da copa (x, y, raio) em cada estado: 0 saudável, 1 ferida, 2 por um fio.
+COPA_SAMAUMA = [
+    [(84, 56, 40), (46, 66, 30), (122, 66, 30), (20, 78, 18), (148, 78, 18),
+     (62, 38, 28), (106, 38, 28), (84, 24, 24), (84, 84, 30)],
+    [(84, 56, 33), (46, 66, 23), (122, 66, 22), (62, 38, 23), (106, 40, 20), (84, 28, 19), (84, 82, 22)],
+    [(84, 58, 22), (50, 64, 14), (118, 66, 13), (70, 40, 15), (102, 44, 12)],
+]
+FOLHA_SECA = [(60, 58, 30), (92, 88, 42), (126, 116, 54), (156, 140, 66), (184, 166, 88)]
+
+
+def arvore_sagrada(semente, estado=0):
+    """Samaúma: tronco cinza com sapopemas e copa em guarda-chuva. O estado mostra o quanto ela já sofreu."""
+    rng = random.Random(semente)
+    img = tela(168, 184)
+    sombra_eliptica(img, 84, 172, 70, 10)
+    # sapopemas (raízes em tábua) e tronco cinza
+    for y in range(96, 176):
+        t = (y - 96) / 80
+        meia = 14 + 6 * t + (max(0, t - 0.55) ** 2) * 160
+        for x in range(int(84 - meia), int(84 + meia) + 1):
+            rel = (x - (84 - meia)) / (2 * meia)
+            indice = 3 if rel < 0.2 else 2 if rel < 0.55 else 1 if rel < 0.85 else 0
+            if rng.random() < 0.08:
+                indice = max(indice - 1, 0)
+            px(img, x, y, CASCA[indice])
+    for x in (60, 108, 72, 96):  # vincos das raízes
+        linha(img, 84 + (x - 84) * 0.3, 140, x, 175, CASCA[0])
+    # símbolo sagrado no tronco: brilha enquanto ela está bem e apaga quando está por um fio
+    cor_simbolo = [BRILHO_SAGRADO[0], (110, 170, 130), CASCA[0]][estado]
+    for dx, dy in ((0, 0), (-1, 1), (1, 1), (0, 2), (-2, 3), (2, 3), (0, 4)):
+        px(img, 84 + dx, 118 + dy, cor_simbolo)
+    # galhos: ficam escondidos pela copa cheia e aparecem conforme ela perde folhas
+    for cx, cy, r in COPA_SAMAUMA[0]:
+        linha(img, 84, 100, cx, cy + r * 0.3, CASCA[1], 3)
+        linha(img, 84, 100, cx, cy + r * 0.3, CASCA[2], 1)
+        for lado in (-1, 1):
+            linha(img, cx, cy + r * 0.3, cx + lado * r * 0.5, cy - r * 0.2, CASCA[1], 2)
+    # copa larga em guarda-chuva, mais rala e mais seca a cada estado
+    blobs = COPA_SAMAUMA[estado]
+    copa(img, blobs, FOLHA if estado < 2 else FOLHA_SECA, rng)
+    for _ in range([14, 8, 3][estado]):  # cipós pendurados
+        x = rng.randint(24, 144)
+        inicio = next((y for y in range(110, 0, -1) if img[y, x, 3] and tuple(img[y, x][:3]) not in CASCA), None)
+        if inicio:
+            for y in range(inicio, inicio + rng.randint(6, 16)):
+                px(img, x, y, FOLHA[1])
+    for _ in range([26, 10, 0][estado]):  # brilhos sagrados na copa
+        cx, cy, r = rng.choice(blobs)
+        x, y = cx + rng.randint(-r // 2, r // 2), cy + rng.randint(-r // 2, r // 2)
+        if img[y, x, 3]:
+            px(img, x, y, BRILHO_SAGRADO[1])
+    contornar(img)
+    return img
+
+
+# ------------------------------------------------------------------ itens (20 x 20, cada um com a cor que o identifica)
+
+def item_fruta():
+    img = tela(20, 20)
+    elipse(img, 10, 12, 6, 6, (176, 30, 44))
+    elipse(img, 9, 11, 5, 5, (220, 52, 60))
+    elipse(img, 7, 9, 2, 2, (255, 140, 130))
+    linha(img, 10, 6, 11, 3, MADEIRA[1])
+    for dx, dy in ((1, 0), (2, -1), (3, -1), (2, 0), (4, -2)):
+        px(img, 11 + dx, 4 + dy, FOLHA[3] if dy < -1 else FOLHA[2])
+    contornar(img)
+    return img
+
+
+def folha(img, x0, y0, angulo, comprimento, largura, clara, escura, nervura, entalhes=False):
+    """Folha (ou pena) em forma de fuso, com nervura no meio. O lado de cima fica mais claro."""
+    a = math.radians(angulo)
+    direcao = (math.cos(a), math.sin(a))
+    normal = (-direcao[1], direcao[0])
+    for i in range(comprimento * 2):
+        t = i / (comprimento * 2)
+        meia = math.sin(math.pi * min(t * 1.15, 1)) * largura
+        if entalhes and int(t * 10) % 3 == 2:
+            meia *= 0.5
+        cx, cy = x0 + direcao[0] * t * comprimento, y0 + direcao[1] * t * comprimento
+        for k in range(-int(meia * 2), int(meia * 2) + 1):
+            d = k / 2
+            px(img, round(cx + normal[0] * d), round(cy + normal[1] * d), clara if d < 0 else escura)
+        px(img, round(cx), round(cy), nervura)
+
+
+def item_erva():
+    img = tela(20, 20)
+    for angulo in (-130, -90, -50):
+        folha(img, 10, 17, angulo, 11 if angulo == -90 else 9, 2.4, FOLHA[3], FOLHA[2], FOLHA[1])
+    retangulo(img, 8, 15, 12, 17, MADEIRA[2])  # amarrado de cipó
+    retangulo(img, 8, 16, 12, 16, MADEIRA[1])
+    contornar(img)
+    return img
+
+
+def item_escudo():
+    """Casco de jabuti azulado."""
+    img = tela(20, 20)
+    azul = [(50, 104, 150), (90, 150, 200), (150, 200, 236), (214, 240, 255)]
+    elipse(img, 10, 11, 8, 7, azul[0])
+    elipse(img, 10, 10, 7, 6, azul[1])
+    for cx, cy in ((10, 10), (6, 9), (14, 9), (8, 13), (12, 13)):  # placas do casco
+        elipse(img, cx, cy, 1.6, 1.4, azul[2])
+    px(img, 7, 6, azul[3])
+    px(img, 8, 6, azul[3])
+    contornar(img)
+    return img
+
+
+def item_velocidade():
+    """Pena de gavião amarela, com a ponta laranja."""
+    img = tela(20, 20)
+    folha(img, 4, 17, -55, 17, 2.6, (255, 230, 120), (226, 176, 44), (150, 100, 30), entalhes=True)
+    for i in range(4):  # ponta laranja
+        px(img, 13 + i // 2, 4 - i // 2 + 1, (236, 120, 40))
+    linha(img, 3, 18, 5, 15, (150, 100, 30))  # cálamo
+    contornar(img)
+    return img
+
+
+def item_forca():
+    """Cacho de sementes roxas de açaí."""
+    img = tela(20, 20)
+    roxo = [(60, 26, 80), (110, 58, 150), (164, 110, 210), (226, 190, 250)]
+    linha(img, 10, 3, 10, 8, MADEIRA[1])
+    for cx, cy in ((7, 10), (13, 10), (10, 9), (8, 14), (12, 14), (10, 12), (10, 16)):
+        elipse(img, cx, cy, 2.2, 2.2, roxo[1])
+        px(img, cx - 1, cy - 1, roxo[3])
+        px(img, cx + 1, cy + 1, roxo[0])
+    contornar(img)
+    return img
+
+
+# ------------------------------------------------------------------ golpe do herói
+
 def golpe(inicio, fim, forca):
     """Arco de energia verde-dourada do cajado, virado para a direita (+x).
     O centro do arco fica no herói, 34 px atrás do centro do quadro (como em heroi.gd).
@@ -356,9 +493,15 @@ def main():
     salvar_quadros("cenas/chefe/escavadeira_quadros.tres", "escavadeira", tamanho,
                    [("andando", [0, 1], 6, True)])
 
+    salvar_folha("arvore_sagrada", [arvore_sagrada(21, estado) for estado in range(3)])
+
     quadros = [golpe(-75, -25, 1.0), golpe(-75, 25, 1.0), golpe(-60, 70, 1.0), golpe(-20, 75, 0.6)]
     tamanho = salvar_folha("golpe", quadros)
     salvar_quadros("cenas/heroi/golpe_quadros.tres", "golpe", tamanho, [("golpe", [0, 1, 2, 3], 20, False)])
+
+    for nome, funcao in (("fruta", item_fruta), ("erva", item_erva), ("escudo", item_escudo),
+                         ("velocidade", item_velocidade), ("forca", item_forca)):
+        salvar_folha("item_" + nome, [funcao()])
 
 
 if __name__ == "__main__":

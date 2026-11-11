@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpi60hdlok1lb"
-path="res://.godot/imported/folhas_largas.png-1937428b89d62e3662a3ba7e1628a366.ctex"
+uid="uid://dqcfuy0qw2q6d"
+path="res://.godot/imported/arvore_frondosa_flores.png-51d958620c4b278c3724aad6b3b49ff8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/folhas_largas.png"
-dest_files=["res://.godot/imported/folhas_largas.png-1937428b89d62e3662a3ba7e1628a366.ctex"]
+source_file="res://assets/cenario/props/arvore_frondosa_flores.png"
+dest_files=["res://.godot/imported/arvore_frondosa_flores.png-51d958620c4b278c3724aad6b3b49ff8.ctex"]
 
 [params]
 

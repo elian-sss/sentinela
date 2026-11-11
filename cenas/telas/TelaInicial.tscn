@@ -487,13 +487,13 @@ text = "Um jogo de Elian Sousa\nGame Jam da Semana GameDev III  •  Santarém, 
 layout_mode = 2
 theme_type_variation = &"LabelSuave"
 horizontal_alignment = 1
-text = "Personagens, interface e fonte:\npixel art original, gerada por código pelo projeto.\nMúsica e efeitos: sintetizados por código, sem samples."
+text = "Personagens, itens, plantas, interface e fonte:\npixel art original, gerada por código pelo projeto.\nMúsica e efeitos: sintetizados por código, sem samples."
 
 
 [node name="Terceiros" type="Label" parent="Interface/Creditos/Centro/Painel/Caixa"]
 layout_mode = 2
 horizontal_alignment = 1
-text = "Cenário, plantas e Samaúma: Dead Swamp e assets de selva\nde Sevarihk (CC-BY 4.0, sevarihk.itch.io e opengameart.org)\nItens: 16x16 RPG Items (DB32), de ARoachIFoundOnMyPillow (CC0)\nFeito com Godot Engine (licença MIT)"
+text = "Chão e árvores secas do pântano: Dead Swamp, de Sevarihk\n(CC-BY 4.0, sevarihk.itch.io)\nFeito com Godot Engine (licença MIT)"
 
 
 [node name="BotaoVoltar" type="Button" parent="Interface/Creditos/Centro/Painel/Caixa"]

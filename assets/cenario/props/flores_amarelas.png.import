@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://du7yp5p4gh7cc"
-path="res://.godot/imported/flores_brancas.png-3985a2ed7af09ca9f5e38617c6813c07.ctex"
+uid="uid://cslno531t5uf1"
+path="res://.godot/imported/flores_amarelas.png-d1f6c0968d23cef2e67e3bff04a9cfcc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/flores_brancas.png"
-dest_files=["res://.godot/imported/flores_brancas.png-3985a2ed7af09ca9f5e38617c6813c07.ctex"]
+source_file="res://assets/cenario/props/flores_amarelas.png"
+dest_files=["res://.godot/imported/flores_amarelas.png-d1f6c0968d23cef2e67e3bff04a9cfcc.ctex"]
 
 [params]
 

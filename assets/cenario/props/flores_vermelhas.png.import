@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvg8nijhtnc8e"
-path="res://.godot/imported/touceira.png-869b254f2ad8d11679b8d954a71bb84e.ctex"
+uid="uid://di1d61d4tu6ov"
+path="res://.godot/imported/flores_vermelhas.png-4611dc8b4b7e40935b1943c5b38d35cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/touceira.png"
-dest_files=["res://.godot/imported/touceira.png-869b254f2ad8d11679b8d954a71bb84e.ctex"]
+source_file="res://assets/cenario/props/flores_vermelhas.png"
+dest_files=["res://.godot/imported/flores_vermelhas.png-4611dc8b4b7e40935b1943c5b38d35cd.ctex"]
 
 [params]
 

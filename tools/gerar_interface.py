@@ -13,8 +13,8 @@ import os
 import numpy as np
 from PIL import Image
 
-from gerar_personagens import CINZA, FOGO, MADEIRA, AMARELO, VIDRO, elipse, heroi, linha, px, retangulo
-from pixel_base import contornar, tela
+from gerar_personagens import CASCA, CINZA, FOGO, MADEIRA, AMARELO, VIDRO, elipse, folha, heroi, linha, px, retangulo
+from gerar_props import FOLHA, contornar, copa, tela
 
 RAIZ = os.path.join(os.path.dirname(__file__), "..")
 PASTA = os.path.join(RAIZ, "assets", "interface")
@@ -29,23 +29,6 @@ OURO = [(150, 104, 30), (214, 166, 60), (250, 218, 120)]
 CREME = (236, 226, 190)
 VERDE_UI = [(30, 72, 40), (44, 104, 50), (66, 138, 60), (104, 172, 72), (150, 204, 96)]
 CINZA_TECLA = [(70, 72, 80), (150, 154, 164), (206, 210, 218), (240, 242, 246)]
-
-
-def folha(img, x0, y0, angulo, comprimento, largura, clara, escura, nervura, entalhes=False):
-    """Folha (ou pena) em forma de fuso, com nervura no meio. O lado de cima fica mais claro."""
-    a = math.radians(angulo)
-    direcao = (math.cos(a), math.sin(a))
-    normal = (-direcao[1], direcao[0])
-    for i in range(comprimento * 2):
-        t = i / (comprimento * 2)
-        meia = math.sin(math.pi * min(t * 1.15, 1)) * largura
-        if entalhes and int(t * 10) % 3 == 2:
-            meia *= 0.5
-        cx, cy = x0 + direcao[0] * t * comprimento, y0 + direcao[1] * t * comprimento
-        for k in range(-int(meia * 2), int(meia * 2) + 1):
-            d = k / 2
-            px(img, round(cx + normal[0] * d), round(cy + normal[1] * d), clara if d < 0 else escura)
-        px(img, round(cx), round(cy), nervura)
 
 
 def salvar(img, nome, escala=ESCALA, pasta=PASTA):
@@ -157,6 +140,23 @@ def retrato_sentinela():
             if rosto[y, x, 3] and img[y + 4, x + 3, 3]:
                 img[y + 4, x + 3] = rosto[y, x]
     salvar(img, "retrato_sentinela")
+
+
+def icone_samauma():
+    import random
+    img = tela(24, 24)
+    moldura_redonda(img, (40, 66, 44))
+    miolo = tela(24, 24)
+    for y in range(13, 21):  # tronco com sapopemas
+        meia = 1.5 + max(0, y - 16) * 0.9
+        for x in range(int(12 - meia), int(12 + meia) + 1):
+            px(miolo, x, y, CASCA[3] if x < 12 else CASCA[1])
+    copa(miolo, [(12, 9, 5), (7, 11, 3.5), (17, 11, 3.5), (12, 6, 4)], FOLHA, random.Random(3))
+    for y in range(24):
+        for x in range(24):
+            if miolo[y, x, 3] and img[y, x, 3]:
+                img[y, x] = miolo[y, x]
+    salvar(img, "icone_samauma")
 
 
 def icone_escavadeira():
@@ -360,6 +360,7 @@ def main():
     tecla()
     mouse()
     retrato_sentinela()
+    icone_samauma()
     icone_escavadeira()
     icone_dash()
     pip_onda("pip_onda_cheia", True)

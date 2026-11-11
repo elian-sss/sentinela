@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cseubvaqmb5fv"
-path="res://.godot/imported/folhagem.png-18945288603df737c6ed5f20aa582b4c.ctex"
+uid="uid://c1ss626by3kkf"
+path="res://.godot/imported/arbusto_flores_amarelas.png-c42ad0a120cb343e6fdb4e07df6a6f04.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/folhagem.png"
-dest_files=["res://.godot/imported/folhagem.png-18945288603df737c6ed5f20aa582b4c.ctex"]
+source_file="res://assets/cenario/props/arbusto_flores_amarelas.png"
+dest_files=["res://.godot/imported/arbusto_flores_amarelas.png-c42ad0a120cb343e6fdb4e07df6a6f04.ctex"]
 
 [params]
 

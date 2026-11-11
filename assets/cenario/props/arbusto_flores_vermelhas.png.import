@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccxoyd5kojvl8"
-path="res://.godot/imported/arvore_pequena.png-cd7b82b65c4f02dc6d5acee628046cb0.ctex"
+uid="uid://b5ea1uxct3guh"
+path="res://.godot/imported/arbusto_flores_vermelhas.png-65133187689d28dca9a35c2123ceb5a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cenario/props/arvore_pequena.png"
-dest_files=["res://.godot/imported/arvore_pequena.png-cd7b82b65c4f02dc6d5acee628046cb0.ctex"]
+source_file="res://assets/cenario/props/arbusto_flores_vermelhas.png"
+dest_files=["res://.godot/imported/arbusto_flores_vermelhas.png-65133187689d28dca9a35c2123ceb5a1.ctex"]
 
 [params]
 
